@@ -1,44 +1,85 @@
 # AI Capacity × Judgement — Learning Studio
 
-An interactive, responsive Grades 6–10 learning experience with **two complementary curricula**: Capacity (understanding, working and creating with AI) and Judgement (agency, trust and ethics).
+A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two connected curricula: **AI Capacity** (understanding, working with, and creating with AI) and **AI Judgement** (agency, truth, trust, ethics and consequences).
 
-## Current version
+**Live site, once Pages is deployed:** https://edtechevans.github.io/AIcapacityjudgement/
 
-- Grade selector for G6, G7, G8, G9, G10 (MYP 1–5).
-- 30 structured lessons, six per grade, organized into two pathways and six strands.
-- Lessons contain learning objectives, guided activity, applied scenario, a model response to compare and a learning evidence prompt.
-- Learner dashboard, progress indicators and locally saved lesson completion.
-- Optional reflection text saved only in the current browser.
-- Responsive interface matching the original cream, navy, coral, blue, peach, sage and lilac quadrant visual style.
-- Clear human-first approach and an AI Capacity × Judgement quadrant explanation.
+## Phase 1 — Interactive learning engine
 
-## Preview / deployment
+All **30 modules** have original interactive formative challenges, organized into six strands:
 
-This site is plain HTML, CSS and JavaScript with no build requirement. Open `index.html` in a browser for a quick preview, or enable **Settings → Pages → Deploy from a branch → main / root** in the repository and visit:
+| Capacity | Judgement |
+| --- | --- |
+| A1 · Understanding AI | B1 · Purpose & Agency |
+| A2 · Working with AI | B2 · Truth & Trust |
+| A3 · Creating with AI | B3 · Ethics & Consequences |
 
-`https://edtechevans.github.io/AIcapacityjudgement/`
+Activities use five accessible interaction patterns:
+- Classify examples using standard select controls and per-item explanations.
+- Compare prompts using simulated examples (explicitly *not* live AI output).
+- Sequence human-centred workflows using keyboard-accessible up/down buttons.
+- Choose between contextual decisions and inspect feedback.
+- Evaluate the strength and relevance of evidence.
 
-Note: the URL only works once GitHub Pages has been enabled and the deployment has succeeded. This repository does not automatically configure GitHub Pages.
+A module includes **Understand → Practise → Apply → Review**, with a question and optional worked example, a checked interactive challenge, a transfer prompt, and a reflection. Completion is recorded only after passing the challenge and self-confirming an explanation. **Completion is not a mastery grade or a teacher assessment.** Written responses are not graded by AI, cannot prove the quality of a student's explanation, and are **not saved or uploaded**.
 
-## IMPORTANT: Student login & safety
+## Phase 2 — Two-dimensional formative personalisation
 
-This is an early curriculum MVP, **not a production school LMS**.
+- Each grade has an **optional six-item starting snapshot**: one item per strand.
+- Results show *Capacity* and *Judgement* **separately**. There is no single AI literacy score.
+- A lightly highlighted Capacity × Judgement quadrant is a **temporary illustration**, not a fixed label or validated psychometric result.
+- The snapshot offers a starting suggestion from each pathway; existing lesson-practice evidence and completion inform what is recommended next.
+- Students can review the reasoning behind all six items and retake the snapshot.
+- Separate strand-level indicators show an encouraging first response, an opportunity to revisit, or a passed practice check.
 
-- Preview mode allows a local display name (not an authenticated login). Completion and reflection drafts are saved in localStorage on that browser, so they do not sync across devices.
-- Use a generic display name. Do not enter student personal data, assessment results or private information.
-- Optional Entra ID sign-in hooks are provided in `auth-config.js`; school administrators must register a compliant SPA app, configure the client ID and allowed redirect URI, and approve access before this is activated.
-- Even after Entra sign-in, this static website **does not have secure student records or cloud progress syncing**. A server-side API, identity verification, authorization/RBAC, persistence, data retention rules and privacy assessment must be added before real student deployment.
-- Never use localStorage or a static public repository for sensitive student information.
-- Course activities must use approved, age-appropriate tools, or teacher-supplied transcripts, and follow school safeguarding/privacy rules.
+A small set of quiz questions cannot establish proficiency. The results are only actionable **formative signals**; no automated academic placement or high-stakes decision should rely on them.
 
-## Next build steps
+## For staff and curriculum designers
 
-1. Replace local preview with school SSO and a backend with student enrolments and secure progress storage.
-2. Add teacher/admin course editor, versioned content and moderation workflow.
-3. Add meaningful formative assessment and rubrics for six strands (A1–A3, B1–B3).
-4. Map lessons to existing MYP units, ATL, TLF and school academic integrity expectations.
-5. Accessibility audit, browser testing, classroom usability pilot, and policy approval.
+This is the first interactive curriculum pilot, not a formal MYP subject curriculum or school-assessed gradebook. Use with lesson planning, explicit teacher guidance, approved tools, meaningful subject connections and school academic-integrity expectations.
 
-## Curriculum licensing
+Some activities require external research or creation tasks. The online platform supplies the structured challenge and formative feedback but **does not yet** collect student artifacts, evaluate long-form work, or enable teacher marking. Those are possible follow-on developments.
 
-© 2026 Tim Evans. CC BY-NC-SA 4.0. Where third-party source material is used, its original license continues to apply.
+The current scope is six introductory modules per grade. It should be expanded based on lesson observation and student learning evidence, not the number of modules alone.
+
+## Deployment
+
+A build step is not needed. GitHub Pages should be set to **main / root** in Settings → Pages. The repository contains:
+- \`index.html\` — startup, scripts and accessible fallback
+- \`styles.css\` — brand, responsive layout, focus, interactive controls
+- \`curriculum.js\` — curriculum map and outcomes for G6–G10
+- \`learning-data.js\` — **30 interactive activities and 30 diagnostic items**
+- \`app.js\` — learner UI, challenge checking, recommendations, completion
+- \`auth-config.js\` — reserved for future approved school SSO integration
+- \`.nojekyll\` — static publishing marker
+
+After changing the scripts, update the version query parameters in \`index.html\` to avoid stale browser caches.
+
+## Student privacy and limitations
+
+**This is a public, static preview — not a production school learning management system.**
+
+- A student can enter with a **local display alias**. There is currently **no genuine school login** and no validated identity.
+- Quiz choices, completion status and a display alias are saved in \`localStorage\` on the user's device, not in a central student record. Progress does not sync between devices.
+- Free-text explanation is held in memory while the tab remains open. It is **not sent to a server or saved to localStorage**.
+- All quiz items and answers are present in public JavaScript; **do not use the items for secure or high-stakes testing**.
+- Avoid entering identifying, confidential, medical or other sensitive student information. Clear the local profile on shared devices.
+- Activities do not send learner content to an AI service. Any optional real-world AI experimentation must use approved age-appropriate, school-sanctioned tools and follow relevant privacy, consent and academic-integrity rules.
+- Before deploying to actual students, add school authentication, appropriate authorisation, secure server-side records, retention/deletion rules, safeguarding review and a complete privacy impact assessment.
+
+Previous v1 browser progress is preserved as \`legacyDone\` and displayed as "Previously explored", **not** converted to the new evidence-based "Practised" status.
+
+## QA and next steps
+
+Engineering review should cover all five activity types, reflection gating, saved progress, diagnostic retake, keyboard navigation, mobile view, screen-reader focus and real-device testing.
+
+Recommended next school-facing steps:
+1. Pilot Grade 6 A1, Grade 8 A3 and Grade 10 B1 with students and teachers; record misconceptions and usability issues.
+2. Tighten activity quality using authentic disciplinary evidence and user-testing results.
+3. Develop richer rubrics, teacher feedback and subject-unit integration maps.
+4. Add secure SSO and teacher views only after privacy and safeguarding review.
+5. Conduct a formal WCAG 2.2 AA review before operational use.
+
+## Attribution
+
+Concept and curriculum: © 2026 Tim Evans. **CC BY-NC-SA 4.0** — https://creativecommons.org/licenses/by-nc-sa/4.0/. Third-party content keeps its own licence.
