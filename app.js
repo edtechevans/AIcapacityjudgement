@@ -105,7 +105,7 @@ if(t.dataset.lesson){openLesson(t.dataset.lesson);return;}
 const action=t.dataset.action;
 if(["home","courses","about","snapshot","profile"].includes(action)){goto(action);return}
 if(action==="enter"){goto("welcome");return}
-if(action==="pick-grade"){if(!GRADES[t.dataset.pick])return;state.grade=+t.dataset.pick;render();const button=document.querySelector('[data-pick="'+state.grade+'"]');if(button&&button.focus)button.focus();return}
+if(action==="pick-grade"){if(!GRADES[t.dataset.pick])return;state.grade=+t.dataset.pick;if(window.location?.hash?.startsWith("#/")&&window.history?.replaceState)window.history.replaceState({},"","#/welcome");render();const button=document.querySelector('[data-pick="'+state.grade+'"]');if(button&&button.focus)button.focus();return}
 if(action==="guest"){state.name=($("#guest-name")?.value||"Learner").trim().slice(0,40)||"Learner";persist();const initialHash=window.location?.hash||"";if(initialHash.startsWith("#/")&&initialHash!=="#/welcome"&&readRoute()){goto(state.page,{fromHistory:true});}else{goto("courses");}return}
 if(action==="track"){state.track=t.dataset.track;persist();goto("courses");return}
 if(action==="diagnostic"||action==="retake"){beginDiagnostic();return}
@@ -131,9 +131,10 @@ if(t.id==="reflection-check"){getPractice(state.lessonId).confirmed=t.checked;co
 });
 document.addEventListener("input",(e)=>{if(e.target.id==="transfer-text"){const w=getPractice(state.lessonId);w.reflection=e.target.value.slice(0,2000);const n=$(".char-count");if(n)n.textContent=w.reflection.trim().length+" characters · Write at least 40 meaningful characters.";const submit=$('[data-action="record"]');if(submit)submit.disabled=!(getRecord(state.lessonId).practicePassed&&w.confirmed&&w.reflection.trim().length>=40)}});
 function syncHistory(){if(!state.name){state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="guest-name"){e.preventDefault();const button=document.querySelector('[data-action="guest"]');if(button&&button.click)button.click();}});
 window.addEventListener("popstate",syncHistory);
 window.addEventListener("hashchange",syncHistory);
-if(state.name){if(!readRoute()||state.page==="welcome")state.page="home";}else{state.page="welcome";}
+if(state.name){if(!readRoute()||state.page==="welcome")state.page="home";}else{const requested=(window.location?.hash||"").match(/^#\/(?:grade\/|lesson\/)(6|7|8|9|10)/);if(requested)state.grade=+requested[1];state.page="welcome";}
 if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};
 render();
 })();
