@@ -5,7 +5,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch{return {}}};
 let state={name:"",grade:6,view:"home",track:"all",lesson:null,step:0,reveal:false,answer:"",done:{},responses:{},userType:"guest",...read()};
 let msalClient=null;
-const readyAuth=()=>typeof window.msal!=="undefined" && window.AUTH_CONFIG?.clientId && !window.AUTH_CONFIG.clientId.startsWith("REPLACE");
+const readyAuth=()=>Boolean(window.AUTH_CONFIG?.clientId && !window.AUTH_CONFIG.clientId.startsWith("REPLACE"));
 const save=()=>{const {name,grade,done,responses,userType}=state;localStorage.setItem(KEY,JSON.stringify({name,grade,done,responses,userType}))};
 const lessons=()=>LESSONS.filter(l=>l.grade===state.grade && (state.track==="all"||state.track===l.track));
 const completed=grade=>LESSONS.filter(l=>l.grade===grade && state.done[l.id]).length;
@@ -48,7 +48,27 @@ document.addEventListener("click",async e=>{
  if(a==="schoollogin")try{await initAuth();const r=await msalClient.loginPopup({scopes:["User.Read"]});state.name=r.account.name||"Learner";state.userType="school";save();navigate("home")}catch(err){alert("School sign-in is not available yet. Please contact the site administrator.")}
 });
 document.addEventListener("input",e=>{if(e.target.id==="student-response"&&state.lesson){state.responses[state.lesson]=e.target.value.slice(0,1500);save()}});
-async function initAuth(){if(!readyAuth())throw Error("Missing school identity configuration");if(!msalClient){msalClient=new msal.PublicClientApplication({auth:{clientId:AUTH_CONFIG.clientId,authority:AUTH_CONFIG.authority,redirectUri:location.origin+location.pathname},cache:{cacheLocation:"sessionStorage"}});await msalClient.initialize()}}
+async function initAuth(){
+  if(!readyAuth())throw Error("Missing school identity configuration");
+  if(!window.msal){
+    await new Promise((resolve,reject)=>{
+      const script=document.createElement("script");
+      script.src="https://alcdn.msauth.net/browser/2.38.4/js/msal-browser.min.js";
+      script.async=true;
+      script.onload=resolve;
+      script.onerror=()=>reject(new Error("Unable to load Microsoft sign-in"));
+      document.head.appendChild(script);
+    });
+  }
+  if(!msalClient){
+    msalClient=new window.msal.PublicClientApplication({auth:{
+      clientId:window.AUTH_CONFIG.clientId,
+      authority:window.AUTH_CONFIG.authority,
+      redirectUri:location.origin+location.pathname
+    },cache:{cacheLocation:"sessionStorage"}});
+    await msalClient.initialize();
+  }
+}
 window.addEventListener("hashchange",()=>{if(location.hash==="#/about")navigate("about");else if(location.hash==="#/courses")navigate("courses")});
 if(!state.name)state.view="login";else state.view="home";
 render();
