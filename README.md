@@ -2,7 +2,21 @@
 
 A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two connected curricula: **AI Capacity** (understanding, working with, and creating with AI) and **AI Judgement** (agency, truth, trust, ethics and consequences).
 
-**Live site, once Pages is deployed:** https://edtechevans.github.io/AIcapacityjudgement/
+**Live website:** https://edtechevans.github.io/AIcapacityjudgement/
+
+## UI/UX refinement (13 November 2026)
+
+The student-facing experience has been reviewed and redesigned for faster access to learning and clearer navigation:
+
+- New student entry begins with an explicit **Grade 6–10** choice, a local display alias and direct access to the selected course library.
+- The course page uses compact **grade chips**, Capacity/Judgement filters, a featured next module and a less crowded library.
+- The lesson player displays **Step 1–4** progress and prevents advancing from the interactive practice step until its check is passed.
+- Successful practice leads to a clearer next action, including an unfinished module or a review task when a grade is complete.
+- URL routes support grade and pathway filters, **direct lesson links**, browser back/forward and reload.
+- Accessibility refinements include focus treatment, clearer contrast and larger touch targets.
+- Clearing the preview learner profile now also clears legacy local records.
+
+The detailed source-level assessment and remaining validation criteria are in [UI/UX Review (13 November 2026)](docs/UI_UX_REVIEW_2026-11-13.md). This is not a formal accessibility certification or live classroom usability study.
 
 ## Phase 1 — Interactive learning engine
 
