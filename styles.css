@@ -153,3 +153,17 @@ footer .license{color:#687587;font-size:.75rem}
   .brand small{font-size:.56rem}
 }
 @media(prefers-reduced-motion:reduce){.step-meter>div{transition:none}}
+
+/* Explanation and formative feedback components */
+.answer-review{margin:0 0 30px;border:1px solid #d5dce2;border-radius:13px;background:#f8fafb}
+.answer-review summary{cursor:pointer;color:#1f3957;font-weight:700;padding:19px 23px;line-height:1.5}
+.answer-review summary:focus-visible{outline:3px solid #b2645c;outline-offset:3px}
+.answer-review[open] summary{border-bottom:1px solid #dce2e7}
+.answer-review ol{margin:5px 0 0;padding:18px 26px 20px 50px}
+.answer-review li{padding:13px 2px}
+.answer-review li+li{border-top:1px solid #e5e9eb}
+.answer-review li strong{display:block;color:#253d58}
+.answer-review li p{margin:4px 0;font-size:.88rem;line-height:1.55}
+.example-reasoning{margin-top:17px;padding:18px 20px;border-radius:9px;background:#e8f0ed;border:1px solid #c9d9d0;color:#315544}
+.example-reasoning p{margin-top:6px}
+@media(max-width:650px){.answer-review ol{padding-left:38px;padding-right:16px}}
