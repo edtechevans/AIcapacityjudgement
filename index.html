@@ -16,9 +16,15 @@
       <p>Opening your learning studio…</p>
     </div>
   </div>
+  <script>
+    // A visible recovery message is preferable to leaving learners on a loading screen.
+    window.addEventListener("error", function () {
+      var loader=document.querySelector(".initial-loading");
+      if(loader) loader.innerHTML='<span class="brand-mark">C<span>×</span>J</span><p>The learning studio could not start. Please reload the page.</p>';
+    });
+  </script>
   <script src="./auth-config.js"></script>
-  <script src="https://alcdn.msauth.net/browser/2.38.4/js/msal-browser.min.js" defer></script>
-  <script src="./curriculum.js" defer></script>
-  <script src="./app.js" defer></script>
+  <script src="./curriculum.js?v=2" defer></script>
+  <script src="./app.js?v=2" defer></script>
 </body>
 </html>
