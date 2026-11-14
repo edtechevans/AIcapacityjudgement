@@ -26,7 +26,10 @@ async function finish(h,l){
  else{h.change({name:"activity-choice",value:String(a.correct)});h.input({id:"practice-reason",value:"This is the strongest response because it serves the learning goal and considers credible evidence."})}
  await h.click({action:"check"});assert.match(h.html,/Challenge passed/);
  await h.click({action:"next"});
- for(const [key,value] of Object.entries(notes))h.input({dataset:{planField:key},value});
+ await h.click({action:"apply-next"});
+ for(const key of ["purpose","decision","evidence"])h.input({dataset:{planField:key},value:notes[key]});
+ await h.click({action:"apply-next"});
+ for(const key of ["work","revision"])h.input({dataset:{planField:key},value:notes[key]});
  h.change({id:"project-confirm",checked:true,dataset:{}});
  await h.click({action:"record"});assert.match(h.html,/Stage 5 of 5 · Reflect/);
 }
