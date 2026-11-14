@@ -5,8 +5,8 @@ import {join} from "node:path";
 import {runInContext,createContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=p=>readFileSync(join(root,p),"utf8");
-const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js"];
-function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,labClassify,labRankFeed})",context)}
+const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js"];
+function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,UNSEEN_TRANSFER,TEACHER_RUBRIC,classroomPlan,labClassify,labRankFeed,labGrade6,labEvaluate})",context)}
 const DATA=content(createContext({}));
 function app(seed={},hash=""){
  const hooks={},el={innerHTML:""},store={...seed},location={hash},listeners={},downloads=[];let exportedBlob=null,copiedText="";
@@ -288,14 +288,14 @@ test("profile clear requires a deliberate confirmation and can be cancelled",asy
  assert.equal(h.storage["aicj-studio-v2"],before);
  await h.click({action:"logout"});
  await h.click({action:"confirm-clear"});
- assert.match(h.html,/Think bigger/);
+ assert.match(h.html,/Your grade\. Your learning\./);
  assert.equal(h.storage["aicj-studio-v2"],undefined);
 });
 test("learning stages show completed progress rather than implying instant completion",async()=>{
  const h=app();await h.click({action:"guest"});await h.click({lesson:"6-A1"});
  assert.match(h.html,/Stage 1 of 5/);
- assert.match(h.html,/0% completed/);
- assert.match(h.html,/aria-label="Completed learning stages" aria-valuenow="0"/);
+ assert.match(h.html,/Journey steps 0 of 5/);
+ assert.match(h.html,/aria-label="Journey stages reached, not assessed mastery" aria-valuenow="0"/);
  assert.match(h.html,/id="stage-title" tabindex="-1"/);
 });
 test("mobile, high-contrast and feedback UI refinements are present",()=>{
@@ -489,7 +489,7 @@ test("reflective evidence is required, while discussion and sketch options remai
  const h=app({"aicj-studio-v2":JSON.stringify({name:"Learner",grade:6,records:{"6-B1":applied},diagnostics:{}})});
  await h.click({lesson:"6-B1"});
  assert.match(h.html,/Pause, reflect and transfer/);
- assert.match(h.html,/80% completed/);
+ assert.match(h.html,/Journey steps 4 of 5/);
  assert.match(h.html,/Discuss or explain aloud/);
  await h.click({action:"finish-reflection"});
  assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records["6-B1"].completed,false);
@@ -497,14 +497,15 @@ test("reflective evidence is required, while discussion and sketch options remai
  h.change({id:"reflection-confirm",checked:true,dataset:{}});
  await h.click({action:"finish-reflection"});
  assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records["6-B1"].completed,true);
- assert.match(h.html,/100% completed/);
+ assert.match(h.html,/Journey steps 5 of 5/);
 });
 test("application supports concise notes when students choose visual or spoken expression",async()=>{
  const h=app();await h.click({action:"guest"});await h.click({lesson:"6-A1"});
  await h.click({action:"concept-next"});await h.click({action:"concept-next"});
  h.change({name:"knowledge-choice",value:"0"});await h.click({action:"knowledge-check"});await h.click({action:"next"});
  await h.click({action:"model-reveal"});await h.click({action:"next"});
- const a=DATA.ACTIVITIES["6-A1"];a.items.forEach((item,i)=>h.change({dataset:{sort:String(i)},value:String(item[1])}));
+ await exploreLab(h,"6-A1");
+  const a=DATA.ACTIVITIES["6-A1"];a.items.forEach((item,i)=>h.change({dataset:{sort:String(i)},value:String(item[1])}));
  await h.click({action:"check"});await h.click({action:"next"});
  h.click({action:"format-choice",format:"visual"});
  await h.click({action:"apply-next"});
@@ -619,8 +620,8 @@ test("all 30 modules recover from a wrong answer through optional coaching witho
 });
 
 
-test("five interactive laboratories work as real choices, and never save simulated results",async()=>{
- const ids=["7-A1","8-B2","9-A1","9-B1","10-A3"];
+test("six interactive laboratories support learner choices without saving their inputs",async()=>{
+ const ids=["6-A1","7-A1","8-B2","9-A1","9-B1","10-A3"];
  for(const id of ids){
   const h=app();
   await h.click({action:"pick-grade",pick:id.split("-")[0]});
