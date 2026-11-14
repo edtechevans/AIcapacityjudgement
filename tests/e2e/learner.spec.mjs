@@ -235,3 +235,48 @@ test("Grade 8 feed-ranking investigation changes visible voices with the objecti
  await expect(page.locator(".lab-comparison")).toContainText("same five posts appear in a different order");
  await expect(page.locator('[data-action="check"]')).toBeEnabled();
 });
+
+
+
+test("Grade 6 visual AI-versus-rule lab changes output when learners change input",async({page})=>{
+ await startGrade(page,6);
+ await page.goto("/#/lesson/6-A1");
+ await page.locator('[data-action="concept-next"]').click();
+ await page.locator('[data-action="concept-next"]').click();
+ await page.locator('input[name="knowledge-choice"][value="0"]').check();
+ await page.locator('[data-action="knowledge-check"]').click();
+ await page.locator('[data-action="next"]').click();
+ await page.locator('[data-action="model-reveal"]').click();
+ await page.locator('[data-action="next"]').click();
+ await expect(page.locator(".learning-lab")).toContainText("What makes it AI?");
+ await expect(page.locator('[data-action="check"]')).toBeDisabled();
+ await page.locator('[data-action="lab-mode"][data-mode="timer"]').click();
+ await expect(page.locator("#lab-result")).toContainText("300 seconds");
+ await page.locator('[data-action="lab-adjust"][data-setting="changed"][data-value="1"]').click();
+ await expect(page.locator("#lab-result")).toContainText("120 seconds");
+ await page.locator('[data-action="lab-mode"][data-mode="classifier"]').click();
+ await expect(page.locator('[data-action="check"]')).toBeEnabled();
+});
+
+test("Grade 7 classroom lab supports user-changed data with no saved free text",async({page})=>{
+ await startGrade(page,7);
+ await page.goto("/#/lesson/7-A1");
+ await page.locator('[data-action="concept-next"]').click();
+ await page.locator('[data-action="concept-next"]').click();
+ await page.locator('input[name="knowledge-choice"][value="0"]').check();
+ await page.locator('[data-action="knowledge-check"]').click();
+ await page.locator('[data-action="next"]').click();
+ await page.locator('[data-action="model-reveal"]').click();
+ await page.locator('[data-action="next"]').click();
+ await page.locator('[data-action="lab-mode"][data-mode="skewed"]').click();
+ await expect(page.locator("#lab-result")).toContainText("2 training examples");
+ await page.locator('[data-action="lab-adjust"][data-setting="oakShade"][data-value="1"]').click();
+ await expect(page.locator("#lab-result")).toContainText("3 training examples");
+ await page.locator('[data-action="lab-adjust"][data-setting="mapleBright"][data-value="1"]').click();
+ await expect(page.locator("#lab-result")).toContainText("4 training examples");
+ await page.locator(".lab-observation-field textarea").fill("Adding examples changed predictions, but the sample is too small to establish real-world accuracy.");
+ expect(await page.evaluate(()=>JSON.stringify(localStorage))).not.toContain("Adding examples changed predictions");
+ await expect(page.locator('[data-action="check"]')).toBeDisabled();
+ await page.locator('[data-action="lab-mode"][data-mode="balanced"]').click();
+ await expect(page.locator('[data-action="check"]')).toBeEnabled();
+});
