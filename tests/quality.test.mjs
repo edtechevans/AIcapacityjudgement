@@ -19,10 +19,17 @@ function app(seed={},hash=""){
  return {get html(){return el.innerHTML},get hash(){return location.hash},get storage(){return store},get reading(){return document.documentElement.dataset.reading},get downloads(){return downloads},get exportedBlob(){return exportedBlob},get copiedText(){return copiedText},fire:(name,event)=>listeners[name]?.(event),click:async ds=>hooks.click({target:{dataset:ds,tagName:"BUTTON",closest(){return this}}}),change:t=>hooks.change({target:t}),input:t=>hooks.input({target:t}),back:hash=>{location.hash=hash;listeners.popstate?.()}};
 }
 const notes={purpose:"I want to help students understand an authentic problem and explain who might benefit.",decision:"I will use approved AI tools only where they help and check the evidence against alternatives.",evidence:"I will ask a potential user for feedback, examine the results and decide what needs improving.",work:"I created a first storyboard explaining the task and how a student would approach the problem.",revision:"I tested my first version, found a confusing explanation and revised it for the audience."};
+async function exploreLab(h,id){
+ const lab=DATA.LEARNING_LABS[id];
+ if(!lab)return;
+ for(const [mode] of lab.modes.slice(0,2))await h.click({action:"lab-mode",mode});
+ assert.match(h.html,/Both conditions explored/,id+" should compare two scenarios");
+}
 async function finish(h,l){
  const k=DATA.KNOWLEDGE[l.id],a=DATA.ACTIVITIES[l.id];
  await h.click({lesson:l.id});await h.click({action:"concept-next"});await h.click({action:"concept-next"});
  h.change({name:"knowledge-choice",value:String(k.check[2])});await h.click({action:"knowledge-check"});await h.click({action:"next"});await h.click({action:"model-reveal"});await h.click({action:"next"});
+ await exploreLab(h,l.id);
  if(a.kind==="sort")a.items.forEach((item,i)=>h.change({dataset:{sort:String(i)},value:String(item[1])}));
  else if(a.kind==="sequence"){const order=a.start.slice();for(let n=0;n<a.steps.length;n++){let j=order.indexOf(n);while(j>n){await h.click({action:"move",index:String(j),dir:"-1"});const tmp=order[j];order[j]=order[j-1];order[j-1]=tmp;j--}}}
  else{h.change({name:"activity-choice",value:String(a.correct)});h.input({id:"practice-reason",value:"This is the strongest response because it serves the learning goal and considers credible evidence."})}
@@ -518,6 +525,7 @@ async function reachPractice(h,id){
  await h.click({action:"next"});
  await h.click({action:"model-reveal"});
  await h.click({action:"next"});
+ await exploreLab(h,id);
  assert.match(h.html,/Stage 3 of 5/);
 }
 test("a mistaken classification leads to item feedback, optional scaffolding and self-selected stretch",async()=>{
@@ -640,6 +648,7 @@ test("all 30 applications show a distinct investigation and capstone evidence wh
    await h.click({action:"concept-next"});await h.click({action:"concept-next"});
    h.change({name:"knowledge-choice",value:String(k.check[2])});await h.click({action:"knowledge-check"});
    await h.click({action:"next"});await h.click({action:"model-reveal"});await h.click({action:"next"});
+   await exploreLab(h,id);
    if(a.kind==="sort")a.items.forEach((item,i)=>h.change({dataset:{sort:String(i)},value:String(item[1])}));
    else if(a.kind==="sequence"){const order=a.start.slice();for(let n=0;n<a.steps.length;n++){let j=order.indexOf(n);while(j>n){await h.click({action:"move",index:String(j),dir:"-1"});const tmp=order[j];order[j]=order[j-1];order[j-1]=tmp;j--}}}
    else{h.change({name:"activity-choice",value:String(a.correct)});h.input({id:"practice-reason",value:"This is a responsible choice because I can explain the evidence and its effect on the task."})}
