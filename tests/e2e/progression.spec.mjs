@@ -15,16 +15,15 @@ async function accessible(page,region){
  const result=await new AxeBuilder({page}).include(region).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]).analyze();
  expect(result.violations.map(x=>({rule:x.id,impact:x.impact,nodes:x.nodes.map(n=>n.target)}))).toEqual([]);
 }
-test("scope and sequence is visible, complete and keyboard expandable across G6–12",async({page})=>{
- await chooseGrade(page,8);
- await page.goto("/#/about");
- await expect(page.locator(".scope-grade-item")).toHaveCount(7);
- await expect(page.locator(".scope-grade-item").first()).toContainText("Explore & Question");
- await expect(page.locator(".scope-grade-item").last()).toContainText("Create & Steward");
- await page.locator(".scope-strands summary").click();
- await expect(page.locator(".scope-strand-grid section")).toHaveCount(6);
- await expect(page.locator(".scope-strand-grid li")).toHaveCount(42);
- await accessible(page,".scope-sequence");
+test("public curriculum displays the complete seven-grade sequence and six strands",async({page})=>{
+ await page.goto("/#/curriculum");
+ await expect(page.locator(".curriculum-year-tab")).toHaveCount(7);
+ await expect(page.locator(".curriculum-year-tab").first()).toContainText("Notice & explain");
+ await expect(page.locator(".curriculum-year-tab").last()).toContainText("Create & steward");
+ await expect(page.locator(".curriculum-strand-tab")).toHaveCount(6);
+ await expect(page.locator(".curriculum-progression-step")).toHaveCount(7);
+ await expect(page.locator(".catalogue-module")).toHaveCount(6);
+ await accessible(page,".curriculum-atlas");
  await noHorizontalOverflow(page);
 });
 test("G8 can investigate the representation of identical cases and recognise missing data",async({page})=>{
