@@ -4,6 +4,14 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## v20 — Investigate, test, create and transfer (November 2026)
+
+The curriculum has been rebuilt where comparative benchmarking revealed gaps, while preserving all **30 modules, six strands and five learning stages**. Every module now includes an original, evidence-oriented inquiry brief with an investigation method, authentic work sample and transfer question. Five modules gain interactive, offline laboratories: **G7 A1** (training data and shortcuts), **G8 B2** (algorithmic feeds and missing voices), **G9 A1** (performance evaluation and failure cases), **G9 B1** (AI companionship, privacy and boundaries) and **G10 A3** (design choices and accountability). The accompanying teaching explanations and formative questions have been rewritten to match what students observe.
+
+In the five laboratories, students compare **at least two different conditions** before completing the guided practice check. Results are fictional and clearly identified as teaching models; no network AI model or student-data service is involved. Four capstone-style modules now include explicit project phases and evidence requirements. Lesson notes exports contain their investigation question, method and evidence expectations.
+
+The aim is a materially stronger educational experience—not a claim of externally certified mastery or a proven 10/10 student outcome. See [Curriculum Rebuild v20](docs/CURRICULUM_REBUILD_V20.md), the [Teacher Labs Guide](docs/TEACHER_LABS_GUIDE.md) and [Curriculum Assessment Guide](docs/CURRICULUM_ASSESSMENT.md).
+
 ## v19 — Choose your grade, then learn within your grade (November 2026)
 
 The landing page now asks **one question: which grade are you in?** Students select Grade 6–10 and immediately enter the six-module experience for that grade. There is no alias-entry step. The Home page, course library, progress view and learning links stay within the chosen grade, with no everyday grade-switching controls.
