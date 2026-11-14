@@ -67,7 +67,7 @@ test("G11 provenance laboratory differentiates copied and independent sources",a
  await page.locator('[data-action="lab-mode"][data-mode="independent"]').click();
  await expect(page.locator("#lab-result")).toContainText("3 separately verifiable origins");
  await page.locator('[data-action="lab-adjust"][data-setting="standard"][data-value="headlines"]').click();
- await expect(page.locator("#lab-result")).toContainText("Count each headline");
+ await expect(page.locator("#lab-result")).toContainText("Counting headlines");
  await checkAxe(page);
 });
 
@@ -90,7 +90,7 @@ test("G12 governance lab reveals need for accessible appeal and remedy",async({p
  await page.locator('[data-action="lab-mode"][data-mode="redress"]').click();
  await page.locator('[data-action="lab-adjust"][data-setting="access"][data-value="assistive"]').click();
  await expect(page.locator("#lab-result")).toContainText("Needs assistive-technology access");
- await expect(page.locator("#lab-result")).toContainText("meaningful");
+ await expect(page.locator("#lab-result")).toContainText("accessible appeal");
  await checkAxe(page);
 });
 
@@ -108,9 +108,9 @@ test("G12 Impact Project has real multi-session pacing, milestone planning and n
  const answers=[0,1,2,0];
  for(let i=0;i<answers.length;i++)await page.locator('[data-sort="'+i+'"]').selectOption(String(answers[i]));
  await page.locator('[data-action="check"]').click();
- await expect(page.locator(".practice-feedback")).toContainText("Challenge passed");
+ await expect(page.locator("#activity-feedback")).toContainText("Challenge passed");
  await page.locator('[data-action="next"]').click();
- await expect(page.locator(".senior-portfolio")).toContainText("DP2 Capacity × Judgement Impact Project");
+ await expect(page.locator(".senior-portfolio")).toContainText("Build a defensible record");
  await expect(page.locator('[data-senior-milestone]')).toHaveCount(6);
  await page.locator('[data-senior-milestone="0"]').check();
  await expect(page.locator(".senior-portfolio-progress")).toContainText("1 of 6 planning milestones marked");
