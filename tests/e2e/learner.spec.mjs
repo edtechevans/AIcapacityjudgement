@@ -26,6 +26,7 @@ test("welcome, courses, home, learning, about, profile and lessons fit the scree
     await page.goto("/"+route);
     await expect(page.locator("#main-title")).toBeVisible();
     await assertNoOverflow(page,label);
+    await page.evaluate(()=>{document.activeElement?.blur?.();window.scrollTo(0,0)});
     await page.screenshot({path:"visual-review/"+info.project.name+"-"+label.toLowerCase().replace(/\s+/g,"-")+".png",fullPage:true,animations:"disabled"});
   }
 });
@@ -101,6 +102,13 @@ test("complete an authentic lesson, download work and resume the final stage",as
   expect(download.suggestedFilename()).toBe("AI-CJ-6-A1-learning-notes.txt");
   await page.locator('[data-action="record"]').click();
   await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5");
+  const stageVisible=await page.evaluate(()=>{
+    const track=document.querySelector(".step-track"),active=track?.querySelector(".step-dot.active");
+    if(!track||!active)return false;
+    const container=track.getBoundingClientRect(),item=active.getBoundingClientRect();
+    return item.left>=container.left-3&&item.right<=container.right+3;
+  });
+  expect(stageVisible,"Active lesson stage must remain visible inside the mobile stage navigation").toBe(true);
   await page.reload();
   await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5");
 });
