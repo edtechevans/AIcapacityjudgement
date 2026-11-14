@@ -8,3 +8,8 @@ study-data/
 .studies-private/
 *student-scores*.csv
 *learning-outcomes-data*.csv
+
+# Prefer school-approved, offline locations for any actual student study data.
+*anonymous_scores*.csv
+*participant_scores*.csv
+*real_study*.csv
