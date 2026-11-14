@@ -73,7 +73,7 @@ const SCOPE_SEQUENCE={
    title:"Investigate a disputed community alert",
    question:"How should people respond when an apparently credible, AI-assisted public message may be wrong?",
    task:"Audit the provenance of a fictional voice or video notice, compare a tool on familiar and accessibility-related edge cases, assess the consequences of false claims and design an inclusive, human-approved correction process.",
-   evidence:"A provenance chain, reproducible evaluation cases, a stakeholder impact analysis and a carefully qualified communication plan.",
+   evidence:"An independently verified provenance chain, a reproducible test log of failure cases, a stakeholder impact analysis and a carefully qualified communication plan.",
    feedback:"Invite a peer to challenge your evidence chain or introduce a hard-to-serve user case, then revise the deployment decision.",
    transfer:"What should change when the message concerns a school cancellation, medical instruction or local service?",
    criteria:["Distinguish authentic source evidence from synthetic realism.","Test consequential failure cases and name affected people.","Defend a safe response with transparent uncertainty and oversight."]
