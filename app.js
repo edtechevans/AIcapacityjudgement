@@ -669,6 +669,11 @@ if(t.dataset.lesson){openLesson(t.dataset.lesson);return;}
 const action=t.dataset.action;
 if(action==="skip-main"){const main=$("#main-content");if(main?.focus)main.focus({preventScroll:true});return}
 if(["home","courses","about","curriculum","snapshot","profile"].includes(action)){goto(action);return}
+if(action==="curriculum-grade"){const g=Number(t.dataset.curGrade);if(GRADES[g]){curriculumView.grade=g;render();const tab=$("#curriculum-grade-"+g);if(tab?.focus)tab.focus({preventScroll:true});}return}
+if(action==="curriculum-strand"){const id=t.dataset.curStrand;if(STRANDS.some(st=>st.id===id)){curriculumView.strand=id;render();const tab=$("#curriculum-strand-"+id);if(tab?.focus)tab.focus({preventScroll:true});}return}
+if(action==="curriculum-open-grade"){const g=Number(t.dataset.curGrade);if(!GRADES[g])return;if(state.gradeChosen){if(state.grade===g)goto("courses");else showNotice("Your current learning space is Grade "+state.grade+". Use your profile to change grades in this preview.");}else gradeTo(g);return}
+if(action==="curriculum-jump"){const heading=$("#curriculum-explorer-heading");if(heading?.focus){heading.tabIndex=-1;heading.focus({preventScroll:true});}const target=$("#curriculum-explorer");if(target?.scrollIntoView)target.scrollIntoView({behavior:"smooth",block:"start"});return}
+if(action==="copy-curriculum"){const link="https://edtechevans.github.io/AIcapacityjudgement/#/curriculum";if(navigator.clipboard?.writeText){try{await navigator.clipboard.writeText(link);showNotice("Public curriculum link copied.");}catch(_){showNotice("Share this link: "+link)}}else showNotice("Share this link: "+link);return}
 if(action==="enter"){goto("welcome");return}
 if(action==="pick-grade"){gradeTo(t.dataset.pick);return}
 // Backward-compatible action for older local tests; no extra welcome step is displayed.
