@@ -42,8 +42,8 @@ for(const entry of lessons){
   await expect(page.locator(".lab-offline summary")).toBeVisible();
   const axe=await new AxeBuilder({page}).include(".learning-lab")
    .withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]).analyze();
-  const serious=axe.violations.filter(v=>["serious","critical"].includes(v.impact));
-  expect(serious.map(v=>({id:v.id,targets:v.nodes.slice(0,2).map(n=>n.target)}))).toEqual([]);
+  const violations=axe.violations;
+  expect(violations.map(v=>({id:v.id,impact:v.impact,targets:v.nodes.slice(0,2).map(n=>n.target)}))).toEqual([]);
   const widths=await page.evaluate(()=>({
     viewport:document.documentElement.clientWidth,
     scroll:document.documentElement.scrollWidth
