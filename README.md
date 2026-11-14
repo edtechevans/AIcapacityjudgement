@@ -8,17 +8,17 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 All **30 modules** across G6–10 now teach substantive content **before** assessment. Each module has:
 
-1. **Learn:** Three sequential concept explanations, key vocabulary and a short retrieval check with corrective feedback.
+1. **Learn:** Three sequential concept explanations, optional local read-aloud, key vocabulary and a short retrieval check with corrective feedback.
 2. **Model:** A relevant situation and a comparison between a weaker approach and a more considered response, with an explanation of the reasoning.
 3. **Practise:** An interactive classification, evidence, decision, prompt or sequencing activity, with feedback; selection-based tasks require students to explain their choices.
-4. **Apply:** Two authentic contexts to choose from, choice of written, visual or discussion format, and a guided five-part project record (purpose, AI-use decision, verification plan, actual work sample, feedback/revision).
+4. **Apply:** Two authentic contexts to choose from, a choice of written, visual or discussion format, and a guided five-part work record (purpose, AI-use decision, evidence plan, created/tested work sample, and feedback/revision).
 5. **Reflect:** Summarise what was learned, what was tested and what to try in a new context.
 
 The resulting learning experiences create space for **choice, original work, feedback from others, reflection, and transfer**. Students may use approved AI tools or teacher-provided examples; the platform does not connect to an external AI model.
 
 Site completion is a **formative record of participation and self-confirmed application**, not evidence that a teacher has validated the quality of the student's work. Text drafts are not saved or uploaded. Previously completed v2 lessons are displayed as prior exploration, not automatically reclassified as completed under the deeper sequence.
 
-A ready-to-use [ten-student pilot guide](docs/STUDENT_PILOT_GUIDE.md) explains how to observe learning, collect feedback appropriately and test transfer across Grades 6–10. No human student study is claimed as completed.
+A ready-to-use [ten-student pilot guide](docs/STUDENT_PILOT_GUIDE.md) explains how to observe learning, collect feedback appropriately and test transfer across Grades 6–10. The [Curriculum and Assessment Guide](docs/CURRICULUM_ASSESSMENT.md) describes separate progressions and authentic evidence for both curricula. No human student study is claimed as completed.
 
 ## UI/UX refinement (13 November 2026)
 
