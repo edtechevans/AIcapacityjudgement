@@ -67,7 +67,10 @@ test("instruction is required, and a completed checkpoint survives reload",async
 });
 test("all 30 courses still work end-to-end without saving student writing",async()=>{
  const h=app();await h.click({action:"guest"});
- for(const l of DATA.LESSONS)await finish(h,l);
+ for(const grade of [6,7,8,9,10]){
+  if(grade!==6){await h.click({action:"profile"});await h.click({action:"switch-grade"});await h.click({action:"pick-grade",pick:String(grade)});}
+  for(const l of DATA.LESSONS.filter(item=>item.grade===grade))await finish(h,l);
+ }
  const stored=JSON.parse(h.storage["aicj-studio-v2"]);
  assert.equal(Object.values(stored.records).filter(v=>v.completed).length,30);
  assert.ok(!JSON.stringify(stored).includes(notes.work));
@@ -567,6 +570,11 @@ test("all 30 modules recover from a wrong answer through optional coaching witho
  const h=app();
  await h.click({action:"guest"});
  for(const l of DATA.LESSONS){
+  if(l.grade!==JSON.parse(h.storage["aicj-studio-v2"]).grade){
+   await h.click({action:"profile"});
+   await h.click({action:"switch-grade"});
+   await h.click({action:"pick-grade",pick:String(l.grade)});
+  }
   const a=DATA.ACTIVITIES[l.id];
   await reachPractice(h,l.id);
   if(a.kind==="sort"){
