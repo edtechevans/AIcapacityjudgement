@@ -8,7 +8,7 @@ const root=join(import.meta.dirname,"..");
 const paths=[
  "curriculum.js","learning-data.js",...[6,7,8,9,10].map(g=>"content/grade"+g+".js"),
  "content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js",
- "content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js"
+ "content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js"
 ];
 const ctx=createContext({});
 for(const path of paths)runInContext(readFileSync(join(root,path),"utf8"),ctx,{filename:path});
@@ -117,7 +117,7 @@ test("senior projects have authentic human-checked evidence and realistic multi-
 
 test("browser entry loads all senior resources before app; no senior lesson needs external AI or private data",()=>{
  const html=readFileSync(join(root,"index.html"),"utf8");
- const positions=["curriculum.js","learning-data.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","app.js"].map(x=>html.indexOf('src="./'+x));
+ const positions=["curriculum.js","learning-data.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js","app.js"].map(x=>html.indexOf('src="./'+x));
  assert.ok(positions.every(x=>x>=0));
  assert.ok(positions.every((x,i)=>i===0||x>positions[i-1]),"Script order must preserve dependencies");
  const senior=paths.filter(x=>x.includes("senior-")).map(x=>readFileSync(join(root,x),"utf8")).join("\n");
