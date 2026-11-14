@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Student-first AI Capacity x Judgement Learning Studio",
   "scripts": {
-    "test:unit": "node --test tests/quality.test.mjs tests/engineering.test.mjs tests/learning-quality.test.mjs tests/study-analysis.test.mjs",
+    "test:unit": "node --test tests/quality.test.mjs tests/engineering.test.mjs tests/learning-quality.test.mjs tests/senior-learning.test.mjs tests/study-analysis.test.mjs",
     "test:browser": "playwright test",
     "test:browser:report": "playwright show-report"
   },
