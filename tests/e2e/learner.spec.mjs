@@ -186,7 +186,7 @@ test("welcome is a single-step grade chooser and entry stays in one grade",async
   await page.goto("/#/lesson/9-A1");
   await expect(page).toHaveURL(/#\/grade\/8$/);
   await expect(page.locator(".course-intro")).toContainText("Grade 8:");
-  await page.locator('[data-action="profile"]').first().click();
+  await page.goto("/#/profile");
   await expect(page.locator('[data-action="switch-grade"]')).toBeVisible();
   await page.locator('[data-action="switch-grade"]').click();
   await expect(page.locator("#main-title")).toHaveText("Your grade. Your learning.");
