@@ -393,3 +393,76 @@ test("mobile navigation contains reading controls and skip navigation keeps the 
  assert.match(css,/@media\(max-width:360px\)/);
  assert.match(css,/\.topbar \.top-actions \.comfort-toggle\{display:none\}/);
 });
+
+
+test("all 30 modules have distinct, actionable and age-specific learning scaffolds",()=>{
+ const ids=DATA.LESSONS.map(l=>l.id),guides=DATA.LEARNING_SCAFFOLDS;
+ assert.equal(ids.length,30);
+ assert.equal(Object.keys(guides).length,30);
+ const transferred=new Set();
+ for(const l of DATA.LESSONS){
+  const g=guides[l.id];
+  assert.ok(g,"Missing scaffold for "+l.id);
+  assert.equal(g.criteria.length,3,"Three success indicators "+l.id);
+  for(const field of ["notice","support","stretch","transfer"])assert.ok(g[field].length>=50,"Too generic or missing "+field+" for "+l.id);
+  for(const c of g.criteria)assert.ok(c.length>=25,"Success indicator is too vague in "+l.id);
+  transferred.add(g.transfer);
+ }
+ assert.equal(transferred.size,30,"Transfer tasks should be individually authored");
+});
+test("instruction appears before challenge, includes meaningful support and responsive feedback",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({lesson:"6-A1"});
+ const guide=DATA.LEARNING_SCAFFOLDS["6-A1"];
+ assert.match(h.html,/What success looks like/);
+ assert.match(h.html,/By the end, I can/);
+ assert.ok(h.html.includes(guide.criteria[0]));
+ await h.click({action:"concept-next"});await h.click({action:"concept-next"});
+ h.change({name:"knowledge-choice",value:"1"});await h.click({action:"knowledge-check"});
+ assert.match(h.html,/Try this next:/);
+ assert.ok(h.html.includes(guide.support));
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records["6-A1"].knowledgePassed,false);
+ h.change({name:"knowledge-choice",value:"0"});await h.click({action:"knowledge-check"});
+ await h.click({action:"next"});
+ assert.ok(h.html.includes(guide.notice));
+ await h.click({action:"model-reveal"});
+ assert.ok(h.html.includes(guide.stretch));
+});
+test("completed prior-grade study offers optional retrieval in the next grade",async()=>{
+ const prior={knowledgePassed:true,modelSeen:true,practicePassed:true,applied:true,reflected:true,completed:true,lastStage:4};
+ const h=app({"aicj-studio-v2":JSON.stringify({name:"Learner",grade:7,records:{"6-A1":prior},diagnostics:{}})});
+ await h.click({lesson:"7-A1"});
+ assert.match(h.html,/Connect with what you learned before/);
+ assert.match(h.html,/In your earlier module/);
+ assert.match(h.html,/AI can produce convincing outputs/);
+ await h.click({lesson:"7-B1"});
+ assert.doesNotMatch(h.html,/Connect with what you learned before/);
+});
+test("reflective evidence is required, while discussion and sketch options remain legitimate",async()=>{
+ const applied={knowledgePassed:true,modelSeen:true,practicePassed:true,applied:true,reflected:false,completed:false,lastStage:4};
+ const h=app({"aicj-studio-v2":JSON.stringify({name:"Learner",grade:6,records:{"6-B1":applied},diagnostics:{}})});
+ await h.click({lesson:"6-B1"});
+ assert.match(h.html,/Pause, reflect and transfer/);
+ assert.match(h.html,/80% completed/);
+ assert.match(h.html,/Discuss or explain aloud/);
+ await h.click({action:"finish-reflection"});
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records["6-B1"].completed,false);
+ h.change({name:"reflection-mode",value:"spoken"});
+ h.change({id:"reflection-confirm",checked:true,dataset:{}});
+ await h.click({action:"finish-reflection"});
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records["6-B1"].completed,true);
+ assert.match(h.html,/100% completed/);
+});
+test("application supports concise notes when students choose visual or spoken expression",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({lesson:"6-A1"});
+ await h.click({action:"concept-next"});await h.click({action:"concept-next"});
+ h.change({name:"knowledge-choice",value:"0"});await h.click({action:"knowledge-check"});await h.click({action:"next"});
+ await h.click({action:"model-reveal"});await h.click({action:"next"});
+ const a=DATA.ACTIVITIES["6-A1"];a.items.forEach((item,i)=>h.change({dataset:{sort:String(i)},value:String(item[1])}));
+ await h.click({action:"check"});await h.click({action:"next"});
+ h.click({action:"format-choice",format:"visual"});
+ await h.click({action:"apply-next"});
+ assert.match(h.html,/Brief notes are enough/);
+ for(const key of ["purpose","decision","evidence"])h.input({dataset:{planField:key},value:"A specific brief note about my work"});
+ await h.click({action:"apply-next"});
+ assert.match(h.html,/Make, test and improve/);
+});
