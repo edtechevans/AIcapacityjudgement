@@ -71,14 +71,14 @@ Object.assign(CLASSROOM_PACING,{
      setup:"Independent inquiry, design and testing, peer challenge, revision and a defensible public or teacher conference."}
 });
 Object.assign(MULTI_SESSION_PACING,{
- "11-A1":"2 × 75-minute investigations and evaluation conference",
- "11-A2":"2 × 80-minute workflow studios",
+ "11-A1":"2 × 75-minute investigation sessions and evaluation conference",
+ "11-A2":"2 × 80-minute workflow sessions",
  "11-A3":"3 × 80-minute design sessions plus feedback",
  "11-B2":"2 × 70-minute research provenance sessions",
  "11-B3":"2 × 80-minute stakeholder/equity sessions",
  "12-A1":"2 × 85-minute investigation sessions",
- "12-A2":"3 × 85-minute workflow and incident studios",
- "12-A3":"6–8 weekly studio blocks plus an authentic stakeholder conference",
+ "12-A2":"3 × 85-minute workflow and incident sessions",
+ "12-A3":"6–8 weekly studio blocks (60–90 minutes per session) plus an authentic stakeholder conference",
  "12-B2":"2 × 80-minute evidence and oral-defence sessions",
  "12-B3":"3 × 85-minute governance and response sessions"
 });
