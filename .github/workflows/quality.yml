@@ -1,0 +1,32 @@
+name: Learning Studio quality
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.js"
+      - "**/*.mjs"
+      - "**/*.css"
+      - "**/*.html"
+      - ".github/workflows/quality.yml"
+  pull_request:
+    paths:
+      - "**/*.js"
+      - "**/*.mjs"
+      - "**/*.css"
+      - "**/*.html"
+
+permissions:
+  contents: read
+
+jobs:
+  curriculum-and-ui-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate curriculum, learning flow and accessibility foundations
+        run: node --test tests/quality.test.mjs
