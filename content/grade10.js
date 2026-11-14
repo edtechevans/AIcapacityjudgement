@@ -82,9 +82,9 @@ Object.assign(KNOWLEDGE, {
   },
   "10-A3": {
     "core": [
-      "Authentic creation starts with a need defined by people, not an attractive tool. Interview or listen to affected users, document what the solution must achieve and agree on criteria for success. Treat AI as one possible contributor rather than the owner of the project.",
-      "Prototype with transparent methods. Keep track of human decisions and any AI contributions. Test whether the design works across different users, languages or access needs. A solution that succeeds in a controlled demonstration may fail in a real setting.",
-      "Revise using evidence. Compare the prototype to your criteria, report what did not work and explain your response to feedback. Your final presentation should communicate not only what you made, but why it matters to the intended audience and what you would improve next."
+      "Authentic design begins with a need and a person, not with an impressive AI tool. Identify the affected stakeholders and agree on specific success criteria, including accessibility, privacy, clarity and usefulness. Consider AI-assisted, non-AI and blended methods as genuine alternatives; declining to use AI may be the best decision if it does not advance the goal or cannot be used safely.",
+      "Prototype something people could really use, such as a multilingual school welcome resource. Before sharing it, test the accuracy of its content and translations, include an unusual failure case, check that its design works for users with different access needs and document the human decisions behind it. A model-generated draft is not a completed solution, and impressive output is not evidence that intended users can benefit.",
+      "Gather feedback from stakeholders or a teacher-approved fictional user brief, revise the prototype and keep a decision and test log. Your capstone must show the problem, the alternatives, the reasons for AI use or non-use, evaluation evidence, an account of who bears the risks, and what remains unproven. Defend the result in a peer or teacher conference. The website can guide your process but cannot verify the quality of the work you produce."
     ],
     "example": [
       "'Build an impressive AI demonstration first and find a problem for it later.'",
