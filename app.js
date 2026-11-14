@@ -305,7 +305,7 @@ passed=w.selected===a.correct;feedback=a.options[w.selected][a.kind==="prompt"?2
 }
 w.checked=true;w.feedback={passed,message:feedback};r.attempts=(r.attempts||0)+1;if(passed){r.practicePassed=true;w.retrying=false;}persist();render();const feedbackEl=$("#activity-feedback");if(feedbackEl)feedbackEl.focus({preventScroll:true});
 }
-function recordReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);const fields=w.fields||{};const sufficient=["purpose","decision","evidence","work","revision"].every(key=>(fields[key]||"").trim().length>=35);if(!r.knowledgePassed||!w.modelSeen||!r.practicePassed||!sufficient||!w.confirmed){notice="Complete the learning sequence and explain your plan before recording it.";render();return;}r.applied=true;r.reflected=true;r.completed=true;w.stage=4;checkpoint(l.id,4);goto("lesson");}
+function recordReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);const fields=w.fields||{};const sufficient=["purpose","decision","evidence","work","revision"].every(key=>(fields[key]||"").trim().length>=35);if(!r.knowledgePassed||!w.modelSeen||!r.practicePassed||!sufficient||!w.confirmed){notice="Complete the learning sequence and explain your plan before recording it.";render();return;}r.applied=true;r.reflected=true;r.completed=true;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
 document.addEventListener("click",async(e)=>{
 const t=e.target.closest("[data-action],[data-grade],[data-lesson]");if(!t)return;if(t.tagName==="A"&&typeof e.preventDefault==="function")e.preventDefault();
 if(t.dataset.grade){gradeTo(t.dataset.grade);return;}
