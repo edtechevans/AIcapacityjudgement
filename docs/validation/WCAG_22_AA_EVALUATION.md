@@ -113,7 +113,7 @@ For each criterion record **Pass / Fail / Not Applicable / Not Tested**, the aff
 
 | ID | Criterion | URL/flow | Environment | Evidence | Severity | Owner | Status | Retest |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Pending | — | — | — | — | — | — | Not assessed | — |
+| A11Y-001 | 2.1.1 Keyboard (scrollable region focus) | Grade 7 A1 classifier, narrow mobile width | GitHub Actions Chromium phone and small phone | [Failed run 43564341021](https://github.com/edtechevans/AIcapacityjudgement/actions/runs/43564341021), axe `scrollable-region-focusable` on `.lab-table-wrap` | Serious | Development | Code corrected in commit `80ca8230`; manual and browser retest pending | Await latest passing run |
 
 ## Qualified evaluator sign-off — only after evaluation
 
