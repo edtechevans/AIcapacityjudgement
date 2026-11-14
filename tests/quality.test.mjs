@@ -466,3 +466,61 @@ test("application supports concise notes when students choose visual or spoken e
  await h.click({action:"apply-next"});
  assert.match(h.html,/Make, test and improve/);
 });
+
+
+async function reachPractice(h,id){
+ const k=DATA.KNOWLEDGE[id];
+ await h.click({lesson:id});
+ await h.click({action:"concept-next"});
+ await h.click({action:"concept-next"});
+ h.change({name:"knowledge-choice",value:String(k.check[2])});
+ await h.click({action:"knowledge-check"});
+ await h.click({action:"next"});
+ await h.click({action:"model-reveal"});
+ await h.click({action:"next"});
+ assert.match(h.html,/Stage 3 of 5/);
+}
+test("a mistaken classification leads to item feedback, optional scaffolding and self-selected stretch",async()=>{
+ const h=app();
+ await h.click({action:"guest"});
+ await reachPractice(h,"6-A1");
+ assert.match(h.html,/Choose your next learning step/);
+ assert.match(h.html,/Work it out/);
+ assert.match(h.html,/Use a clue/);
+ assert.match(h.html,/Go further/);
+ [1,1,0,1].forEach((value,i)=>h.change({dataset:{sort:String(i)},value:String(value)}));
+ await h.click({action:"check"});
+ assert.match(h.html,/Example 1/);
+ assert.match(h.html,/A smaller step may help/);
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records["6-A1"].completed,false);
+ await h.click({action:"coach-route",route:"support"});
+ assert.match(h.html,/A smaller step/);
+ assert.ok(h.html.includes(DATA.LEARNING_SCAFFOLDS["6-A1"].support));
+ await h.click({action:"coach-revisit"});
+ assert.match(h.html,/Stage 2 of 5/);
+ await h.click({action:"next"});
+ assert.match(h.html,/Stage 3 of 5/);
+ h.change({dataset:{sort:"0"},value:"0"});
+ await h.click({action:"check"});
+ assert.match(h.html,/Challenge passed/);
+ assert.match(h.html,/Try applying the idea in a harder situation/);
+ await h.click({action:"coach-route",route:"stretch"});
+ assert.ok(h.html.includes(DATA.LEARNING_SCAFFOLDS["6-A1"].transfer));
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records["6-A1"].completed,false,"Passing practice is not mastery or completion");
+});
+test("wrong multiple-choice feedback addresses the chosen response but does not assess written reasoning",async()=>{
+ const h=app();await h.click({action:"guest"});
+ await reachPractice(h,"6-B1");
+ h.change({name:"activity-choice",value:"0"});
+ h.input({id:"practice-reason",value:"A complete answer seems easiest, but I need to think about what I am practising."});
+ await h.click({action:"check"});
+ assert.match(h.html,/This removes the practice/);
+ assert.match(h.html,/Try this next/);
+ assert.match(h.html,/Use a clue/);
+ const stored=JSON.stringify(h.storage);
+ assert.ok(!stored.includes("A complete answer seems easiest"),"Free text is never saved");
+ h.change({name:"activity-choice",value:String(DATA.ACTIVITIES["6-B1"].correct)});
+ await h.click({action:"check"});
+ assert.match(h.html,/Challenge passed/);
+ assert.match(h.html,/has not been assessed/);
+});
