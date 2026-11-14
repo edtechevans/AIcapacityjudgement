@@ -177,7 +177,7 @@ test("specific mistakes open learner-controlled support, model review and option
 test("welcome is a single-step grade chooser and entry stays in one grade",async({page})=>{
   await page.goto("/#/welcome");
   await expect(page.locator("#main-title")).toHaveText("Your grade. Your learning.");
-  await expect(page.locator('[data-action="pick-grade"]')).toHaveCount(5);
+  await expect(page.locator('[data-action="pick-grade"]')).toHaveCount(7);
   await expect(page.locator("#guest-name")).toHaveCount(0);
   await expect(page.locator('[data-action="guest"]')).toHaveCount(0);
   await page.locator('[data-action="pick-grade"][data-pick="8"]').click();
