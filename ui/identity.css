@@ -608,3 +608,32 @@ html{scroll-behavior:auto}
  .learning-coach-suggested{font-size:.67rem}
  .learning-coach-panel{padding:15px}
 }
+
+
+/* v19: single-choice, grade-specific welcome and grade context. */
+.welcome-panel.grade-entry{max-width:1200px;margin:0 auto;padding:clamp(34px,5vw,72px) 24px 58px;text-align:center}
+.grade-entry .welcome-brand{justify-content:center;margin:0 auto 22px}
+.grade-entry .eyebrow{font-size:.77rem;letter-spacing:.15em;color:var(--brand-capacity)}
+.grade-entry h1{font-family:var(--brand-display);font-size:clamp(2.3rem,4.8vw,4.2rem);font-weight:650;line-height:1.15;letter-spacing:-.045em;color:var(--brand-ink);margin:13px auto 16px;max-width:900px}
+.grade-entry .grade-entry-intro{font-size:clamp(1rem,1.45vw,1.12rem);line-height:1.65;color:var(--brand-muted);max-width:620px;margin:0 auto 30px}
+.grade-entry-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin:28px auto 24px;text-align:left}
+.grade-entry-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-height:240px;padding:22px 18px;border:1px solid var(--brand-line);border-top:4px solid var(--brand-capacity);border-radius:16px;background:var(--brand-white);box-shadow:0 8px 25px rgba(20,35,57,.035);color:var(--brand-ink);text-align:left;cursor:pointer;transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease}
+.grade-entry-card:nth-child(even){border-top-color:var(--brand-judgement)}
+.grade-entry-card:hover{border-color:#79a9aa;box-shadow:0 15px 35px rgba(20,35,57,.12);transform:translateY(-3px)}
+.grade-entry-card:nth-child(even):hover{border-color:#c98b80}
+.grade-entry-card:focus-visible{outline:3px solid var(--brand-focus);outline-offset:4px}
+.grade-entry-number{display:inline-flex;gap:7px;align-items:baseline;color:var(--brand-muted);font-size:.95rem;font-weight:700;white-space:nowrap}
+.grade-entry-number strong{font-size:2.6rem;line-height:1;color:var(--brand-ink);font-weight:750;letter-spacing:-.05em}
+.grade-entry-title{font-size:1.08rem;font-weight:740;line-height:1.4;min-height:43px;letter-spacing:-.02em;color:var(--brand-ink)}
+.grade-entry-description{font-size:.84rem;line-height:1.55;color:var(--brand-muted);flex:1}
+.grade-entry-arrow{font-size:.82rem;font-weight:750;color:var(--brand-capacity);margin-top:auto}
+.grade-entry-card:nth-child(even) .grade-entry-arrow{color:var(--brand-judgement)}
+.grade-entry-footnote{font-size:.87rem;color:#476277;font-weight:600;margin:3px auto 12px}
+.grade-entry .grade-entry-privacy{font-size:.78rem;line-height:1.6;max-width:620px;margin:8px auto;color:var(--brand-muted)}
+.grade-entry .welcome-deeplink{max-width:680px;background:var(--brand-capacity-soft);border:1px solid #b2d9d1;border-radius:10px;padding:13px 17px;margin:0 auto 17px;color:#23594f;font-size:.92rem;line-height:1.55;text-align:left}
+.dashboard-grade-locked strong{display:inline-block;padding:10px 15px;border:1px solid var(--brand-line);background:#fff;border-radius:10px;font-weight:750;color:var(--brand-ink)}
+.course-grade-scope{display:inline-flex;align-items:center;gap:9px;margin-top:18px;padding:9px 13px;border:1px solid #c3dfd8;border-radius:9px;background:#f0faf7;color:#276258;font-size:.83rem;font-weight:700}
+.grade-scope-profile{border-left:4px solid var(--brand-capacity)}
+@media(max-width:990px){.grade-entry-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.grade-entry-card{min-height:218px}}
+@media(max-width:620px){.welcome-panel.grade-entry{padding:35px 18px 48px}.grade-entry .welcome-brand{margin-bottom:17px}.grade-entry h1{font-size:2.4rem}.grade-entry-grid{grid-template-columns:1fr;gap:11px;margin-top:22px}.grade-entry-card{min-height:116px;padding:16px 18px;gap:6px}.grade-entry-number strong{font-size:2rem}.grade-entry-title{min-height:0;font-size:1.05rem}.grade-entry-description{font-size:.82rem}.grade-entry-arrow{margin-top:2px}.grade-entry-footnote{font-size:.77rem;line-height:1.6}}
+@media(prefers-reduced-motion:reduce){.grade-entry-card{transition:none}.grade-entry-card:hover{transform:none}}
