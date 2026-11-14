@@ -7,8 +7,8 @@ Object.assign(KNOWLEDGE, {
       "Communicate findings transparently. Explain what you tested, your criteria, the observed results, risks and uncertainties. Avoid universal claims from small samples. A valuable evaluation helps a real audience decide if, when and under what safeguards to use the tool."
     ],
     "example": [
-      "'A vendor says its model never makes mistakes, so we can adopt it.'",
-      "'I will inspect the evidence, test realistic and unusual cases, compare a non-AI alternative and present conditional recommendations.'"
+      "A vendor promises perfect accuracy, so our school can adopt the tool.",
+      "I will demand representative tests and clearly defined uses, examine consequential failures, and compare a non-AI alternative before recommending a bounded pilot."
     ],
     "check": [
       "What should you do with a claim of perfect AI accuracy?",
@@ -47,8 +47,8 @@ Object.assign(KNOWLEDGE, {
       "A mature decision can select AI, limit it or reject it for a particular task. State the reasons, describe who benefits and note what you would reconsider if new evidence became available. The outcome is not using AI more often, but choosing better approaches."
     ],
     "example": [
-      "'The AI version was produced faster, so it must be the best workflow.'",
-      "'I will compare overall quality, time including verification, accessibility and risks, then select the method that best serves the goal.'"
+      "The AI draft took less time, so it is automatically the best workflow.",
+      "I will compare end-to-end quality, verification effort, privacy, accessibility and alternatives; non-use may be the more responsible choice."
     ],
     "check": [
       "What is a defensible way to choose between AI and non-AI workflows?",
@@ -87,8 +87,8 @@ Object.assign(KNOWLEDGE, {
       "Gather feedback from stakeholders or a teacher-approved fictional user brief, revise the prototype and keep a decision and test log. Your capstone must show the problem, the alternatives, the reasons for AI use or non-use, evaluation evidence, an account of who bears the risks, and what remains unproven. Defend the result in a peer or teacher conference. The website can guide your process but cannot verify the quality of the work you produce."
     ],
     "example": [
-      "'Build an impressive AI demonstration first and find a problem for it later.'",
-      "'Listen to users, define a problem, choose tools responsibly, prototype, test with intended users and revise the design.'"
+      "The multilingual welcome guide is polished; it is ready to launch.",
+      "I will test translation and access needs with intended users, document failures and revisions and defend my tool choice against the original criteria."
     ],
     "check": [
       "What is the best evidence that an authentic AI-supported solution is worthwhile?",
@@ -127,8 +127,8 @@ Object.assign(KNOWLEDGE, {
       "Keep a decision record for an authentic project: what did you use, what did you reject and why? Explain how your choices influenced the final result and what evidence would change your view. Transparency makes judgement visible to others."
     ],
     "example": [
-      "'I used AI everywhere because it was available.'",
-      "'I did my initial thinking independently, used an approved tool for targeted critique and rejected generated conclusions I could not verify.'"
+      "I used AI at every step, so I have demonstrated maximum capacity.",
+      "I will defend where I chose not to use AI, explain my independent contributions and show how the tool served a specific learning purpose."
     ],
     "check": [
       "Which statement best demonstrates informed AI judgement?",
@@ -167,8 +167,8 @@ Object.assign(KNOWLEDGE, {
       "Communicate uncertainty precisely. Explain which claims are well supported, which remain contested and what future evidence could help. Being careful with uncertainty does not mean avoiding conclusions; it means making the strength of your confidence proportionate to the evidence."
     ],
     "example": [
-      "'Two studies disagree; therefore nobody can know anything.'",
-      "'I will compare populations and methods, describe what each supports and explain where uncertainty remains.'"
+      "The sources disagree, so no useful conclusion is possible.",
+      "I will compare methods and populations, identify what both studies actually support, state uncertainty and describe what new evidence could change my claim."
     ],
     "check": [
       "What is a sound response when two credible studies reach different conclusions?",
@@ -207,8 +207,8 @@ Object.assign(KNOWLEDGE, {
       "A credible proposal includes conditions for adoption, measurable success criteria and clear reasons to pause or stop. It also recognises costs and unintended effects. Good leadership makes it possible for people to question a system and improve it over time."
     ],
     "example": [
-      "'Launch the system because it saves time; no one needs to know how it works.'",
-      "'Consult affected groups, run fair tests, provide oversight and an appeal route, and review impacts before expanding.'"
+      "The tool saves time, so a way to contest decisions is unnecessary.",
+      "I will test failures, consult affected people, assign human responsibility and design an accessible appeal and correction route before the system expands."
     ],
     "check": [
       "What is essential when AI influences consequential decisions?",
