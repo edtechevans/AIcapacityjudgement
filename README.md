@@ -4,6 +4,20 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## The Intersection — a refreshed identity (November 2026)
+
+The Learning Studio now has a **complete, original visual identity**. Its symbol represents two distinct pathways—AI Capacity (aqua) and AI Judgement (coral)—meeting at a considered choice. The identity avoids generic AI imagery while remaining recognisable from a 16px favicon to a presentation-size social graphic.
+
+- **[Live brand showcase](https://edtechevans.github.io/AIcapacityjudgement/brand.html):** logos, palette, app icons, sharing card and download links.
+- **[Brand system guidelines](docs/BRAND_SYSTEM.md):** rationale, colour contrast, typography, logo usage, accessibility rules and maintenance steps.
+- **[Design tokens](ui/identity.css):** the sitewide brand palette, applied after the base and responsive layout styles.
+- **[Scalable source assets](assets/brand/):** primary mark, inverse mark, horizontal lockup, favicon and social preview (SVG).
+- **[Automated raster exports](scripts/build_brand_assets.py):** 16/32px browser favicons, 180px Apple icon, 192/512px app icons, maskable icon and 1200×630 social card (PNG).
+- **[Manifest](site.webmanifest):** home-screen branding and install metadata. Online access is still required; no offline mode is promised.
+- **[Quality tests](tests/quality.test.mjs):** asset existence, expected PNG dimensions, metadata and contrast assertions alongside the 30-module learning checks.
+
+The product name and learning philosophy remain unchanged. The new design is independent; it does not assert school or institutional endorsement.
+
 ## November 2026 — Future-ready learner experience
 
 The interface has been reviewed and refined as a cohesive, scalable student workspace:
