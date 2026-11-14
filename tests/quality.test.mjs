@@ -69,3 +69,27 @@ test("comfortable reading preference persists",async()=>{
  assert.equal(h.reading,"comfortable");
  assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).reading,"comfortable");
 });
+
+test("local progress import validates records and does not invent mastery",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({action:"profile"});
+ const backup={
+   schemaVersion:3,format:"AI-CJ-local-progress",grade:8,
+   records:{"8-A1":{knowledgePassed:false,practicePassed:true,modelSeen:false,applied:true,completed:true,lastStage:4,attempts:2}},
+   diagnostics:{},legacyDone:{}
+ };
+ const json=JSON.stringify(backup);
+ h.change({id:"import-progress",files:[{size:json.length,text:async()=>json}]});
+ await new Promise(resolve=>setImmediate(resolve));
+ const stored=JSON.parse(h.storage["aicj-studio-v2"]);
+ assert.equal(stored.grade,8);
+ assert.equal(stored.records["8-A1"].completed,false,"invalid completed flags are not trusted");
+ assert.match(h.html,/progress has been imported/);
+});
+test("earlier local completion is retained as exploration, not mastery",async()=>{
+ const older={name:"Explorer",grade:7,records:{"7-A1":{completed:true}},diagnostics:{},legacyDone:{}};
+ const h=app({"aicj-studio-v2":JSON.stringify(older)});
+ await h.click({action:"courses"});
+ assert.match(h.html,/Previously explored/);
+ const stored=JSON.parse(h.storage["aicj-studio-v2"]);
+ assert.equal(stored.records["7-A1"].completed,false);
+});
