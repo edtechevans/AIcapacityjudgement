@@ -637,3 +637,75 @@ html{scroll-behavior:auto}
 @media(max-width:990px){.grade-entry-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.grade-entry-card{min-height:218px}}
 @media(max-width:620px){.welcome-panel.grade-entry{padding:35px 18px 48px}.grade-entry .welcome-brand{margin-bottom:17px}.grade-entry h1{font-size:2.4rem}.grade-entry-grid{grid-template-columns:1fr;gap:11px;margin-top:22px}.grade-entry-card{min-height:116px;padding:16px 18px;gap:6px}.grade-entry-number strong{font-size:2rem}.grade-entry-title{min-height:0;font-size:1.05rem}.grade-entry-description{font-size:.82rem}.grade-entry-arrow{margin-top:2px}.grade-entry-footnote{font-size:.77rem;line-height:1.6}}
 @media(prefers-reduced-motion:reduce){.grade-entry-card{transition:none}.grade-entry-card:hover{transform:none}}
+
+
+/* v20 · inquiry-first learning design, responsive offline laboratories */
+.learning-lab{margin:24px 0 31px;padding:clamp(18px,2.7vw,27px);background:#F1F8F7;border:1px solid #BBDAD5;border-radius:17px;box-shadow:0 9px 23px rgba(20,35,57,.035)}
+.learning-lab .lab-eyebrow{color:#176C69;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;font-weight:800;margin-bottom:9px}
+.learning-lab h3{margin:0 0 9px;color:#163d49;font:750 clamp(1.12rem,2vw,1.38rem)/1.3 var(--brand-body);letter-spacing:-.018em}
+.learning-lab h4{margin:0 0 9px;font:730 1rem/1.3 var(--brand-body);color:var(--brand-ink)}
+.learning-lab p{color:#38566A;font-size:.92rem;line-height:1.63;margin:8px 0 12px}
+.learning-lab .lab-question{padding:13px 15px;border-left:3px solid #176C69;border-radius:6px;background:#fff;color:#1A4853;margin:15px 0}
+.lab-choices{display:flex;flex-wrap:wrap;gap:9px;margin:17px 0}
+.lab-choice{min-height:45px;flex:1 1 170px;max-width:100%;border:1.5px solid #A6C4C7;background:#fff;color:#214F5A;border-radius:10px;padding:10px 13px;font-size:.88rem;line-height:1.4;text-align:center;font-weight:700;cursor:pointer;transition:background .16s ease,border-color .16s ease}
+.lab-choice:hover{background:#E2F2EE;border-color:#176C69}
+.lab-choice.selected{background:#176C69;color:#fff;border-color:#176C69}
+.lab-choice:focus-visible{outline:3px solid var(--brand-focus);outline-offset:3px}
+.lab-result{padding:16px 18px;margin:16px 0;background:#fff;border:1px solid #C4DCD7;border-radius:11px;scroll-margin-top:100px}
+.lab-result:focus{outline:none}
+.lab-result:focus-visible{outline:3px solid var(--brand-focus);outline-offset:3px}
+.lab-result p:first-child{margin-top:0}
+.lab-guidance{background:#E4F2EF;border:1px solid #CAE1DA;border-radius:11px;padding:13px 16px;margin-top:16px}
+.lab-guidance p{margin:7px 0;color:#294D54;font-size:.87rem}
+.lab-table-wrap{overflow-x:auto;max-width:100%}
+.lab-results-table{width:100%;border-collapse:collapse;text-align:left;min-width:400px;margin:10px 0}
+.lab-results-table caption{font-size:.79rem;font-weight:700;text-align:left;padding-bottom:9px;color:#39576D}
+.lab-results-table th,.lab-results-table td{padding:10px 9px;border-bottom:1px solid #DFE7E9;font-size:.81rem;vertical-align:top;line-height:1.4}
+.lab-results-table thead th{background:#F0F5F6;color:#203E56}
+.lab-results-table tbody th{font-weight:650;color:#30445A}
+.lab-correct{color:#176143!important}
+.lab-incorrect{color:#963C35!important}
+.lab-comparison{padding:12px 15px;background:#FFF4E9;border-left:3px solid #B76546;color:#6C4132!important;border-radius:6px}
+.lab-ranking .lab-feed-list{padding:0;margin:13px 0;list-style:none;counter-reset:feed}
+.lab-feed-list li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #E2E8E8;counter-increment:feed}
+.lab-feed-list li:before{content:counter(feed) ".";flex:0 0 22px;font-weight:800;color:#2A5861}
+.lab-feed-list li>div{flex:1;min-width:0}
+.lab-feed-list strong,.lab-feed-list small{display:block}
+.lab-feed-list strong{font-size:.87rem;color:#233D53;line-height:1.5;font-weight:690}
+.lab-feed-list small{color:#536C79;margin-top:3px;font-size:.75rem}
+.lab-score{flex:0 0 auto;font-size:.73rem;color:#2F5C63;font-weight:800;border:1px solid #BCDAD8;border-radius:99px;padding:5px 9px;white-space:nowrap}
+.lab-case-list{padding:0;list-style:none;margin:10px 0}
+.lab-case-list li{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:10px 0;border-bottom:1px solid #E4E9EB;font-size:.85rem}
+.lab-case-list strong{text-align:right}
+.lab-tradeoffs{display:grid;grid-template-columns:minmax(100px,.3fr) 1fr;gap:7px 12px;margin:10px 0;font-size:.89rem;line-height:1.55}
+.lab-tradeoffs dt{color:#1F4A53;font-weight:800}
+.lab-tradeoffs dd{margin:0;color:#394F60}
+.inquiry-brief{padding:clamp(19px,2.6vw,26px);margin:22px 0 23px;background:#F7F9FB;border:1px solid #D6E1E8;border-top:4px solid #176C69;border-radius:13px}
+.inquiry-brief .eyebrow{color:#176C69}
+.inquiry-brief h3{font:750 clamp(1.06rem,2vw,1.27rem)/1.35 var(--brand-body);margin:8px 0 11px;color:var(--brand-ink)}
+.inquiry-driving-question{font-size:1rem!important;color:#1E3B56!important;line-height:1.55!important;font-weight:680}
+.inquiry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}
+.inquiry-grid>div{padding:14px 16px;background:#fff;border:1px solid #DEE7EC;border-radius:10px}
+.inquiry-grid strong{font-size:.81rem;color:#1F5660}
+.inquiry-grid p{font-size:.88rem;line-height:1.6;margin:6px 0 0;color:#435C6B}
+.inquiry-transfer{padding:12px 14px;background:#E7F3ED;border-radius:9px;font-size:.88rem;color:#2B594B!important}
+.capstone-guide{margin:20px 0;padding:18px 21px;border:1px solid #E4C8BC;border-radius:13px;background:#FFF8F3}
+.capstone-guide summary{cursor:pointer;font-size:.95rem;font-weight:800;color:#874236;padding:3px 0}
+.capstone-guide h4{font:750 .92rem/1.4 var(--brand-body);margin:16px 0 7px;color:#8A4C3B}
+.capstone-guide ol,.capstone-guide ul{margin:6px 0 11px;padding-left:23px;font-size:.88rem;line-height:1.6;color:#554B48}
+.capstone-guide li{margin:6px 0}
+.capstone-guide p{font-size:.88rem;color:#684F47}
+@media(max-width:640px){
+ .learning-lab{padding:17px 15px}
+ .lab-choices{display:grid;grid-template-columns:1fr}
+ .lab-choice{width:100%;flex:initial}
+ .lab-result{padding:14px 12px}
+ .lab-feed-list li{align-items:flex-start;gap:8px}
+ .lab-score{font-size:.67rem;padding:4px 7px}
+ .lab-tradeoffs{grid-template-columns:1fr;gap:2px}
+ .lab-tradeoffs dd{margin:0 0 10px}
+ .inquiry-grid{grid-template-columns:1fr;gap:9px}
+ .inquiry-brief{padding:18px 16px}
+ .capstone-guide{padding:17px 16px}
+}
+@media(prefers-reduced-motion:reduce){.lab-choice{transition:none}}
