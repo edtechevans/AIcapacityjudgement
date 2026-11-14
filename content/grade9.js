@@ -7,8 +7,8 @@ Object.assign(KNOWLEDGE, {
       "Write an evaluation card that identifies the system's intended use, test conditions, observed results, important missing groups and error costs. Make an evidence-based recommendation about whether another controlled test is justified. Do not present a small sample's percentage as a promise about all people or all future situations."
     ],
     "example": [
-      "'It answered nine easy examples correctly, so it is 90% reliable for everything.'",
-      "'I will define the kinds of tasks tested, identify an important missed case and report what the results do and do not show.'"
+      "Four out of four easy answers proves this tool is perfectly reliable.",
+      "It passed four familiar cases but five of eight in the broader fictional set. I will report both denominators, error types and missing evaluations before claiming reliability."
     ],
     "check": [
       "Why are varied test cases important?",
@@ -47,8 +47,8 @@ Object.assign(KNOWLEDGE, {
       "Compare approaches using the same materials and conditions. Explain which approach best fits the learning goal, who might benefit and where the conclusion may differ for another task or learner. A strong evaluation can recommend limited AI use or deliberate non-use."
     ],
     "example": [
-      "'The AI generated its report in thirty seconds, so it is always more efficient.'",
-      "'I will count drafting, fact-checking and revision time, then compare quality and usefulness against a manual approach.'"
+      "The AI drafted faster, so the complete process is better.",
+      "I will include fact-checking and revision time, consider missed caveats and assess whether the quality benefit justifies the total work."
     ],
     "check": [
       "What makes a comparison between AI and non-AI workflows fair?",
@@ -87,8 +87,8 @@ Object.assign(KNOWLEDGE, {
       "Test your prototype with people who represent the intended audience. Ask what they understood, what confused them and whose experience was missing. Revise the work and keep a short record of the changes. The goal is communication that works, not simply technology that impresses."
     ],
     "example": [
-      "'The image looks persuasive, so I can publish it.'",
-      "'I will verify the information, check for misleading imagery and test whether the audience understands and trusts the message.'"
+      "The image is visually convincing, so it cannot misrepresent anybody.",
+      "I will check provenance and facts, consult relevant communities, test accessibility and revise the media before publishing."
     ],
     "check": [
       "What should you consider before publishing AI-supported media?",
@@ -127,8 +127,8 @@ Object.assign(KNOWLEDGE, {
       "Protect autonomy through practical boundaries: begin a familiar task independently where appropriate, request hints instead of completed work, do not share private details with unapproved tools and seek support from trusted people when personal or safety issues arise. Evaluate your habits by the quality of your decisions and connections, not just the time AI saves or how friendly it sounds."
     ],
     "example": [
-      "'I cannot begin an essay until an AI produces my outline.'",
-      "'I will write a rough plan independently, then decide whether feedback would improve its structure.'"
+      "A chatbot sounds caring and asks for secrecy, so it should replace my friends.",
+      "A system can generate caring language without human accountability. I will protect private details, set boundaries and seek trusted people when I need support."
     ],
     "check": [
       "What is a sign that AI support may be undermining independence?",
@@ -167,8 +167,8 @@ Object.assign(KNOWLEDGE, {
       "Before sharing, weigh the consequences of being wrong. If information is not verified, pause and describe the uncertainty. If you later find the claim misleading, decide how you would correct the record and avoid repeating a harmful falsehood."
     ],
     "example": [
-      "'The speaker looks and sounds real, so the clip proves the statement.'",
-      "'I will trace the earliest version, look for the full recording and seek reliable independent confirmation before sharing.'"
+      "The person looks and sounds real; the video is definitely genuine.",
+      "I will look for the original footage, trace its context and seek independent verification before deciding whether to share it."
     ],
     "check": [
       "What is the strongest way to evaluate a surprising viral video?",
@@ -207,8 +207,8 @@ Object.assign(KNOWLEDGE, {
       "Make a conditional recommendation rather than a simple vote for or against automation. Identify what tasks should remain under human responsibility, how applicants could appeal, how accuracy would be tested across relevant groups and what environmental information would need verification. Explain what new evidence might change your judgement."
     ],
     "example": [
-      "'The tool saves most people time, so the occasional unfair result doesn't matter.'",
-      "'I will examine who is harmed, compare alternatives, assess resource costs and require safeguards before recommending a pilot.'"
+      "The hiring tool is faster, so rejecting qualified people occasionally is fine.",
+      "I will check who benefits and who loses, require fairness testing and appeals, investigate changing work and resource use, and compare alternatives."
     ],
     "check": [
       "What is missing from an efficiency-only argument for AI?",
