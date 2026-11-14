@@ -563,7 +563,7 @@ test("wrong multiple-choice feedback addresses the chosen response but does not 
  h.change({name:"activity-choice",value:"0"});
  h.input({id:"practice-reason",value:"A complete answer seems easiest, but I need to think about what I am practising."});
  await h.click({action:"check"});
- assert.ok(h.html.includes(DATA.ACTIVITIES["6-B1"].options[0][1]),"Feedback must explain the learner-selected alternative");
+ assert.ok(h.html.includes(DATA.ACTIVITIES["6-B1"].options[0][1].replace(/\u0027/g,"&#39;")),"Feedback must explain the learner-selected alternative");
  assert.match(h.html,/Try this next/);
  assert.match(h.html,/Use a clue/);
  const stored=JSON.stringify(h.storage);
