@@ -954,7 +954,7 @@ html{scroll-behavior:auto}
 .curriculum-strand-tab.is-active .curriculum-strand-code{background:#C6EBE3;color:#174A4E}
 .curriculum-spiral-detail{background:white;border:1px solid #D3E2E5;border-radius:14px;padding:clamp(17px,3vw,27px)}
 .curriculum-spiral-heading{display:flex;justify-content:space-between;align-items:center;gap:15px}
-.curriculum-spiral-heading span{font-size:.7rem;color:#3D827C;letter-spacing:.08em;font-weight:800}
+.curriculum-spiral-heading span{font-size:.7rem;color:#24645E;letter-spacing:.08em;font-weight:800}
 .curriculum-spiral-heading h3{font-size:1.4rem;letter-spacing:-.02em;color:#21485B;margin:7px 0}
 .curriculum-spiral-heading p{font-size:.87rem;color:#54707B;margin:0 0 7px;line-height:1.6}
 .curriculum-spiral-count{padding:7px 12px;border-radius:99px;background:#E9F5F2;color:#24635D;font-weight:760;font-size:.76rem;white-space:nowrap}
@@ -971,7 +971,7 @@ html{scroll-behavior:auto}
 .curriculum-outcomes{margin-bottom:20px}
 .curriculum-evidence-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .curriculum-evidence-grid article{border:1px solid #D4E2E7;border-radius:12px;background:white;padding:20px;min-width:0}
-.curriculum-evidence-grid article>span{font-size:.72rem;color:#358780;font-weight:840;letter-spacing:.06em}
+.curriculum-evidence-grid article>span{font-size:.72rem;color:#256860;font-weight:840;letter-spacing:.06em}
 .curriculum-evidence-grid h3{font-size:1.03rem;color:#1E4554;margin:16px 0 9px}
 .curriculum-evidence-grid p{font-size:.85rem;color:#526A76;line-height:1.66}
 .curriculum-integrity-note{margin:25px 0 35px;border-left:4px solid #3F8F87;padding:13px 20px;background:#F0F7F5;border-radius:0 10px 10px 0;font-size:.85rem;color:#47626B;line-height:1.75}
