@@ -2,3 +2,9 @@ node_modules/
 playwright-report/
 test-results/
 .DS_Store
+
+# All real pupil assessment datasets and any generated individual reports stay outside GitHub.
+study-data/
+.studies-private/
+*student-scores*.csv
+*learning-outcomes-data*.csv
