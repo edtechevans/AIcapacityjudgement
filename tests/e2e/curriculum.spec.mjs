@@ -58,7 +58,9 @@ test("public curriculum link is available from welcome; selecting a course is an
  await page.locator('[data-action="curriculum-grade"][data-cur-grade="10"]').click();
  await page.locator('[data-action="curriculum-open-grade"]').click();
  await expect(page).toHaveURL(/#\/grade\/10$/);
- await page.locator('[data-action="curriculum"]').first().click();
+ const desktopLink=page.locator('.top-actions [data-action="curriculum"]');
+ if(await desktopLink.isVisible()){await desktopLink.click();}
+ else{await page.locator(".mobile-menu summary").click();await page.locator('.mobile-menu-links [data-action="curriculum"]').click();}
  await page.locator('[data-action="curriculum-grade"][data-cur-grade="11"]').click();
  await page.locator('[data-action="curriculum-open-grade"]').click();
  await expect(page).toHaveURL(/#\/curriculum$/);
