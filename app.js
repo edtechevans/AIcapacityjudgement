@@ -163,13 +163,16 @@ if(stage===0){
 if(stage===1){
  body='<div class="eyebrow">See how the thinking works</div><h2 id="stage-title" tabindex="-1">Compare two approaches.</h2>'+
  '<p>Imagine this situation. Before reading the worked response, think about what you would do and what might go wrong.</p>'+
+ '<div class="thinking-prompt"><strong>Look for the difference</strong><p>'+esc(guide.notice)+'</p></div>'+
  '<div class="case-situation"><strong>The situation</strong><p>'+esc(l.scenario)+'</p></div>'+
  '<div class="worked-contrast"><div class="weak-example"><span class="worked-label">A weaker approach</span><p>'+esc(example[0])+'</p></div>'+
  (w.modelSeen?'<div id="worked-model" class="strong-example" tabindex="-1"><span class="worked-label">A more thoughtful approach</span><p>'+esc(example[1])+'</p></div>':'<div class="model-hidden"><p>What would you change? Think first, then reveal another way.</p><button class="btn btn-outline" data-action="model-reveal">Reveal a stronger approach →</button></div>')+'</div>'+
- (w.modelSeen?'<div class="learning-principle"><div class="principle-symbol">✳</div><div><strong>Why this matters</strong><p>'+esc(l.principle)+'</p></div></div><div class="learning-discuss"><strong>Discuss or reflect</strong><p>How did the second approach change the purpose, the evidence or the thinking? What would you add?</p></div>':'<p class="small muted">The stronger example will appear when you choose to reveal it.</p>');
+ (w.modelSeen?'<div class="learning-principle"><div class="principle-symbol">✳</div><div><strong>Why this matters</strong><p>'+esc(l.principle)+'</p></div></div><div class="learning-discuss"><strong>Discuss or reflect</strong><p>How did the second approach change the purpose, the evidence or the thinking? What would you add?</p><details class="learning-support"><summary>Want a deeper challenge?</summary><p>'+esc(guide.stretch)+'</p></details></div>':'<p class="small muted">The stronger example will appear when you choose to reveal it.</p>');
 }
 if(stage===2){
- body='<div class="eyebrow">Guided practice</div><h2 id="stage-title" tabindex="-1">Try the idea yourself.</h2><p class="small muted">Use what you have learned to make a decision. Mistakes are part of the learning: feedback will help you improve.</p>'+activityHtml(l,w);
+ body='<div class="eyebrow">Guided practice</div><h2 id="stage-title" tabindex="-1">Try the idea yourself.</h2><p class="small muted">Use what you have learned to make a decision. Mistakes are part of the learning: feedback will help you improve.</p>'+activityHtml(l,w)+
+ (r.practicePassed?'<details class="learning-support learning-stretch"><summary>Ready to stretch your thinking?</summary><p>'+esc(guide.stretch)+'</p></details>':
+ '<details class="learning-support"><summary>Need a little help?</summary><p>'+esc(guide.support)+'</p></details>');
 }
 if(stage===3){
  const step=Math.min(2,w.applyStep||0);
@@ -179,6 +182,7 @@ if(stage===3){
  const progressNames=["Choose your challenge","Plan your approach","Create, test & improve"];
  const header='<div class="eyebrow">Apply what you know</div><h2 id="stage-title" tabindex="-1">Make your learning matter.</h2>'+
  '<p>Use what you learned to respond to a meaningful problem. Work with an approved tool, teacher-provided examples or a non-AI alternative as appropriate.</p>'+
+ '<div class="application-success"><strong>What good work will show</strong><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">You decide the tool and format. Use the criteria to improve your work—not to earn a score here.</p></div>'+
  '<nav class="apply-steps" aria-label="Your application journey">'+progressNames.map((name,i)=>'<div class="apply-step '+(step===i?"current":i<step?"passed":"")+'" '+(i===step?'aria-current="step"':"")+'><span>'+(i<step?"✓":i+1)+'</span>'+esc(name)+'</div>').join("")+'</nav>';
  let section="";
  if(step===0){
@@ -186,10 +190,10 @@ if(stage===3){
   section='<h3 id="apply-heading" tabindex="-1" class="apply-heading">What would you like to work on?</h3><div class="context-grid">'+options+'</div>'+
   '<div class="context-brief"><strong>Your chosen challenge</strong><p>'+esc(activeContext[1])+'</p><p class="small muted">'+esc(l.activity)+'</p></div>'+
   '<div class="eyebrow" style="margin-top:24px">How would you like to express your work?</div><div class="mode-list">'+[["written","Write an explanation"],["visual","Sketch or storyboard"],["talk","Discuss or present"]].map(([id,label])=>'<button class="mode-option '+(w.format===id?"selected":"")+'" data-action="format-choice" data-format="'+id+'" aria-pressed="'+(w.format===id)+'">'+esc(label)+'</button>').join("")+'</div>'+
-  '<p class="small muted">You may use paper, approved applications or a discussion with someone else. You are still responsible for the work and the decisions.</p>';
+  '<p class="small muted">You may use paper, approved applications or a discussion with someone else. You are still responsible for the work and the decisions.</p><div class="transfer-cue"><strong>Use it beyond this lesson</strong><p>'+esc(guide.transfer)+'</p></div>';
  }
  if(step===1){
-  section='<h3 id="apply-heading" tabindex="-1" class="apply-heading">Think it through before you create.</h3><p class="small muted">Describe your purpose and the evidence you will use. Each answer needs at least 35 characters.</p>'+
+  section='<h3 id="apply-heading" tabindex="-1" class="apply-heading">Think it through before you create.</h3><p class="small muted">Describe your purpose and the evidence you will use. Write at least a full sentence for each response; the form checks length, not quality.</p><details class="learning-support"><summary>Need a planning scaffold?</summary><p>'+esc(guide.support)+'</p></details>'+
   '<div class="project-notes"><label for="plan-purpose"><strong>1. What will you do, and who will benefit?</strong><span>Describe the problem, your goal and your audience.</span></label><textarea id="plan-purpose" data-plan-field="purpose" maxlength="2000" rows="3" placeholder="My goal is… The people who need this are…">'+esc(fs.purpose||"")+'</textarea>'+
   '<label for="plan-decision"><strong>2. Where does AI belong—or not belong?</strong><span>Explain your decision using something you learned.</span></label><textarea id="plan-decision" data-plan-field="decision" maxlength="2000" rows="3" placeholder="I would… because… I would avoid…">'+esc(fs.decision||"")+'</textarea>'+
   '<label for="plan-evidence"><strong>3. How will you check, listen and improve?</strong><span>Plan how you will gather evidence, test and seek feedback.</span></label><textarea id="plan-evidence" data-plan-field="evidence" maxlength="2000" rows="3" placeholder="I will test… Ask… Revise…">'+esc(fs.evidence||"")+'</textarea></div>';
