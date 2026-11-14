@@ -21,7 +21,7 @@ Object.assign(INQUIRY_BRIEFS,{
   try:"Run the provenance laboratory with copied and independently gathered sources; map origins and sample limitations; write and revise a calibrated conclusion.",
   evidence:"Submit a source-dependency graph, verified primary-source trail, methods comparison, confidence statement and proposed discriminating check.",
   transfer:"Trace a surprising scientific or economic claim across a new set of reports, distinguishing repetition from replication."},
- "11-B3":{title:"Make fairness operational",question:"What rights and remedies belong to people disadvantaged by a high-performing automated system?",
+ "11-B3":{title:"Make fairness operational and accountable",question:"What rights and remedies belong to people disadvantaged by a high-performing automated system?",
   try:"Analyse a fictional school allocation process, compare impacts for affected users, identify competing fairness goals and write an accessible explanation and appeals process.",
   evidence:"Create a stakeholder impact assessment, testable safeguards, accountable human-review procedure and deployment conditions.",
   transfer:"Defend equivalent protections for an unfamiliar public service where affected people have different access needs."},
