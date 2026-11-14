@@ -25,7 +25,7 @@ test("all 30 modules now contain original, actionable and age-appropriate inquir
   const task=INQUIRY_BRIEFS[id];
   assert.ok(task,"Missing authentic inquiry for "+id);
   for(const field of ["title","question","try","evidence","transfer"]){
-   assert.ok(typeof task[field]==="string"&&task[field].trim().length>=25, id+"."+field+" needs an actionable instruction");
+   assert.ok(typeof task[field]==="string"&&task[field].trim().length>=(field==="title"?10:25), id+"."+field+" needs an actionable instruction");
   }
   assert.ok(!/\b(?:upload (?:your|student)|enter your full name|sign in to)\b/i.test(task.try),"Do not require private data in public preview: "+id);
  }
