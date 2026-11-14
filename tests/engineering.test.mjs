@@ -7,7 +7,7 @@ import {createContext,runInContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=path=>readFileSync(join(root,path),"utf8");
 const context=createContext({});
-for(const path of ["curriculum.js","learning-data.js",...Array.from({length:5},(_,i)=>"content/grade"+(i+6)+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js"]){
+for(const path of ["curriculum.js","learning-data.js",...Array.from({length:5},(_,i)=>"content/grade"+(i+6)+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js"]){
   runInContext(read(path),context,{filename:path});
 }
 const {LESSONS,STRANDS,GRADES,KNOWLEDGE,ACTIVITIES,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS}=runInContext("({LESSONS,STRANDS,GRADES,KNOWLEDGE,ACTIVITIES,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS})",context);
