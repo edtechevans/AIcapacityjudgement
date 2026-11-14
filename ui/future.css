@@ -305,3 +305,5 @@ html[data-reading="comfortable"] .option,.option:focus-visible{line-height:1.65}
  .apply-step span{width:23px;height:23px;flex-basis:23px}
  .application-actions .btn{width:100%;margin-left:0!important}
 }
+
+.lesson-status.legacy{background:#f1ede9;color:#66564a;border:1px solid #e1d8cf}
