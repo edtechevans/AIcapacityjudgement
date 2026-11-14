@@ -6,7 +6,6 @@ async function enter(page,grade=6){
   await page.goto("/#/welcome");
   await expect(page.locator("#main-title")).toContainText("Think bigger");
   await page.locator('[data-action="pick-grade"][data-pick="'+grade+'"]').click();
-  await page.locator('[data-action="guest"]').click();
   await expect(page.locator(".course-intro")).toBeVisible();
 }
 
@@ -24,7 +23,6 @@ test("deep links preserve destination and basic lesson steps work",async({page})
   await page.goto("/#/lesson/9-B2");
   await expect(page.locator(".welcome-deeplink")).toBeVisible();
   await page.locator('[data-action="pick-grade"][data-pick="9"]').click();
-  await page.locator('[data-action="guest"]').click();
   await expect(page).toHaveURL(/#\/lesson\/9-B2$/);
   await expect(page.locator(".lesson-panel")).toContainText("Stage 1 of 5");
   await page.locator('[data-action="concept-next"]').click();
@@ -43,4 +41,12 @@ test("no learner-written work is sent to a remote service",async({page})=>{
   await page.goto("/#/lesson/6-A1");
   await expect(page.locator(".lesson-panel")).toBeVisible();
   expect(external,"Unexpected external network requests").toEqual([]);
+});
+
+
+test("an already-selected grade cannot be switched by URL navigation",async({page})=>{
+  await enter(page,7);
+  await page.goto("/#/grade/10");
+  await expect(page).toHaveURL(/#\/grade\/7$/);
+  await expect(page.locator(".course-intro")).toContainText("Grade 7:");
 });
