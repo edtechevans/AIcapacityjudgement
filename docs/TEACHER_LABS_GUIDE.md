@@ -1,4 +1,4 @@
-# Facilitator Guide: Ten Interactive AI Investigation Labs
+# Facilitator Guide: Eleven Interactive AI Investigation Labs
 
 **Audience:** G6–12 educators and curriculum reviewers. These original simulations are fictional and work without AI-service accounts, network requests or student submissions. The live website stores existing practice checkpoints locally; laboratory choices are session-only.
 
@@ -102,3 +102,21 @@ For any deployment with authenticated students, use approved SharePoint/Entra ar
 **G12 B3 · Governance and redress:** Examine a fictional consequential error and the response to an affected user with varying language/access needs. Students propose an accessible appeal, independent review, correction and conditions for restart. Concealment is intentionally a poor fictional option for critique, not policy advice. Paper alternative: an ethically framed stakeholder hearing.
 
 **DP projects:** G11 A3 is an independent stakeholder design dossier, normally three substantial studios plus feedback. G12 A3 is an authentic impact portfolio, approximately six to eight weekly blocks and an audience conference. Neither can be completed responsibly merely by ticking the website's practice checklist. Seek original work, consent and approvals, test results, revisions and a human defence. Connections to TOK, Extended Essay and CAS are exploratory only: follow the school's current IB and subject academic-integrity rules.
+
+## Grade 8 A1 · What did the system actually notice? (new v25)
+
+**Driving question:** How does the choice of input features change a system's output, even when the original examples are unchanged?
+
+**Set-up:** Present four fictional leaf descriptions with an independent reference label. Keep every case identical as students compare three transparent rules: (1) colour-only, which matches two out of four; (2) texture-visible, which matches four out of four; and (3) two cases with their texture hidden, which appropriately report **insufficient information**. Students predict before switching, record outcomes, and name which feature was unavailable. The cases and scores are intentionally invented. This is a **deterministic rule** to illustrate *representation*, not a trained machine-learning classifier or a biological diagnosis.
+
+**Facilitation:** Connect backwards to Grade 7's training and test examples and forwards to Grade 9's evaluation of unfamiliar conditions. Ask: “If this example is correct, have we demonstrated that the system understands images?” (No.) “When is an honest uncertainty more useful than a confident guess?” (When essential features or independent evidence are absent.) Extend by comparing image, text, audio and physical-sensor representations without assuming any one modality can capture the whole situation.
+
+**Offline equivalent:** Hand out four written case cards and three feature-view cards. Students sort the cards under different rules and explain why the outputs change. Accept annotated drawings, bilingual explanations or recorded oral responses in approved school systems.
+
+**Assessment:** Do not reward the numerical 4/4 alone. Require students to identify *what information was omitted*, predict an unseen failure and propose another independent test before inferring reliability.
+
+## Grade-level integrated performance tasks (v25)
+
+Each grade's course library now ends with an interdisciplinary challenge using **both** Capacity and Judgement. The challenge provides a purpose, a real or teacher-created audience, a specific evidence product, a peer-review/revision prompt and a different-context transfer problem. Facilitate the work through authentic subject connections; do not impose it as an additional timed e-learning quiz or as a necessary prerequisite for selecting a module.
+
+Use the four human-moderated evidence dimensions: *mechanism*, *investigation/evidence*, *responsible judgement*, and *creation/transfer*. Include a non-AI alternative as part of fair comparison, offer diverse expression modes, and maintain real student and stakeholder evidence only in approved school storage. The website can display the brief and guided practice but cannot independently judge transfer or impact. The full seven-grade map, assessment examples and critiques appear in [SCOPE_SEQUENCE_REVIEW_V25.md](SCOPE_SEQUENCE_REVIEW_V25.md).
