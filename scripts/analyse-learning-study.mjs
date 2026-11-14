@@ -43,7 +43,7 @@ function scoreRow(row,index){
  const fail=reason=>{throw Error("Invalid row "+(index+2)+": "+reason)};
  if(!/^[A-Za-z0-9_-]{3,64}$/.test(row.anonymous_id))fail("use only nonidentifying alphanumeric study codes (3-64 chars)");
  const grade=Number(row.grade);
- if(!Number.isInteger(grade)||grade<6||grade>10)fail("grade must be 6-10");
+ if(!Number.isInteger(grade)||grade<6||grade>12)fail("grade must be 6-12");
  if(!["studio","comparison"].includes(row.group))fail("group must be studio or comparison");
  if(!["pre","post","delayed"].includes(row.timepoint))fail("timepoint must be pre, post or delayed");
  if(!["A","B","T2"].includes(row.form))fail("form must be A, B or T2");
@@ -128,7 +128,7 @@ export function analyse(rows,{disclosureMin=5}={}){
   return describePairs(pairs);
  }
  const byGrade={};
- for(const grade of [6,7,8,9,10]){
+ for(const grade of [6,7,8,9,10,11,12]){
   byGrade[grade]={studio:scoped(primary.filter(s=>s.grade===grade)),
    comparison:scoped(comparison.filter(s=>s.grade===grade))};
  }
