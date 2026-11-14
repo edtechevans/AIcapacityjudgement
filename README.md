@@ -4,6 +4,22 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## November 2026 — Deeper, explanation-first learning
+
+All **30 modules** across G6–10 now teach substantive content **before** assessment. Each module has:
+
+1. **Learn:** Three sequential concept explanations, key vocabulary and a short retrieval check with corrective feedback.
+2. **Model:** A relevant situation and a comparison between a weaker approach and a more considered response, with an explanation of the reasoning.
+3. **Practise:** An interactive classification, evidence, decision, prompt or sequencing activity, with feedback; selection-based tasks require students to explain their choices.
+4. **Apply:** Two authentic contexts to choose from, choice of written, visual or discussion format, and a guided five-part project record (purpose, AI-use decision, verification plan, actual work sample, feedback/revision).
+5. **Reflect:** Summarise what was learned, what was tested and what to try in a new context.
+
+The resulting learning experiences create space for **choice, original work, feedback from others, reflection, and transfer**. Students may use approved AI tools or teacher-provided examples; the platform does not connect to an external AI model.
+
+Site completion is a **formative record of participation and self-confirmed application**, not evidence that a teacher has validated the quality of the student's work. Text drafts are not saved or uploaded. Previously completed v2 lessons are displayed as prior exploration, not automatically reclassified as completed under the deeper sequence.
+
+A ready-to-use [ten-student pilot guide](docs/STUDENT_PILOT_GUIDE.md) explains how to observe learning, collect feedback appropriately and test transfer across Grades 6–10. No human student study is claimed as completed.
+
 ## UI/UX refinement (13 November 2026)
 
 The student-facing experience has been reviewed and redesigned for faster access to learning and clearer navigation:
@@ -35,7 +51,7 @@ Activities use five accessible interaction patterns:
 - Choose between contextual decisions and inspect feedback.
 - Evaluate the strength and relevance of evidence.
 
-A module includes **Understand → Practise → Apply → Review**, with a question and optional worked example, a checked interactive challenge, a transfer prompt, and a reflection. Completion is recorded only after passing the challenge and self-confirming an explanation. **Completion is not a mastery grade or a teacher assessment.** Written responses are not graded by AI, cannot prove the quality of a student's explanation, and are **not saved or uploaded**.
+The five-stage lesson sequence is described above. **Completion is not a mastery grade or teacher assessment.** Written responses are not AI-graded, cannot prove the quality of students’ work, and are **not saved or uploaded**.
 
 ## Phase 2 — Two-dimensional formative personalisation
 
