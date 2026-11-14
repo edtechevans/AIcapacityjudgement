@@ -18,7 +18,7 @@ WCAG-EM report generator: https://www.w3.org/WAI/test-evaluate/conformance/wcag-
 
 Public site: https://edtechevans.github.io/AIcapacityjudgement/
 
-Scope includes all Grades 6–10, Grade selection, Home, Courses, lessons in all five stages, diagnostics, interactive six laboratories, Apply projects, reflection, learning snapshot, profile, exports/imports, navigation, notifications, error/empty states and teacher resources. The future SharePoint authenticated environment is **out of scope** and requires a new audit (including Accessible Authentication, student-grade permissions and role-based views).
+Scope includes all Grades 6–12, Grade selection, Home, Courses, lessons in all five stages, diagnostics, interactive six laboratories, Apply projects, reflection, learning snapshot, profile, exports/imports, navigation, notifications, error/empty states and teacher resources. The future SharePoint authenticated environment is **out of scope** and requires a new audit (including Accessible Authentication, student-grade permissions and role-based views).
 
 For structured coverage sample:
 1. Welcome → Grade 6 Home → Courses → Grade 6 A1 complete lesson and visual lab.
@@ -127,3 +127,6 @@ For each criterion record **Pass / Fail / Not Applicable / Not Tested**, the aff
 - Review/approval signature:
 
 **Current conclusion: there is no basis to assert formal WCAG 2.2 AA conformance.** This file is an audit-ready procedure and blank report, not a signed evaluation or certification.
+## Additional Grade 11–12 audit routes
+
+Include G11 A1 threshold-evaluation table and keyboard-operable controls, G11 B2 provenance table and independent-source selector, G12 A2 workflow incident injection and G12 B3 governance case with accessible-person settings. Inspect DP1/DP2 studios, seven grade-entry cards, the DP Impact Project's milestone checkboxes, multi-session project rubrics, notes download and session-only state. Verify that a low-vision user can change a laboratory parameter, hear the updated result and navigate the horizontally scrollable tables without pointer-only interaction. These are required audit routes, **not a completed audit or a formal conformance statement**.
