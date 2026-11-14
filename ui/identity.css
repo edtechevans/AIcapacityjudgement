@@ -575,3 +575,9 @@ html{scroll-behavior:auto}
   .reflection-mode-option{width:100%;justify-content:flex-start}
   .reflection-modes .mode-list{display:grid;grid-template-columns:1fr;gap:8px}
 }
+
+.reflection-save{margin:24px 0;padding:22px 24px;border:1px solid #B4DCD3;border-radius:14px;background:#E9F8F3}
+.reflection-save strong{font-size:1.05rem;font-weight:750;color:#1E554C}
+.reflection-save p{margin:8px 0 14px;line-height:1.55;color:#385953;font-size:.92rem}
+.reflection-save .application-actions{margin:0}
+@media(max-width:650px){.reflection-save{padding:18px}}
