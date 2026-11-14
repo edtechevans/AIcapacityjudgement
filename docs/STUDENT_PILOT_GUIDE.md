@@ -8,7 +8,7 @@
 
 Invite **two students from each grade (6, 7, 8, 9, 10)**, choosing varied levels of confidence, prior tool experience, language background, learning needs and interests. Obtain the school's required permission and follow its safeguarding procedures. Use **school-approved tools only**; do not enter personal student information into the public preview. Assign anonymous IDs (e.g. P01–P10) only in a school-approved record.
 
-## Student session (approximately 45 minutes)
+## Student session (approximately 45 minutes for a micro-pilot; longer for authentic projects)
 
 1. **2 minutes — Context and confidence.** Ask: "When have you used AI to help with learning? When would you avoid it?" Do not grade confidence.
 2. **4 minutes — Independent entry.** Students select their grade, navigate their library and choose a module. Observe where they hesitate or request help.
@@ -17,6 +17,18 @@ Invite **two students from each grade (6, 7, 8, 9, 10)**, choosing varied levels
 5. **15 minutes — Apply and test.** Students choose a real or classroom-simulated challenge, decide whether AI belongs, create a small work sample (or sketch/presentation), test it or seek feedback, and describe a revision.
 6. **5 minutes — Transfer task.** Pose a new scenario in another subject. Ask what they would do, whether AI would help, which risks or limits matter, and how they would verify the outcome.
 7. **5 minutes — Interview.** Ask questions below; do not coach towards a preferred response.
+
+## Additional v22 investigation and evidence checks
+
+- **Grade 6:** Run the illustrated rule-versus-model lab; ask students what they can actually infer from the output and what evidence is missing.
+- **Grade 7:** Ask students to add one training example and adjust lighting influence; observe whether they can explain the changed result without claiming universal accuracy.
+- **Grade 8:** Let learners change feed-ranking weights and explain the value judgements and missing voices.
+- **Grade 9:** Include edge-case consequences and a separate fictional, third-person chatbot-boundary option; never solicit a student's own confidential chatbot or mental-health experience.
+- **Grade 10:** Ask for an authentic capstone decision, a testable prototype and a defended design change over several sessions.
+
+For every grade, give the module's **unseen transfer challenge** without reopening the worked model, allow writing, speaking, sketching or other accessible expression, and have an educator independently review the evidence. A passed selected-response check is not proof of mastery.
+
+A capstone or community design task may require multiple lessons and a stakeholder conference. Do not interpret a 45-minute usability micro-pilot as verification of a finished project. Use the realistic time guidance in each module's Facilitator resources.
 
 ## Interview prompts
 
