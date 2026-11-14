@@ -1,4 +1,5 @@
 import {test,expect} from "@playwright/test";
+import {mkdirSync} from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 
 async function startGrade(page,grade=6){
@@ -15,7 +16,8 @@ async function assertNoOverflow(page,label){
   }));
   expect(metrics.scroll, "Horizontal overflow on "+label+" ("+JSON.stringify(metrics)+")").toBeLessThanOrEqual(metrics.viewport+2);
 }
-test("welcome, courses, home, learning, about, profile and lessons fit the screen",async({page})=>{
+test("welcome, courses, home, learning, about, profile and lessons fit the screen",async({page},info)=>{
+  mkdirSync("visual-review",{recursive:true});
   await startGrade(page);
   for(const [route,label] of [
     ["#/home","Home"],["#/grade/6","Courses"],["#/grade/6/snapshot","My learning"],
@@ -24,6 +26,7 @@ test("welcome, courses, home, learning, about, profile and lessons fit the scree
     await page.goto("/"+route);
     await expect(page.locator("#main-title")).toBeVisible();
     await assertNoOverflow(page,label);
+    await page.screenshot({path:"visual-review/"+info.project.name+"-"+label.toLowerCase().replace(/\\s+/g,"-")+".png",fullPage:true,animations:"disabled"});
   }
 });
 test("the first learning action and journey card both work",async({page})=>{
