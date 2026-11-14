@@ -7,15 +7,15 @@ import {createContext,runInContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=path=>readFileSync(join(root,path),"utf8");
 const context=createContext({});
-for(const path of ["curriculum.js","learning-data.js",...Array.from({length:5},(_,i)=>"content/grade"+(i+6)+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js"]){
+for(const path of ["curriculum.js","learning-data.js",...Array.from({length:5},(_,i)=>"content/grade"+(i+6)+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js"]){
   runInContext(read(path),context,{filename:path});
 }
 const {LESSONS,STRANDS,GRADES,KNOWLEDGE,ACTIVITIES,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS}=runInContext("({LESSONS,STRANDS,GRADES,KNOWLEDGE,ACTIVITIES,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS})",context);
 const nonEmpty=(value,label)=>assert.ok(typeof value==="string"&&value.trim().length>=8,label+" must be meaningful text");
 
-test("curriculum IDs form a complete, unique and balanced G6-G10 matrix",()=>{
-  assert.equal(LESSONS.length,30);
-  assert.equal(new Set(LESSONS.map(x=>x.id)).size,30,"Duplicate lesson ID");
+test("curriculum IDs form a complete, unique and balanced G6-G12 matrix",()=>{
+  assert.equal(LESSONS.length,42);
+  assert.equal(new Set(LESSONS.map(x=>x.id)).size,42,"Duplicate lesson ID");
   assert.equal(STRANDS.length,6);
   for(const grade of Object.keys(GRADES).map(Number)){
     const actual=LESSONS.filter(x=>x.grade===grade);
