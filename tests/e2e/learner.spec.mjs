@@ -151,6 +151,8 @@ test("specific mistakes open learner-controlled support, model review and option
   await page.locator('[data-action="model-reveal"]').click();
   await page.locator('[data-action="next"]').click();
   await expect(page.locator(".learning-coach")).toContainText("Choose your next learning step");
+  await page.locator('[data-action="lab-mode"][data-mode="timer"]').click();
+  await page.locator('[data-action="lab-mode"][data-mode="classifier"]').click();
   for(const [i,answer] of [1,1,0,1].entries())await page.locator("#sort-"+i).selectOption(String(answer));
   await page.locator('[data-action="check"]').click();
   await expect(page.locator("#activity-feedback")).toContainText("Example 1:");
