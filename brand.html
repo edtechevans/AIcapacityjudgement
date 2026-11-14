@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#142339">
+<meta name="description" content="The Intersection brand system for AI Capacity × Judgement Learning Studio.">
+<title>Brand Studio | AI Capacity × Judgement</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<style>
+:root{--ink:#142339;--cloud:#F7F9FC;--paper:#FFF;--line:#DAE4EA;--muted:#52657B;--cap:#176C69;--jud:#AB473B;--mint:#69E9D8;--coral:#FF9C80;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Avenir Next",Arial,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cloud);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible{outline:3px solid #136B8E;outline-offset:4px}
+img{max-width:100%;height:auto}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{letter-spacing:-.045em}
+p{line-height:1.7}
+.wrap{max-width:1130px;margin:auto;padding-inline:28px}
+header{background:#FFF;border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;min-height:80px;gap:16px}
+.head-brand{display:flex;align-items:center;gap:12px;font-size:.91rem;font-weight:800;text-decoration:none}
+.head-brand img{width:38px;height:38px}
+.back{font-size:.84rem;font-weight:700;text-decoration:none;color:var(--cap)}
+.back:hover{text-decoration:underline}
+.hero{background:linear-gradient(120deg,#142339,#213B52);color:#FFF;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-120px;top:-150px;width:630px;height:630px;background:url("./assets/brand/mark-transparent.svg") center/contain no-repeat;opacity:.08}
+.hero .wrap{position:relative;z-index:1;padding-top:96px;padding-bottom:99px}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.17em;font-weight:800;color:var(--jud)}
+.hero .eyebrow{color:#A6F0E4}
+.hero h1{max-width:820px;font-size:clamp(3rem,7vw,6.7rem);line-height:1.02;margin:25px 0;letter-spacing:-.065em}
+.hero h1 em{color:var(--mint);font-style:normal}
+.hero p{max-width:650px;color:#DBE7ED;font-size:clamp(1.04rem,2vw,1.27rem)}
+.hero-footer{display:flex;gap:10px;margin-top:35px;flex-wrap:wrap}
+.pill{border:1px solid #75959C;border-radius:100px;padding:9px 14px;font-size:.79rem;color:#D1E7E5;font-weight:600}
+section{padding:82px 0}
+.section-title{margin-bottom:33px}
+.section-title h2{font-size:clamp(2rem,3.4vw,3.2rem);margin:9px 0 11px}
+.section-title p{max-width:660px;color:var(--muted)}
+.logo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.asset-card{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#FFF}
+.asset-stage{height:250px;display:grid;place-items:center;padding:30px}
+.asset-stage.pale{background:#F3F8F9}
+.asset-stage.dark{background:#142339}
+.asset-stage img{max-height:160px;width:auto}
+.asset-card figcaption{border-top:1px solid var(--line);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.asset-card figcaption strong{font-size:.89rem}
+.asset-card figcaption a{font-size:.79rem;color:var(--cap);font-weight:750;white-space:nowrap}
+.asset-card figcaption a:hover{text-decoration:underline}
+mark{background:#E1F5F2;color:#176C69;padding:1px 6px;border-radius:5px}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.swatch{background:#FFF;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.swatch .color{height:110px}
+.swatch .details{padding:18px}
+.swatch .details strong{font-size:.91rem}
+.swatch .details code{display:block;margin-top:8px;font-size:.79rem;color:var(--muted)}
+.swatch .details small{display:block;margin-top:7px;font-size:.74rem;color:var(--muted)}
+.sample-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}
+.sample-card{border:1px solid var(--line);background:#FFF;border-radius:17px;overflow:hidden}
+.sample-card .preview{display:grid;place-items:center;min-height:246px;padding:25px}
+.sample-card .preview.preview-dark{background:#142339}
+.sample-card .preview img{max-height:200px;width:auto}
+.sample-card .note{padding:19px 21px;font-size:.86rem;color:var(--muted)}
+.share img{border-radius:12px;border:1px solid var(--line);display:block;width:100%}
+.share a{display:inline-block;margin-top:12px;color:var(--cap);font-size:.84rem;font-weight:750}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.rule{background:#FFF;border:1px solid var(--line);border-radius:16px;padding:23px}
+.rule b{display:block;font-size:1.07rem;margin:10px 0}
+.rule p{font-size:.86rem;color:var(--muted)}
+.rule-number{color:var(--cap);font-weight:800;font-size:.75rem;letter-spacing:.1em}
+footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:.82rem}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{color:var(--cap);font-weight:700}
+@media(max-width:850px){.swatches{grid-template-columns:repeat(2,1fr)}.logo-grid,.sample-grid{grid-template-columns:1fr}.rules{grid-template-columns:1fr}}
+@media(max-width:520px){.wrap{padding-inline:18px}.hero .wrap{padding-top:65px;padding-bottom:66px}.hero:after{right:-260px}.hero h1{font-size:3rem}section{padding:55px 0}.swatches{gap:10px}.asset-stage{height:195px}.asset-card figcaption{flex-wrap:wrap}.sample-card .preview{min-height:170px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="head-brand" href="./"><img src="./assets/brand/mark.svg" alt="">AI Capacity × Judgement</a><a class="back" href="./">← Back to Learning Studio</a></div></header>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow">Identity system · Edition 1.0</div><h1>Two paths.<br><em>One considered choice.</em></h1><p>Meet <strong>The Intersection</strong>: a bold, human-centred identity for young people who are learning not just what AI can do, but when—and whether—it should.</p><div class="hero-footer"><span class="pill">AI Capacity</span><span class="pill">AI Judgement</span><span class="pill">Learning Studio · Grades 6–10</span></div></div></section>
+<section><div class="wrap"><div class="section-title"><div class="eyebrow">The signature</div><h2>A symbol with a point of view.</h2><p>Two coloured pathways converge at a single decision point. Neither capacity nor judgement is complete without the other.</p></div>
+<div class="logo-grid"><figure class="asset-card"><div class="asset-stage pale"><img src="./assets/brand/lockup.svg" alt="AI Capacity × Judgement wordmark with the two-path intersection symbol"></div><figcaption><strong>Primary logo</strong><a href="./assets/brand/lockup.svg" download>Download SVG ↗</a></figcaption></figure>
+<figure class="asset-card"><div class="asset-stage dark"><img src="./assets/brand/mark-transparent.svg" alt="Two colourful diagonal pathways meeting at a white centre"></div><figcaption><strong>Inverse symbol</strong><a href="./assets/brand/mark-transparent.svg" download>Download SVG ↗</a></figcaption></figure>
+<figure class="asset-card"><div class="asset-stage pale"><img src="./assets/brand/mark.svg" alt="Dark square app mark with aqua and coral intersecting pathways"></div><figcaption><strong>Core mark</strong><a href="./assets/brand/mark.svg" download>Download SVG ↗</a></figcaption></figure>
+<figure class="asset-card"><div class="asset-stage pale"><img src="./assets/brand/apple-touch-icon.png" alt="App icon with the intersection symbol"></div><figcaption><strong>App / touch icon</strong><a href="./assets/brand/apple-touch-icon.png" download>Download PNG ↗</a></figcaption></figure></div></div></section>
+<section style="background:#ECF3F6"><div class="wrap"><div class="section-title"><div class="eyebrow">The palette</div><h2>Signal, not spectacle.</h2><p>Clear semantic colours support learning. The brighter hues are for the symbol and dark surfaces; darker versions are reserved for readable text.</p></div>
+<div class="swatches">
+<div class="swatch"><div class="color" style="background:#142339"></div><div class="details"><strong>Ink</strong><code>#142339</code><small>Foundation / dark identity</small></div></div>
+<div class="swatch"><div class="color" style="background:#F7F9FC"></div><div class="details"><strong>Cloud</strong><code>#F7F9FC</code><small>Quiet learning surface</small></div></div>
+<div class="swatch"><div class="color" style="background:#69E9D8"></div><div class="details"><strong>Capacity signal</strong><code>#69E9D8</code><small>Bright icon / dark backgrounds</small></div></div>
+<div class="swatch"><div class="color" style="background:#FF9C80"></div><div class="details"><strong>Judgement signal</strong><code>#FF9C80</code><small>Bright icon / dark backgrounds</small></div></div>
+<div class="swatch"><div class="color" style="background:#176C69"></div><div class="details"><strong>Capacity text</strong><code>#176C69</code><small>Accessible labels on light</small></div></div>
+<div class="swatch"><div class="color" style="background:#AB473B"></div><div class="details"><strong>Judgement text</strong><code>#AB473B</code><small>Accessible labels on light</small></div></div>
+<div class="swatch"><div class="color" style="background:#E1F5F2"></div><div class="details"><strong>Capacity field</strong><code>#E1F5F2</code><small>Selection / learning panels</small></div></div>
+<div class="swatch"><div class="color" style="background:#FFF0EA"></div><div class="details"><strong>Judgement field</strong><code>#FFF0EA</code><small>Reflection / thinking panels</small></div></div>
+</div></div></section>
+<section><div class="wrap"><div class="section-title"><div class="eyebrow">Beyond the browser</div><h2>One identity, every touchpoint.</h2><p>Clear at 16 pixels and recognisable at presentation scale. Vector masters are the source; raster formats are generated automatically.</p></div>
+<div class="sample-grid"><div class="share"><img src="./assets/brand/social-preview.png" alt="Social preview featuring the AI Capacity × Judgement wordmark, intersection symbol and learning tagline"><a href="./assets/brand/social-preview.png" download>Download social preview · 1200 × 630 ↗</a></div><div class="sample-card"><div class="preview preview-dark"><img src="./assets/brand/icon-512.png" alt="Large AI Capacity × Judgement app icon"></div><div class="note">Favicons, app icons and social cards share the same simple geometry. No unrelated stock imagery or generic robot symbols.</div></div></div></div></section>
+<section style="background:#ECF3F6"><div class="wrap"><div class="section-title"><div class="eyebrow">Always in service of learning</div><h2>Three non-negotiables.</h2></div><div class="rules"><div class="rule"><span class="rule-number">01 / CLARITY</span><b>Students come first.</b><p>Brand personality should support focus, never interrupt explanations, practice or genuine creation.</p></div><div class="rule"><span class="rule-number">02 / EQUITY</span><b>Equal paths, equal value.</b><p>Both curricula are essential. Colour identifies each pathway, but labels always carry meaning too.</p></div><div class="rule"><span class="rule-number">03 / RESPONSIBILITY</span><b>Technology is a choice.</b><p>The visual identity should never imply that using AI more often is automatically better learning.</p></div></div></div></section>
+</main>
+<footer><div class="wrap"><span>AI Capacity × Judgement · Identity System v1.0</span><span><a href="./docs/BRAND_SYSTEM.md">Read brand guidelines</a> · <a href="./">Explore Learning Studio</a></span></div></footer>
+</body></html>
