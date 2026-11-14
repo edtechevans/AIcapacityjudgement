@@ -4,6 +4,14 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## v19 — Choose your grade, then learn within your grade (November 2026)
+
+The landing page now asks **one question: which grade are you in?** Students select Grade 6–10 and immediately enter the six-module experience for that grade. There is no alias-entry step. The Home page, course library, progress view and learning links stay within the chosen grade, with no everyday grade-switching controls.
+
+Public-preview users can explicitly return to the picker from **Profile → Change grade (preview only)**. Other-grade URLs redirect to the chosen grade. Progress backups export and import only the active grade and cannot silently change the selected grade; earlier local learning histories are preserved when users intentionally switch grades. Shared lesson links still work after choosing the matching grade.
+
+**Security distinction:** This is an educational *preview*, not authenticated grade-based authorisation; all grade JavaScript remains publicly downloadable. The [SharePoint grade-access plan](docs/SHAREPOINT_GRADE_ACCESS.md) explains the future Entra ID sign-in, authoritative school grade mapping and server-side access enforcement needed before students can be restricted to their own assigned grade and have protected learning records.
+
 ## v18 — Responsive formative feedback and learner choice (November 2026)
 
 Students can now choose among **Work it out**, **Use a clue**, and **Go further** during each of the 30 Grade 6–10 practice activities. The support path connects the lesson's authored hint, success criterion and worked example; stretch offers an optional, authentic deeper challenge and a transfer cue. Incorrect choices lead to item-specific corrective feedback, and an unsuccessful attempt suggests (but never forces) support. A successful selected-response check suggests extension.
