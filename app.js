@@ -44,7 +44,7 @@ function hasLearningCheckpoint(record){return !!(record&&(record.knowledgePassed
 function resumeLesson(grade){return LESSONS.filter(l=>{const record=state.records[l.id];return l.grade===+grade&&record&&!record.completed&&hasLearningCheckpoint(record);}).sort((a,b)=>(state.records[b.id].lastOpenedAt||0)-(state.records[a.id].lastOpenedAt||0))[0]||null;}
 function checkpoint(id,stage){const record=getRecord(id);record.lastStage=Math.max(record.lastStage||0,stage);record.lastOpenedAt=Date.now();persist();}
 function gradeLane(grade,track){const n=pathInfo(grade,track);const pct=Math.round(n.done/n.total*100);return '<div class="lane lane-'+track+'"><div class="lane-top"><span>'+trackLabel(track)+'</span><strong>'+n.done+' / '+n.total+'</strong></div>'+progressBar(pct,trackLabel(track)+' modules practised')+'</div>';}
-function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed||r.applied?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,reflection:"",topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,reason:"",coachMode:"independent",knowledgeMisses:0,context:0,format:"written",fields:{purpose:"",decision:"",evidence:"",work:"",revision:""},applyStep:0,confirmed:false,notesDirty:false,modelPrediction:"",reflectionMode:"written",reflection:{learning:"",transfer:""},reflectionConfirmed:false};}return practice[id]}
+function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed||r.applied?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,reflection:"",topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,reason:"",coachMode:"independent",labMode:null,labModesSeen:[],knowledgeMisses:0,context:0,format:"written",fields:{purpose:"",decision:"",evidence:"",work:"",revision:""},applyStep:0,confirmed:false,notesDirty:false,modelPrediction:"",reflectionMode:"written",reflection:{learning:"",transfer:""},reflectionConfirmed:false};}return practice[id]}
 function pathInfo(grade,track){const a=LESSONS.filter(l=>l.grade===+grade && l.track===track);return {done:a.filter(l=>state.records[l.id]?.completed).length,total:a.length}}
 function score(grade){const d=state.diagnostics[grade];if(!d||!d.completed)return null;const correct={};d.answers.forEach((answer,i)=>{correct[DIAGNOSTICS[grade][i][0]]=answer===DIAGNOSTICS[grade][i][3]});const cap=["A1","A2","A3"].filter(s=>correct[s]).length;const jud=["B1","B2","B3"].filter(s=>correct[s]).length;return {correct,capacity:cap,judgement:jud};}
 function recs(grade){const s=score(grade);return ["capacity","judgement"].map(track=>{
@@ -150,6 +150,65 @@ function coachingOptions(l,w,r){
  }
  return '<section class="learning-coach" aria-label="Choose learning support"><div class="learning-coach-top"><h3>Choose your next learning step</h3><p class="small" id="coach-recommendation">'+esc(messages[suggested])+'</p></div>'+selector+panel+'</section>';
 }
+
+function learningLabHtml(l,w){
+ const lab=LEARNING_LABS[l.id];if(!lab)return "";
+ const seen=w.labModesSeen||[];
+ const choices='<div class="lab-choices" role="group" aria-label="Choose the laboratory condition">'+lab.modes.map(([id,label])=>'<button type="button" class="lab-choice '+(w.labMode===id?"selected":"")+'" data-action="lab-mode" data-mode="'+id+'" aria-pressed="'+(w.labMode===id)+'">'+esc(label)+'</button>').join("")+'</div>';
+ let result="";
+ if(w.labMode){
+  const mode=w.labMode;
+  if(lab.kind==="classifier"){
+   const info=labClassify(mode);
+   result='<p><strong>'+info.trainingCount+' training examples · '+info.correct+' of '+info.total+' test cases matched</strong></p>'+
+    '<div class="lab-table-wrap"><table class="lab-results-table"><caption>New fictional photos: predictions against known labels</caption><thead><tr><th scope="col">Test case</th><th scope="col">Known</th><th scope="col">Predicted</th><th scope="col">Result</th></tr></thead><tbody>'+
+    info.rows.map(x=>'<tr><th scope="row">'+esc(x.name)+'</th><td>'+esc(x.expected)+'</td><td>'+esc(x.predicted)+'</td><td class="'+(x.correct?"lab-correct":"lab-incorrect")+'">'+(x.correct?"Match":"Mismatch")+'</td></tr>').join("")+'</tbody></table></div>';
+   if(seen.includes("skewed")&&seen.includes("balanced")){
+    const a=labClassify("skewed"),b=labClassify("balanced");
+    result+='<p class="lab-comparison"><strong>Compare conditions:</strong> Limited data: '+a.correct+'/'+a.total+' correct. More varied data: '+b.correct+'/'+b.total+' correct. In this teaching example, the two difficult lighting conditions changed the outcome; the result is not a general model benchmark.</p>';
+   }
+  }else if(lab.kind==="feed"){
+   result='<div class="lab-ranking"><p class="small muted">Ranking uses '+(mode==="attention"?"the fictional attention score.":"65% evidence quality and 35% representation quality.")+'</p>'+
+    '<ol class="lab-feed-list">'+labRankFeed(mode).map(x=>'<li><div><strong>'+esc(x.title)+'</strong><small>'+esc(x.voice)+'</small></div><span class="lab-score">Score '+x.score+'</span></li>').join("")+'</ol></div>';
+   if(seen.includes("attention")&&seen.includes("evidence"))result+='<p class="lab-comparison"><strong>Compare the feeds:</strong> The same five posts appear in a different order. The system goal, not simply the existence of content, shapes what someone sees first.</p>';
+  }else if(lab.kind==="evaluation"){
+   const rows=LAB_EVALUATIONS[mode],count=rows.filter(x=>x.passed).length;
+   result='<p><strong>'+count+' of '+rows.length+' invented test cases passed</strong>. This is a small teaching dataset, not a performance guarantee.</p>'+
+    '<ul class="lab-case-list">'+rows.map(x=>'<li><span>'+esc(x.name)+'</span><strong class="'+(x.passed?"lab-correct":"lab-incorrect")+'">'+(x.passed?"Met case":"Failed case")+'</strong></li>').join("")+'</ul>';
+   if(seen.includes("easy")&&seen.includes("mixed"))result+='<p class="lab-comparison"><strong>Compare tests:</strong> The familiar-only test was 4/4; the broader fictional test was 5/8. Which headline would be misleading if shared without scope?</p>';
+  }else if(lab.kind==="relationship"){
+   const item=LAB_RELATIONSHIP_FEEDBACK[mode];
+   result='<h4>'+esc(item.title)+'</h4><p>'+esc(item.message)+'</p><p><strong>Next step:</strong> '+esc(item.next)+'</p>';
+  }else if(lab.kind==="decision"){
+   const item=LAB_DESIGN_CHOICES[mode];
+   result='<h4>'+esc(item.title)+'</h4><dl class="lab-tradeoffs"><dt>Potential benefit</dt><dd>'+esc(item.strength)+'</dd><dt>Potential limitation</dt><dd>'+esc(item.risk)+'</dd><dt>How to strengthen it</dt><dd>'+esc(item.step)+'</dd></dl>';
+  }
+  result='<div class="lab-result" id="lab-result" tabindex="-1" role="status" aria-label="Laboratory observation">'+result+'</div>';
+ }
+ return '<section class="learning-lab" aria-label="Interactive investigation"><div class="lab-eyebrow">Investigate · Interactive laboratory</div><h3>'+esc(lab.title)+'</h3><p>'+esc(lab.introduction)+'</p>'+
+ '<p class="lab-question"><strong>Investigate:</strong> '+esc(lab.question)+'</p>'+choices+
+ (result||'<p class="small muted lab-start-hint">Select one condition to see what happens. Try another and compare the evidence.</p>')+
+ '<div class="lab-guidance"><p><strong>What this model cannot show:</strong> '+esc(lab.explanation)+'</p>'+
+ '<p><strong>Make sense of it:</strong> '+esc(lab.reflection)+'</p></div>'+
+ '<p class="small muted">Your choices in this laboratory are temporary; they are not grades or saved student records.</p></section>';
+}
+function inquiryBriefHtml(l){
+ const brief=INQUIRY_BRIEFS[l.id];if(!brief)return "";
+ return '<section class="inquiry-brief" aria-label="Authentic investigation"><div class="eyebrow">Investigate and create</div><h3>'+esc(brief.title)+'</h3>'+
+ '<p class="inquiry-driving-question">'+esc(brief.question)+'</p>'+
+ '<div class="inquiry-grid"><div><strong>What to investigate</strong><p>'+esc(brief.try)+'</p></div>'+
+ '<div><strong>What evidence to show</strong><p>'+esc(brief.evidence)+'</p></div></div>'+
+ '<p class="inquiry-transfer"><strong>Transfer it:</strong> '+esc(brief.transfer)+'</p>'+
+ '<p class="small muted">Use teacher-provided sources or approved tools; you can work without a live AI service.</p></section>';
+}
+function capstoneGuideHtml(l){
+ const guide=CAPSTONE_GUIDES[l.id];if(!guide)return "";
+ return '<details class="capstone-guide" open><summary>Project guide · '+esc(guide.name)+'</summary><div>'+
+ '<h4>Design, test and revise</h4><ol>'+guide.phases.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>'+
+ '<h4>Evidence to bring to a conference</h4><ul>'+guide.evidence.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>'+
+ '<p><strong>Question for review:</strong> '+esc(guide.review)+'</p>'+
+ '<p class="small muted">Your project is reviewed by a teacher or audience using real work, not automatically graded by this website.</p></div></details>';
+}
 function activityHtml(l,w){const a=ACTIVITIES[l.id];if(!a)return '<p>Activity unavailable.</p>';let body='<div class="eyebrow">Interactive challenge · '+esc(a.kind==="sort"?"Classify":a.kind==="sequence"?"Build a workflow":a.kind==="prompt"?"Compare prompts":a.kind==="evidence"?"Check the evidence":"Make a decision")+'</div><h2>'+esc(a.title)+'</h2><p>'+esc(activityDescription(a))+'</p>';
 if(a.kind==="sort")body+='<div class="sort-list">'+a.items.map((item,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p>'+esc(item[0])+'</p><label class="small" for="sort-'+i+'">Your classification</label><select id="sort-'+i+'" data-sort="'+i+'"><option value="">Choose a category…</option>'+a.categories.map((x,n)=>'<option value="'+n+'" '+(w.sort[i]===n?"selected":"")+'>'+esc(x)+'</option>').join("")+'</select>'+(w.checked?'<div class="item-feedback '+(w.sort[i]===item[1]?"right":"try-again")+'">'+(w.sort[i]===item[1]?"✓ ":"↗ ")+esc(item[2])+'</div>':"")+'</div></div>').join("")+'</div>';
 if(["prompt","decision","evidence"].includes(a.kind))body+='<div class="option-list">'+a.options.map((item,i)=>'<label class="option '+(w.selected===i?"chosen":"")+'"><input type="radio" name="activity-choice" value="'+i+'" '+(w.selected===i?"checked":"")+'><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(item[0])+'</span></label>').join("")+'</div>'+(w.checked&&a.kind==="prompt"&&w.selected!==null?'<div class="example-output"><strong>Illustrative response</strong><p>'+esc(a.options[w.selected][1])+'</p></div>':"");
@@ -189,7 +248,7 @@ if(stage===1){
  (w.modelSeen?'<div class="learning-principle"><div class="principle-symbol">✳</div><div><strong>Why this matters</strong><p>'+esc(l.principle)+'</p></div></div><div class="learning-discuss"><strong>Discuss or reflect</strong><p>How did the second approach change the purpose, the evidence or the thinking? What would you add?</p><details class="learning-support"><summary>Want a deeper challenge?</summary><p>'+esc(guide.stretch)+'</p></details></div>':'<p class="small muted">The stronger example will appear when you choose to reveal it.</p>');
 }
 if(stage===2){
-  body='<div class="eyebrow">Guided practice</div><h2 id="stage-title" tabindex="-1">Try the idea yourself.</h2><p class="small muted">Use what you have learned to make a decision. Mistakes are part of the learning: feedback will help you improve.</p>'+coachingOptions(l,w,r)+activityHtml(l,w);
+  body='<div class="eyebrow">Guided practice</div><h2 id="stage-title" tabindex="-1">Try the idea yourself.</h2><p class="small muted">Use what you have learned to make a decision. Mistakes are part of the learning: feedback will help you improve.</p>'+coachingOptions(l,w,r)+learningLabHtml(l,w)+activityHtml(l,w);
  }
  if(stage===3){
  const step=Math.min(2,w.applyStep||0);
@@ -201,7 +260,7 @@ if(stage===2){
  const header='<div class="eyebrow">Apply what you know</div><h2 id="stage-title" tabindex="-1">Make your learning matter.</h2>'+
  '<p>Use what you learned to respond to a meaningful problem. Work with an approved tool, teacher-provided examples or a non-AI alternative as appropriate.</p>'+
  '<div class="application-success"><strong>What good work will show</strong><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">You decide the tool and format. Use the criteria to improve your work—not to earn a score here.</p></div>'+
- '<nav class="apply-steps" aria-label="Your application journey">'+progressNames.map((name,i)=>'<div class="apply-step '+(step===i?"current":i<step?"passed":"")+'" '+(i===step?'aria-current="step"':"")+'><span>'+(i<step?"✓":i+1)+'</span>'+esc(name)+'</div>').join("")+'</nav>';
+ '<nav class="apply-steps" aria-label="Your application journey">'+progressNames.map((name,i)=>'<div class="apply-step '+(step===i?"current":i<step?"passed":"")+'" '+(i===step?'aria-current="step"':"")+'><span>'+(i<step?"✓":i+1)+'</span>'+esc(name)+'</div>').join("")+'</nav>'+(step===0?inquiryBriefHtml(l)+capstoneGuideHtml(l):'');
  let section="";
  if(step===0){
   const options=ct.map(([title,task],i)=>'<button class="context-card '+(w.context===i?"selected":"")+'" data-action="context-choice" data-index="'+i+'" aria-pressed="'+(w.context===i)+'"><span class="context-num">'+(i+1)+'</span><strong>'+esc(title)+'</strong><span>'+esc(task)+'</span></button>').join("");
@@ -509,6 +568,16 @@ if(action==="prev"){const w=getPractice(state.lessonId);w.stage=Math.max(0,(w.st
 if(action==="next"){const w=getPractice(state.lessonId),r=getRecord(state.lessonId);if((w.stage===0&&!r.knowledgePassed)||(w.stage===1&&!w.modelSeen)||(w.stage===2&&!r.practicePassed))return;w.stage=Math.min(3,(w.stage||0)+1);checkpoint(state.lessonId,w.stage);goto("lesson",{focusStage:true});return}
 if(action==="reveal-example"){const w=getPractice(state.lessonId);w.exampleOpen=!w.exampleOpen;render();return}
 if(action==="check"){checkActivity();return}
+ if(action==="lab-mode"){
+  const l=currentLesson();if(!l||!LEARNING_LABS[l.id])return;
+  const lab=LEARNING_LABS[l.id],mode=t.dataset.mode;
+  if(!lab.modes.some(x=>x[0]===mode))return;
+  const w=getPractice(l.id);w.labMode=mode;
+  if(!w.labModesSeen.includes(mode))w.labModesSeen.push(mode);
+  render();
+  const result=$("#lab-result");if(result?.focus)result.focus({preventScroll:true});
+  return;
+ }
  if(action==="coach-route"){const w=getPractice(state.lessonId),route=t.dataset.route;if(["independent","support","stretch"].includes(route)){w.coachMode=route;render();const panel=$("#coach-panel");if(panel?.focus)panel.focus({preventScroll:true});}return}
  if(action==="coach-revisit"){const id=state.lessonId;if(!getRecord(id).knowledgePassed)return;const w=getPractice(id);w.stage=1;checkpoint(id,1);goto("lesson",{focusStage:true});return}
 if(action==="retry"){const w=getPractice(state.lessonId);w.checked=false;w.feedback=null;w.retrying=true;render();return}
