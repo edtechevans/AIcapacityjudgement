@@ -4,6 +4,20 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## November 2026 — Future-ready learner experience
+
+The interface has been reviewed and refined as a cohesive, scalable student workspace:
+
+- **Learner dashboard:** Shows the last unfinished module, a separate Capacity and Judgement learning overview, and a clear path to the next meaningful activity.
+- **New visual system:** A documented light-touch design layer, consistent navy/coral/pastel branding, responsive typography and layout, and no external font dependency.
+- **Responsive lessons:** Accessible stage navigation, less cramped controls on narrow screens, and a larger-text option for reading.
+- **Easier authentic application:** Choose a challenge → Plan → Create and review, while retaining full teaching, practice and application requirements.
+- **Resilient progress:** Minimal learning checkpoints survive reload; JSON backups can be exported and imported between devices. Free-text drafts are **never** included in saved progress or backups.
+- **Future grade expansion:** Navigation validates grade and lesson routes against existing curriculum content rather than fixed grade patterns.
+- **Automated quality checks:** [Learning Studio quality workflow](.github/workflows/quality.yml) exercises the entire 30-module learner journey on future code changes.
+
+The [Future-Readiness UI/UX Review](docs/FUTURE_READY_UI_REVIEW.md) contains the assessment, release decisions and remaining accessibility/production risks. The website is still a **public prototype**, not an authenticated school learning platform.
+
 ## November 2026 — Deeper, explanation-first learning
 
 All **30 modules** across G6–10 now teach substantive content **before** assessment. Each module has:
@@ -26,7 +40,7 @@ The student-facing experience has been reviewed and redesigned for faster access
 
 - New student entry begins with an explicit **Grade 6–10** choice, a local display alias and direct access to the selected course library.
 - The course page uses compact **grade chips**, Capacity/Judgement filters, a featured next module and a less crowded library.
-- The lesson player displays **Step 1–4** progress and prevents advancing from the interactive practice step until its check is passed.
+- The lesson player displays **five learning stages** and prevents advancing from the interactive practice step until its check is passed.
 - Successful practice leads to a clearer next action, including an unfinished module or a review task when a grade is complete.
 - URL routes support grade and pathway filters, **direct lesson links**, browser back/forward and reload.
 - Accessibility refinements include focus treatment, clearer contrast and larger touch targets.
