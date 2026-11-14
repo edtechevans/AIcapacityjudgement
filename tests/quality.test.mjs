@@ -324,3 +324,65 @@ test("completed lesson cards remain accessible and grade switching does not lose
  assert.equal(h.hash,"#/grade/9");
  assert.match(h.html,/Grade 9:/);
 });
+
+
+test("shared lesson links survive the welcome screen and grade confirmation",async()=>{
+ const h=app({},"#/lesson/8-A2");
+ assert.match(h.html,/Grade 8/);
+ assert.match(h.html,/A lesson was shared with you/);
+ await h.click({action:"pick-grade",pick:"8"});
+ await h.click({action:"guest"});
+ assert.equal(h.hash,"#/lesson/8-A2");
+ assert.match(h.html,/Stage 1 of 5/);
+ assert.match(h.html,/id="main-title"/);
+ const changed=app({},"#/lesson/8-A2");
+ await changed.click({action:"pick-grade",pick:"7"});
+ await changed.click({action:"guest"});
+ assert.equal(changed.hash,"#/grade/7","Intentional grade change should override a shared lesson");
+ assert.match(changed.html,/Grade 7:/);
+});
+test("application notes can be downloaded and unsaved work prompts on page exit",async()=>{
+ const h=app();await h.click({action:"guest"});
+ await finish(h,DATA.LESSONS.find(l=>l.id==="6-A1"));
+ let blocked=false;
+ h.fire("beforeunload",{preventDefault(){blocked=true},returnValue:null});
+ assert.equal(blocked,true,"Unsaved typed work must trigger the browser warning");
+ await h.click({action:"prev"});
+ assert.match(h.html,/Download my notes/);
+ assert.match(h.html,/not saved by this website/);
+ await h.click({action:"download-notes"});
+ assert.deepEqual(h.downloads,["AI-CJ-6-A1-learning-notes.txt"]);
+ const written=await h.exportedBlob.text();
+ assert.match(written,/AI CAPACITY × JUDGEMENT/);
+ assert.match(written,/My goal and audience/);
+ assert.match(written,/I created a first storyboard/);
+ assert.ok(!JSON.stringify(h.storage).includes("I created a first storyboard"));
+ blocked=false;h.fire("beforeunload",{preventDefault(){blocked=true},returnValue:null});
+ assert.equal(blocked,false,"Downloaded work no longer needs an unsaved warning");
+});
+test("copying work preserves student choice without saving written text",async()=>{
+ const h=app();await h.click({action:"guest"});await finish(h,DATA.LESSONS.find(l=>l.id==="6-A1"));
+ await h.click({action:"prev"});
+ await h.click({action:"copy-plan"});
+ await new Promise(resolve=>setImmediate(resolve));
+ assert.match(h.copiedText,/My AI-use or non-use decision/);
+ assert.match(h.copiedText,/My goal and audience/);
+ let blocked=false;h.fire("beforeunload",{preventDefault(){blocked=true},returnValue:null});
+ assert.equal(blocked,false);
+});
+test("mobile navigation contains reading controls and skip navigation keeps the course route",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({action:"courses"});
+ const current=h.hash;
+ assert.match(h.html,/brand-wordmark-short/);
+ assert.match(h.html,/aria-label="Mobile navigation"/);
+ assert.match(h.html,/Larger reading size/);
+ assert.match(h.html,/data-action="skip-main"/);
+ await h.click({action:"skip-main"});
+ assert.equal(h.hash,current,"Skipping to the page content must not corrupt hash routing");
+ await h.click({action:"reading"});
+ assert.match(h.html,/Standard reading size/);
+ assert.equal(h.reading,"comfortable");
+ const css=read("ui/identity.css");
+ assert.match(css,/@media\(max-width:360px\)/);
+ assert.match(css,/\.topbar \.top-actions \.comfort-toggle\{display:none\}/);
+});
