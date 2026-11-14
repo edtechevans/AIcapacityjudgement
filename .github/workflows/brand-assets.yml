@@ -1,0 +1,37 @@
+name: Regenerate brand assets
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/brand/*.svg'
+      - 'scripts/build_brand_assets.py'
+      - '.github/workflows/brand-assets.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  export-vector-icons:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install vector renderer
+        run: python -m pip install 'CairoSVG>=2.7,<3' 'Pillow>=10,<13'
+      - name: Render icons and social sharing card
+        run: python scripts/build_brand_assets.py
+      - name: Commit generated assets only when changed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/brand/*.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'Generate PNG brand icons and social preview from vector masters'
+            git push
+          fi
