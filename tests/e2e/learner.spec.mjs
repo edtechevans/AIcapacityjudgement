@@ -138,3 +138,35 @@ test("critical accessibility defects are caught on the student learning pages",a
     expect(readable,"Axe serious/critical findings on "+route).toBe("");
   }
 });
+
+
+test("specific mistakes open learner-controlled support, model review and optional stretch",async({page})=>{
+  await startGrade(page);
+  await page.goto("/#/lesson/6-A1");
+  await page.locator('[data-action="concept-next"]').click();
+  await page.locator('[data-action="concept-next"]').click();
+  await page.locator('input[name="knowledge-choice"][value="0"]').check();
+  await page.locator('[data-action="knowledge-check"]').click();
+  await page.locator('[data-action="next"]').click();
+  await page.locator('[data-action="model-reveal"]').click();
+  await page.locator('[data-action="next"]').click();
+  await expect(page.locator(".learning-coach")).toContainText("Choose your next learning step");
+  for(const [i,answer] of [1,1,0,1].entries())await page.locator("#sort-"+i).selectOption(String(answer));
+  await page.locator('[data-action="check"]').click();
+  await expect(page.locator("#activity-feedback")).toContainText("Example 1:");
+  await expect(page.locator("#coach-recommendation")).toContainText("smaller step");
+  await page.locator('[data-action="coach-route"][data-route="support"]').click();
+  await expect(page.locator("#coach-panel")).toContainText("Check your thinking against this goal");
+  await page.locator('[data-action="coach-revisit"]').click();
+  await expect(page.locator(".lesson-panel")).toContainText("Stage 2 of 5");
+  await page.locator('[data-action="next"]').click();
+  await page.locator("#sort-0").selectOption("0");
+  await page.locator('[data-action="check"]').click();
+  await expect(page.locator("#activity-feedback")).toContainText("Challenge passed");
+  await expect(page.locator("#coach-recommendation")).toContainText("harder situation");
+  await page.locator('[data-action="coach-route"][data-route="stretch"]').click();
+  await expect(page.locator("#coach-panel")).toContainText("Make a connection elsewhere");
+  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("aicj-studio-v2")).records["6-A1"]);
+  expect(saved.practicePassed).toBe(true);
+  expect(saved.completed).toBe(false);
+});
