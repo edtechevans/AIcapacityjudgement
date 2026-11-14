@@ -201,6 +201,7 @@ function labTuningHtml(l,w){
  }else if(lab.kind==="decision"){
   controls=labSettingChoices("priority","Which constraint matters most to this school community?",[["inclusion","Inclusive access"],["privacy","Information privacy"],["speed","Time to deliver"]],settings.priority??"inclusion");
  }
+ if(["benchmark","provenance","workflow","governance"].includes(lab.kind))controls=seniorLabTuning(lab.kind,settings,mode,labSettingChoices);
  return controls?'<div class="lab-tuning" aria-label="Adjust the investigation"><h4>Change the conditions</h4><p class="small muted">These are your choices. Change one control at a time, predict what might happen and compare.</p>'+controls+'</div>':"";
 }
 function learningLabHtml(l,w){
@@ -246,6 +247,7 @@ function learningLabHtml(l,w){
    result='<h4>'+esc(item.title)+'</h4><dl class="lab-tradeoffs"><dt>Potential benefit</dt><dd>'+esc(item.strength)+'</dd><dt>Potential limitation</dt><dd>'+esc(item.risk)+'</dd><dt>How to strengthen it</dt><dd>'+esc(item.step)+'</dd></dl>'+
    '<p class="lab-interpretation"><strong>Under your priority:</strong> '+esc(LAB_DESIGN_PRIORITIES[priority])+'</p>';
   }
+  if(["benchmark","provenance","workflow","governance"].includes(lab.kind))result=seniorLabRender(lab.kind,mode,settings,seen,esc);
   result='<div class="lab-result" id="lab-result" tabindex="-1" role="status" aria-label="Laboratory observation">'+result+'</div>';
  }
  return '<section class="learning-lab" aria-label="Interactive investigation"><div class="lab-eyebrow">Investigate · Interactive laboratory</div><h3>'+esc(lab.title)+'</h3><p>'+esc(lab.introduction)+'</p>'+
@@ -439,6 +441,7 @@ function planText(l,w){
   "WHAT EVIDENCE TO SHOW:",brief?.evidence||"",
   "UNSEEN TRANSFER TASK:",UNSEEN_TRANSFER[l.id]||"",
   "TEACHER REVIEW EXPECTATION:",GRADE_RESPONSE_EXPECTATIONS[l.grade],
+  ...(capstone?["MY PORTFOLIO MILESTONES:",...capstone.phases.map((phase,i)=>(w.seniorMilestones?.[i]?"[marked] ":"[pending] ")+phase)]:[]),
   ...(capstone?["CAPSTONE EVIDENCE CHECKLIST:",...capstone.evidence.map(item=>"- "+item)]:[]),
   "How I chose to share my work:",{written:"Written explanation",visual:"Sketch or storyboard",talk:"Discussion or presentation"}[w.format]||"Written explanation",
   ...headers.flatMap(([title,key])=>[title+":",f[key]||"(Not yet written)"]),
@@ -657,11 +660,11 @@ if(action==="check"){checkActivity();return}
  if(action==="lab-adjust"){
   const l=currentLesson(),w=getPractice(l.id),lab=LEARNING_LABS[l.id];
   if(!lab||!w.labMode)return;
-  const allowed={discriminate:["changed"],classifier:["oakShade","mapleBright","lightingWeight"],feed:["evidenceWeight"],evaluation:["errorCost"],decision:["priority"]};
+  const allowed={discriminate:["changed"],classifier:["oakShade","mapleBright","lightingWeight"],feed:["evidenceWeight"],evaluation:["errorCost"],decision:["priority"],benchmark:["threshold","severity"],provenance:["standard"],workflow:["incident"],governance:["access"]};
   const key=t.dataset.setting,raw=t.dataset.value;
   if(!allowed[lab.kind]?.includes(key))return;
-  const choices={changed:[0,1],oakShade:[0,1],mapleBright:[0,1],lightingWeight:[0,1,2,3],evidenceWeight:[20,50,65,90],errorCost:[0,1],priority:["inclusion","privacy","speed"]};
-  const value=key==="priority"?raw:Number(raw);
+  const choices={changed:[0,1],oakShade:[0,1],mapleBright:[0,1],lightingWeight:[0,1,2,3],evidenceWeight:[20,50,65,90],errorCost:[0,1],priority:["inclusion","privacy","speed"],threshold:[50,65,80],severity:[1,3,5],standard:["headlines","independent"],incident:["missing","outage","privacy"],access:["standard","language","assistive"]};
+  const value=["priority","standard","incident","access"].includes(key)?raw:Number(raw);
   if(!choices[key]?.includes(value))return;
   w.labTuning=w.labTuning||{};w.labTuning[w.labMode]=w.labTuning[w.labMode]||{};
   w.labTuning[w.labMode][key]=value;
@@ -696,6 +699,7 @@ if(t.name==="activity-choice"){const w=getPractice(state.lessonId);w.selected=+t
 if(t.id==="import-progress"){const file=t.files?.[0];if(file)importProgress(file);return}
 
 if(t.dataset?.sort!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.sort;w.sort[i]=t.value===""?undefined:+t.value;w.checked=false;w.feedback=null;render();const choice=$("#sort-"+i);if(choice?.focus)choice.focus({preventScroll:true});return}
+if(t.dataset?.seniorMilestone!==undefined){const l=currentLesson(),w=getPractice(l.id),i=Number(t.dataset.seniorMilestone),guide=CAPSTONE_GUIDES[l.id];if(!guide||!Number.isInteger(i)||i<0||i>=guide.phases.length)return;w.seniorMilestones[i]=!!t.checked;render();return;}
 if(t.id==="project-confirm"){const w=getPractice(state.lessonId);w.confirmed=!!t.checked;updateProjectButton();return}
 if(t.name==="reflection-mode"){const w=getPractice(state.lessonId);if(["written","spoken","visual"].includes(t.value))w.reflectionMode=t.value;render(true,"stage-title");return}
 if(t.id==="reflection-confirm"){const w=getPractice(state.lessonId);w.reflectionConfirmed=!!t.checked;updateReflectionButton();return}
