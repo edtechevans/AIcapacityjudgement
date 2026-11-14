@@ -162,9 +162,9 @@ Object.assign(KNOWLEDGE, {
   },
   "8-B2": {
     "core": [
-      "AI-generated descriptions may reflect which perspectives are common in the material used to develop the model. Some communities, languages and experiences may be represented poorly. A response that sounds neutral can still rely on assumptions or omit important voices.",
-      "Look for who is being described and who is speaking. Compare a generated account with relevant first-person perspectives, trusted community sources and established research. Ask whether the output describes a complex culture using only a few familiar stereotypes.",
-      "A stronger account is not simply longer. Revise to reflect evidence, represent complexity and acknowledge uncertainty. When appropriate, seek feedback from people whose experiences are involved, rather than deciding everything on their behalf."
+      "AI can influence what information you meet in two ways: generating descriptions and selecting which existing content to show first. Recommendation and search systems rank results using objectives chosen by designers or organisations. An attention-focused system can promote sensational content while a different objective may emphasise independently checked evidence and a broader range of voices. No ranking is automatically neutral.",
+      "When evaluating a feed, ask what its objective is, what signals it measures and which viewpoints rarely reach the top. Representation is not simply the number of posts: investigate who created them, who is discussed, whether information is credible and what context is missing. An apparently neutral summary can also repeat stereotypes or overlook less-represented communities.",
+      "Change one ranking objective at a time in the fictional laboratory. Observe how the same posts move, then question the values behind the metric. A more responsible design might give users meaningful choice, explain ranking decisions and invite perspectives from affected communities. Evidence and diversity both matter, but neither can be reduced to one perfect score."
     ],
     "example": [
       "'This AI summary lists only traditional clothing and food, so that must tell us everything about the culture.'",
