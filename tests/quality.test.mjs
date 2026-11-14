@@ -79,7 +79,7 @@ test("comfortable reading preference persists",async()=>{
 });
 
 test("local progress import validates records and does not invent mastery",async()=>{
- const h=app();await h.click({action:"guest"});await h.click({action:"profile"});
+ const h=app();await h.click({action:"pick-grade",pick:"8"});await h.click({action:"profile"});
  const backup={
    schemaVersion:3,format:"AI-CJ-local-progress",grade:8,
    records:{"8-A1":{knowledgePassed:false,practicePassed:true,modelSeen:false,applied:true,completed:true,lastStage:4,attempts:2}},
@@ -213,9 +213,10 @@ test("journey card is a genuine, accessible lesson link with a clear learning pr
 });
 test("student pages have coherent headings, navigation and a readable welcome",async()=>{
  const h=app();
- assert.match(h.html,/Think bigger/);
- assert.match(h.html,/Step 1 · Choose your grade/);
- await h.click({action:"pick-grade",pick:"9"});await h.click({action:"guest"});
+ assert.match(h.html,/Your grade\. Your learning\./);
+ assert.match(h.html,/Choose your grade to explore/);
+ assert.doesNotMatch(h.html,/guest-name|Step 2 · Display alias/);
+ await h.click({action:"pick-grade",pick:"9"});
  const pages=["home","courses","about","snapshot","profile"];
  for(const page of pages){
   await h.click({action:page});
@@ -312,39 +313,75 @@ test("My learning always displays real practice even without a check-in",async()
  assert.match(h.html,/What could you try next/);
  assert.doesNotMatch(h.html,/Your six starting choices/);
 });
-test("changing grades on Home keeps the learner on their dashboard",async()=>{
- const h=app();await h.click({action:"guest"});await h.click({action:"home"});
- h.change({id:"dashboard-grade",value:"8"});
- assert.equal(h.hash,"#/home");
+test("landing requires only one grade click and hides other grade navigation",async()=>{
+ const h=app();
+ assert.match(h.html,/Your grade\. Your learning\./);
+ for(const grade of [6,7,8,9,10])assert.match(h.html,new RegExp('data-action="pick-grade" data-pick="'+grade+'"'));
+ assert.doesNotMatch(h.html,/guest-name|data-action="guest"/);
+ await h.click({action:"pick-grade",pick:"8"});
+ assert.equal(h.hash,"#/grade/8");
+ assert.match(h.html,/Grade 8:/);
+ assert.doesNotMatch(h.html,/grade-chip|data-grade=|Change grade/);
+ await h.click({action:"home"});
  assert.match(h.html,/Your learning studio · Grade 8/);
  assert.match(h.html,/All Grade 8 modules/);
- assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).grade,8);
+ assert.doesNotMatch(h.html,/id="dashboard-grade"|Choose grade/);
+ const persisted=JSON.parse(h.storage["aicj-studio-v2"]);
+ assert.equal(persisted.gradeChosen,true);
+ assert.equal(persisted.grade,8);
+ assert.match(app(h.storage).html,/Your learning studio · Grade 8/);
 });
-test("completed lesson cards remain accessible and grade switching does not lose progress",async()=>{
- const h=app();await h.click({action:"guest"});
- await h.click({action:"track",track:"judgement"});
- await h.click({action:"home"});
+test("out-of-grade links cannot change the chosen grade, including browser history",async()=>{
+ const h=app();await h.click({action:"pick-grade",pick:"6"});
  await h.click({lesson:"6-A1"});
- await h.click({action:"courses"});
- assert.match(h.html,/All 6 modules/);
- await h.click({grade:"9"});
- assert.equal(h.hash,"#/grade/9");
- assert.match(h.html,/Grade 9:/);
+ const stored=JSON.parse(h.storage["aicj-studio-v2"]);
+ assert.ok(stored.records["6-A1"],"Grade 6 lesson is available");
+ await h.click({lesson:"9-A1"});
+ assert.equal(h.hash,"#/lesson/6-A1","Other-grade lesson button must not open");
+ h.back("#/lesson/9-A1");
+ assert.equal(h.hash,"#/grade/6","Out-of-grade deep links redirect to active grade");
+ assert.match(h.html,/Grade 6:/);
+ h.back("#/grade/9");
+ assert.equal(h.hash,"#/grade/6","Out-of-grade course links redirect too");
+ h.back("#/grade/9/snapshot");
+ assert.equal(h.hash,"#/grade/6","Out-of-grade snapshot must not appear");
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).grade,6);
 });
-
-
+test("a deliberate preview-only grade change retains other grade progress without mixing course libraries",async()=>{
+ const h=app();await h.click({action:"pick-grade",pick:"6"});
+ await h.click({lesson:"6-A1"});await h.click({action:"profile"});
+ assert.match(h.html,/Change grade \(preview only\)/);
+ await h.click({action:"switch-grade"});
+ assert.match(h.html,/Your grade\. Your learning\./);
+ await h.click({action:"pick-grade",pick:"9"});
+ assert.equal(h.hash,"#/grade/9");
+ assert.doesNotMatch(h.html,/data-lesson="6-A1"/);
+ assert.ok(JSON.parse(h.storage["aicj-studio-v2"]).records["6-A1"]);
+ await h.click({action:"profile"});await h.click({action:"switch-grade"});await h.click({action:"pick-grade",pick:"6"});
+ assert.ok(JSON.parse(h.storage["aicj-studio-v2"]).records["6-A1"]);
+});
+test("a backup from another grade cannot silently change grade or replace progress",async()=>{
+ const h=app();await h.click({action:"pick-grade",pick:"6"});
+ await h.click({lesson:"6-A1"});await h.click({action:"profile"});
+ const before=JSON.stringify(JSON.parse(h.storage["aicj-studio-v2"]).records);
+ const data={schemaVersion:3,format:"AI-CJ-local-progress",grade:9,records:{"9-A1":{knowledgePassed:true}},diagnostics:{}};
+ const json=JSON.stringify(data);
+ h.change({id:"import-progress",files:[{size:json.length,text:async()=>json}]});
+ await new Promise(resolve=>setImmediate(resolve));
+ assert.match(h.html,/backup belongs to Grade 9/);
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).grade,6);
+ assert.equal(JSON.stringify(JSON.parse(h.storage["aicj-studio-v2"]).records),before);
+});
 test("shared lesson links survive the welcome screen and grade confirmation",async()=>{
  const h=app({},"#/lesson/8-A2");
  assert.match(h.html,/Grade 8/);
  assert.match(h.html,/A lesson was shared with you/);
  await h.click({action:"pick-grade",pick:"8"});
- await h.click({action:"guest"});
  assert.equal(h.hash,"#/lesson/8-A2");
  assert.match(h.html,/Stage 1 of 5/);
  assert.match(h.html,/id="main-title"/);
  const changed=app({},"#/lesson/8-A2");
  await changed.click({action:"pick-grade",pick:"7"});
- await changed.click({action:"guest"});
  assert.equal(changed.hash,"#/grade/7","Intentional grade change should override a shared lesson");
  assert.match(changed.html,/Grade 7:/);
 });
