@@ -2,9 +2,9 @@
 Object.assign(KNOWLEDGE, {
   "7-A1": {
     "core": [
-      "Machine learning systems find patterns in examples. A simple classifier might be trained using pictures labelled as different leaves. The labels and pictures teach it what features tend to go together. Unlike a person, it may not understand why a leaf belongs to a species.",
-      "Training data shape what a system can recognise. If all the training pictures show leaves in bright daylight, the model might struggle with wet, damaged or shadowy leaves. Results can also be affected by labels that are inaccurate or examples that exclude particular groups.",
-      "To investigate a model, ask which examples were included and which were missing. Compare its performance with familiar and unfamiliar cases, then explain what the test actually shows. One correct result is not proof that a system works reliably everywhere."
+      "Machine learning models learn patterns from labelled or unlabelled examples; a classifier can predict a category using features it has been shown. A label tells us what a training example represents, but an accurate-looking prediction does not prove that a model understands a living thing. In this lesson's toy classifier, a new leaf photo is matched to the closest training example using two simplified features: shape and lighting.",
+      "A dataset can contain an accidental shortcut. Imagine nearly all oak photos are taken in bright light while maple photos are taken in shade. A model that pays too much attention to lighting may appear successful on familiar examples and fail when an oak appears in shade. This is a distribution and representation problem, not evidence that all models behave in the same way.",
+      "Investigate fairly: define the expected labels, hold the test cases constant, change only the training examples and compare errors. In the fictional lab, a limited set gets two of four test cases right; a more varied set gets four of four. These tiny results illustrate a mechanism, not a real-world accuracy guarantee. Explain who and what could still be missing before using a classifier for a consequential decision."
     ],
     "example": [
       "'It identified my leaf correctly, so the model is always accurate.'",
