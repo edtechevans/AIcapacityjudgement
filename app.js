@@ -276,8 +276,11 @@ function about(){
  '<div class="app-banner"><div><h2>Ready to explore?</h2><p>Choose a Grade 6–10 course and start with a learning experience that matters to you.</p></div><button class="btn" data-action="courses">Explore my courses →</button></div></main>';
 }
 function profile(){const d=state.diagnostics[state.grade],n=count(state.grade);return '<main id="main-content" class="max page"><section class="profile-panel"><div class="eyebrow">Local learner profile</div><h1 id="main-title" tabindex="-1" class="course-title">Your learning, in your hands.</h1><p class="small muted">This prototype has no school accounts or central student records. Only learning progress and check-in choices are stored on this browser; project notes are never uploaded or saved here.</p><div class="field"><label for="profile-name">Display alias (avoid full names)</label><input id="profile-name" maxlength="40" autocomplete="off" value="'+esc(state.name)+'"></div><div class="profile-summary"><div><span class="eyebrow">Your current grade</span><strong>Grade '+state.grade+'</strong><small>'+esc(GRADES[state.grade].headline)+'</small></div><div><span class="eyebrow">Learning explored</span><strong>'+n.done+' / '+n.total+'</strong><small>Modules practised, not mastery grades</small></div></div>'+gradeLane(state.grade,"capacity")+gradeLane(state.grade,"judgement")+
+ '<div class="profile-section grade-scope-profile"><h2>One grade at a time</h2><p>Your learning library is currently set to <strong>Grade '+state.grade+'</strong>. Other grades are not shown here.</p>'+
+ (window.AUTH_CONFIG?.deployment==="sharepoint"?'<p class="small muted">In a school deployment, grade access must be assigned and enforced by the school sign-in and content service.</p>':'<button type="button" class="btn btn-outline btn-small" data-action="switch-grade">Change grade (preview only) →</button>')+
+ '</div>'+
  '<div class="profile-section"><h2>Reading comfort</h2><p>Choose a larger reading size for the teaching sections. Your preference stays on this device.</p><button class="btn btn-outline btn-small" data-action="reading">'+(state.reading==="comfortable"?"Use standard text size":"Use more spacious text")+' →</button></div>'+
- '<div class="profile-section"><h2>Keep a copy of your progress</h2><p>You can download a small JSON backup containing your module checkpoints and check-in selections, then import it on another device. It does not include your alias or written work. Keep the backup private.</p><div class="backup-actions"><button class="btn btn-outline" data-action="export-progress">Download my progress</button><div class="import-control"><input type="file" class="import-input" id="import-progress" accept=".json,application/json" aria-label="Choose a learning progress backup to import"><label class="import-label" for="import-progress">Choose a backup to import</label></div></div><p class="small muted">Importing replaces this browser’s saved progress. A backup is not a secure student account or verified assessment record.</p></div>'+
+ '<div class="profile-section"><h2>Keep a copy of your progress</h2><p>You can download a small JSON backup containing your module checkpoints and check-in selections, then import it on another device. It does not include your alias or written work. Keep the backup private.</p><div class="backup-actions"><button class="btn btn-outline" data-action="export-progress">Download my progress</button><div class="import-control"><input type="file" class="import-input" id="import-progress" accept=".json,application/json" aria-label="Choose a learning progress backup to import"><label class="import-label" for="import-progress">Choose a backup to import</label></div></div><p class="small muted">Importing replaces the saved progress for your current grade only. A backup is not a secure student account or verified assessment record.</p></div>'+
  '<div class="profile-section"><h2>Privacy on shared devices</h2><p>Finished on a shared computer? You can clear the display alias, saved learning progress and check-in choices from this browser.</p>'+(confirmClear?
 '<div id="clear-warning" class="profile-clear-confirm" role="group" aria-label="Confirm clearing local progress" tabindex="-1"><strong>Clear all progress on this device?</strong><p>This cannot be undone unless you already downloaded a backup. Your learning progress and starting snapshot choices on this browser will be erased.</p><div class="profile-confirm-actions"><button class="btn btn-outline" data-action="cancel-clear">Keep my progress</button><button class="btn btn-danger" data-action="confirm-clear">Yes, clear this device</button></div></div>':
 '<button class="btn btn-small btn-outline" data-action="logout">Review clearing my local profile</button>')+'</div>'+
@@ -316,7 +319,10 @@ function downloadPlan(){
 }
 function exportProgress(){
  try{
-  const payload={schemaVersion:STORAGE_SCHEMA,format:"AI-CJ-local-progress",exportedAt:new Date().toISOString(),grade:state.grade,records:state.records,diagnostics:state.diagnostics,legacyDone:state.legacyDone};
+  const scopedRecords=Object.fromEntries(Object.entries(state.records).filter(([id])=>LESSON_BY_ID[id]?.grade===state.grade));
+  const scopedLegacy=Object.fromEntries(Object.entries(state.legacyDone).filter(([id])=>LESSON_BY_ID[id]?.grade===state.grade));
+  const scopedDiagnostics=state.diagnostics[state.grade]?{[state.grade]:state.diagnostics[state.grade]}:{};
+  const payload={schemaVersion:STORAGE_SCHEMA,format:"AI-CJ-local-progress",exportedAt:new Date().toISOString(),grade:state.grade,records:scopedRecords,diagnostics:scopedDiagnostics,legacyDone:scopedLegacy};
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="AI-CJ-learning-progress.json";
   document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -328,10 +334,11 @@ async function importProgress(file){
  try{
   const data=JSON.parse(await file.text());
   if(data.format!=="AI-CJ-local-progress"||data.schemaVersion!==STORAGE_SCHEMA||typeof data.records!=="object"||data.records===null||!GRADES[data.grade])throw Error("Unsupported backup format");
+  if(+data.grade!==state.grade){notice="This backup belongs to Grade "+data.grade+". You are currently in Grade "+state.grade+". Change your preview grade first to import it.";render();return;}
   if(window.confirm&&!window.confirm("Import this backup and replace the progress saved in this browser?"))return;
   const cleanRecords={};
   for(const [id,r] of Object.entries(data.records)){
-   if(!LESSON_BY_ID[id]||!r||typeof r!=="object")continue;
+   if(!LESSON_BY_ID[id]||LESSON_BY_ID[id].grade!==state.grade||!r||typeof r!=="object")continue;
    const knowledgePassed=!!r.knowledgePassed,practicePassed=!!r.practicePassed,modelSeen=!!r.modelSeen,applied=!!r.applied;
    cleanRecords[id]={
     knowledgePassed,practicePassed,modelSeen,applied,
@@ -343,11 +350,14 @@ async function importProgress(file){
    };
   }
   const cleanDiagnostics={};
-  for(const grade of [6,7,8,9,10]){
+  for(const grade of [state.grade]){
    const d=data.diagnostics?.[grade];
    if(d?.completed&&Array.isArray(d.answers)&&d.answers.length===6&&d.answers.every(n=>Number.isInteger(n)&&n>=0&&n<=2)){cleanDiagnostics[grade]={answers:d.answers.slice(),completed:true};}
   }
-  state.records=cleanRecords;state.diagnostics=cleanDiagnostics;state.grade=+data.grade;state.legacyDone={};practice={};persist();goto("profile");
+  const otherRecords=Object.fromEntries(Object.entries(state.records).filter(([id])=>LESSON_BY_ID[id]?.grade!==state.grade));
+  const otherDiagnostics=Object.fromEntries(Object.entries(state.diagnostics).filter(([grade])=>+grade!==state.grade));
+  const otherLegacy=Object.fromEntries(Object.entries(state.legacyDone).filter(([id])=>LESSON_BY_ID[id]?.grade!==state.grade));
+  state.records={...otherRecords,...cleanRecords};state.diagnostics={...otherDiagnostics,...cleanDiagnostics};state.legacyDone=otherLegacy;practice={};persist();goto("profile");
   notice="Your progress has been imported for this browser. No student work was uploaded.";render();
  }catch(_){notice="We couldn't read that progress file. Your existing progress is unchanged.";render();}
 }
@@ -469,7 +479,7 @@ if(action==="enter"){goto("welcome");return}
 if(action==="pick-grade"){gradeTo(t.dataset.pick);return}
 // Backward-compatible action for older local tests; no extra welcome step is displayed.
 if(action==="guest"){if(!state.gradeChosen)gradeTo(state.grade);return}
-if(action==="switch-grade"){state.gradeChosen=false;state.track="all";state.lessonId="";pendingSharedLesson="";persist();goto("welcome",{replace:true});return}
+if(action==="switch-grade"){if(window.AUTH_CONFIG?.deployment==="sharepoint"){showNotice("Your grade is assigned by your school.");return;}state.gradeChosen=false;state.track="all";state.lessonId="";pendingSharedLesson="";persist();goto("welcome",{replace:true});return}
 if(action==="export-progress"){exportProgress();return}
 if(action==="reading"){state.reading=state.reading==="comfortable"?"standard":"comfortable";persist();render();return}
 if(action==="track"){state.track=t.dataset.track;persist();goto("courses");return}
