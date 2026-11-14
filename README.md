@@ -4,6 +4,13 @@ A student-facing Grades 6–12 formative learning studio (MYP and DP-adjacent), 
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+**Public curriculum showcase:** https://edtechevans.github.io/AIcapacityjudgement/#/curriculum — a dedicated page for educators, school leaders, caregivers and collaborators that can be viewed **without selecting a grade or logging in**. It contains the seven-year progression, six-strand explorer, all 42 module titles and learning objectives, grade-specific performance tasks and assessment expectations. Browsing the overview does not change a learner's grade or record progress.
+
+
+## Public curriculum and progression page (v27)
+
+The scope and sequence is now presented in a standalone, shareable website experience, not buried in The idea/About. It has a two-pathway overview, dynamic seven-grade catalogue with six modules per year, a selective A1–B3 seven-year progression, seven authentic integrated grade challenges, teacher-readable learning evidence, and clear limits on what completion and automated checks can demonstrate. The page is linked from the welcome screen and desktop/mobile navigation and uses the existing content as its single source of truth. It is viewable publicly, but lesson content and learning records remain restricted to the learner's selected grade in the preview; production SharePoint must enforce school-authorised access separately.
+
 ## Validation evidence — CI, accessibility and student learning
 
 Three separate release gates are now tracked in [GitHub Issue #4](https://github.com/edtechevans/AIcapacityjudgement/issues/4):
