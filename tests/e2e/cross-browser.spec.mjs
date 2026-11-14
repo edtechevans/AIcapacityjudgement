@@ -4,7 +4,7 @@ import {test,expect} from "@playwright/test";
 // They run in Chromium, Firefox and WebKit; the deeper suite runs in Chromium.
 async function enter(page,grade=6){
   await page.goto("/#/welcome");
-  await expect(page.locator("#main-title")).toContainText("Think bigger");
+  await expect(page.locator("#main-title")).toContainText("Your grade. Your learning.");
   await page.locator('[data-action="pick-grade"][data-pick="'+grade+'"]').click();
   await expect(page.locator(".course-intro")).toBeVisible();
 }
