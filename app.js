@@ -44,7 +44,7 @@ function hasLearningCheckpoint(record){return !!(record&&(record.knowledgePassed
 function resumeLesson(grade){return LESSONS.filter(l=>{const record=state.records[l.id];return l.grade===+grade&&record&&!record.completed&&hasLearningCheckpoint(record);}).sort((a,b)=>(state.records[b.id].lastOpenedAt||0)-(state.records[a.id].lastOpenedAt||0))[0]||null;}
 function checkpoint(id,stage){const record=getRecord(id);record.lastStage=Math.max(record.lastStage||0,stage);record.lastOpenedAt=Date.now();persist();}
 function gradeLane(grade,track){const n=pathInfo(grade,track);const pct=Math.round(n.done/n.total*100);return '<div class="lane lane-'+track+'"><div class="lane-top"><span>'+trackLabel(track)+'</span><strong>'+n.done+' / '+n.total+'</strong></div>'+progressBar(pct,trackLabel(track)+' modules practised')+'</div>';}
-function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed||r.applied?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,reflection:"",topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,reason:"",coachMode:"independent",labMode:null,labModesSeen:[],knowledgeMisses:0,context:0,format:"written",fields:{purpose:"",decision:"",evidence:"",work:"",revision:""},applyStep:0,confirmed:false,notesDirty:false,modelPrediction:"",reflectionMode:"written",reflection:{learning:"",transfer:""},reflectionConfirmed:false};}return practice[id]}
+function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed||r.applied?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,reflection:"",topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,reason:"",coachMode:"independent",labMode:null,labModesSeen:[],labTuning:{},labObservation:"",knowledgeMisses:0,context:0,format:"written",fields:{purpose:"",decision:"",evidence:"",work:"",revision:""},applyStep:0,confirmed:false,notesDirty:false,modelPrediction:"",reflectionMode:"written",reflection:{learning:"",transfer:""},reflectionConfirmed:false};}return practice[id]}
 function pathInfo(grade,track){const a=LESSONS.filter(l=>l.grade===+grade && l.track===track);return {done:a.filter(l=>state.records[l.id]?.completed).length,total:a.length}}
 function score(grade){const d=state.diagnostics[grade];if(!d||!d.completed)return null;const correct={};d.answers.forEach((answer,i)=>{correct[DIAGNOSTICS[grade][i][0]]=answer===DIAGNOSTICS[grade][i][3]});const cap=["A1","A2","A3"].filter(s=>correct[s]).length;const jud=["B1","B2","B3"].filter(s=>correct[s]).length;return {correct,capacity:cap,judgement:jud};}
 function recs(grade){const s=score(grade);return ["capacity","judgement"].map(track=>{
@@ -151,47 +151,84 @@ function coachingOptions(l,w,r){
  return '<section class="learning-coach" aria-label="Choose learning support"><div class="learning-coach-top"><h3>Choose your next learning step</h3><p class="small" id="coach-recommendation">'+esc(messages[suggested])+'</p></div>'+selector+panel+'</section>';
 }
 
+function labSettingChoices(key,label,values,current){
+ return '<div class="lab-control"><p class="lab-control-label">'+esc(label)+'</p><div class="lab-control-buttons" role="group" aria-label="'+esc(label)+'">'+values.map(([value,title])=>
+ '<button type="button" class="lab-adjust-choice '+(current===value?"selected":"")+'" data-action="lab-adjust" data-setting="'+key+'" data-value="'+value+'" aria-pressed="'+(current===value)+'">'+esc(title)+'</button>').join("")+'</div></div>';
+}
+function labTuningHtml(l,w){
+ const lab=LEARNING_LABS[l.id];if(!lab||!w.labMode)return "";
+ const mode=w.labMode;
+ const settings=w.labTuning?.[mode]||{};
+ let controls="";
+ if(lab.kind==="discriminate"){
+  controls=labSettingChoices("changed","Change the input, then compare the response",[[0,"First input"],[1,"Change the input"]],settings.changed??0);
+ }else if(lab.kind==="classifier"){
+  const initial=mode==="balanced"?1:0;
+  controls=labSettingChoices("oakShade","Add an oak example in dim light",[[0,"Leave out"],[1,"Include"]],settings.oakShade??initial)+
+   labSettingChoices("mapleBright","Add a maple example in bright light",[[0,"Leave out"],[1,"Include"]],settings.mapleBright??initial)+
+   labSettingChoices("lightingWeight","How strongly does the toy model use lighting?",[[0,"Ignore lighting"],[1,"Normal"],[2,"Twice as much"],[3,"Three times"]],settings.lightingWeight??2);
+ }else if(lab.kind==="feed"&&mode==="evidence"){
+  controls=labSettingChoices("evidenceWeight","How much should verified evidence count, relative to representation?",[[20,"20% evidence"],[50,"50% evidence"],[65,"65% evidence"],[90,"90% evidence"]],settings.evidenceWeight??65);
+ }else if(lab.kind==="evaluation"){
+  controls=labSettingChoices("errorCost","How should we account for the consequences of different failures?",[[0,"Count every failure equally"],[1,"Consider higher-stakes harm"]],settings.errorCost??0);
+ }else if(lab.kind==="decision"){
+  controls=labSettingChoices("priority","Which constraint matters most to this school community?",[["inclusion","Inclusive access"],["privacy","Information privacy"],["speed","Time to deliver"]],settings.priority??"inclusion");
+ }
+ return controls?'<div class="lab-tuning" aria-label="Adjust the investigation"><h4>Change the conditions</h4><p class="small muted">These are your choices. Change one control at a time, predict what might happen and compare.</p>'+controls+'</div>':"";
+}
 function learningLabHtml(l,w){
  const lab=LEARNING_LABS[l.id];if(!lab)return "";
- const seen=w.labModesSeen||[];
- const choices='<div class="lab-choices" role="group" aria-label="Choose the laboratory condition">'+lab.modes.map(([id,label])=>'<button type="button" class="lab-choice '+(w.labMode===id?"selected":"")+'" data-action="lab-mode" data-mode="'+id+'" aria-pressed="'+(w.labMode===id)+'">'+esc(label)+'</button>').join("")+'</div>';
+ const seen=w.labModesSeen||[],mode=w.labMode,settings=w.labTuning?.[mode]||{};
+ const choices='<div class="lab-choices" role="group" aria-label="Choose the laboratory condition">'+lab.modes.map(([id,label])=>
+ '<button type="button" class="lab-choice '+(mode===id?"selected":"")+'" data-action="lab-mode" data-mode="'+id+'" aria-pressed="'+(mode===id)+'">'+esc(label)+'</button>').join("")+'</div>';
  let result="";
- if(w.labMode){
-  const mode=w.labMode;
-  if(lab.kind==="classifier"){
-   const info=labClassify(mode);
+ if(mode){
+  if(lab.kind==="discriminate"){
+   const example=labGrade6(mode,settings.changed===1);
+   const symbols={timer:"01 · Fixed rule",classifier:"02 · Pattern labeler",unknown:"03 · Not enough evidence"};
+   result='<div class="lab-grade6"><div class="lab-grade6-symbol" aria-hidden="true">'+(mode==="timer"?"◷":mode==="classifier"?"◎":"?")+'</div><div><strong>'+esc(symbols[mode])+'</strong><p>'+esc(example.output)+'</p><p class="lab-interpretation"><strong>What does that show?</strong> '+esc(example.interpretation)+'</p></div></div>';
+  }else if(lab.kind==="classifier"){
+   const defaults=mode==="balanced"?1:0;
+   const extras=[settings.oakShade??defaults,settings.mapleBright??defaults].map((v,i)=>v?i:-1).filter(x=>x>=0);
+   const weight=settings.lightingWeight??2;
+   const info=labClassify(mode,{extraExamples:extras,lightingWeight:weight});
    result='<p><strong>'+info.trainingCount+' training examples · '+info.correct+' of '+info.total+' test cases matched</strong></p>'+
-    '<div class="lab-table-wrap"><table class="lab-results-table"><caption>New fictional photos: predictions against known labels</caption><thead><tr><th scope="col">Test case</th><th scope="col">Known</th><th scope="col">Predicted</th><th scope="col">Result</th></tr></thead><tbody>'+
+    '<p class="small muted">This toy nearest-example model gives lighting '+weight+' times the influence of leaf shape. Change it to discover which examples are sensitive to the shortcut.</p>'+
+    '<div class="lab-table-wrap"><table class="lab-results-table"><caption>Unseen fictional photos: predicted labels against known labels</caption><thead><tr><th scope="col">Test case</th><th scope="col">Known</th><th scope="col">Predicted</th><th scope="col">Result</th></tr></thead><tbody>'+
     info.rows.map(x=>'<tr><th scope="row">'+esc(x.name)+'</th><td>'+esc(x.expected)+'</td><td>'+esc(x.predicted)+'</td><td class="'+(x.correct?"lab-correct":"lab-incorrect")+'">'+(x.correct?"Match":"Mismatch")+'</td></tr>').join("")+'</tbody></table></div>';
    if(seen.includes("skewed")&&seen.includes("balanced")){
     const a=labClassify("skewed"),b=labClassify("balanced");
-    result+='<p class="lab-comparison"><strong>Compare conditions:</strong> Limited data: '+a.correct+'/'+a.total+' correct. More varied data: '+b.correct+'/'+b.total+' correct. In this teaching example, the two difficult lighting conditions changed the outcome; the result is not a general model benchmark.</p>';
+    result+='<p class="lab-comparison"><strong>Compare the starting conditions:</strong> Limited data: '+a.correct+'/'+a.total+' correct. More varied data: '+b.correct+'/'+b.total+' correct (default lighting weight). Your adjustments can change those numbers. These four toy cases cannot predict real-world accuracy.</p>';
    }
   }else if(lab.kind==="feed"){
-   result='<div class="lab-ranking"><p class="small muted">Ranking uses '+(mode==="attention"?"the fictional attention score.":"65% evidence quality and 35% representation quality.")+'</p>'+
-    '<ol class="lab-feed-list">'+labRankFeed(mode).map(x=>'<li><div><strong>'+esc(x.title)+'</strong><small>'+esc(x.voice)+'</small></div><span class="lab-score">Score '+x.score+'</span></li>').join("")+'</ol></div>';
+   const weight=settings.evidenceWeight??65;
+   result='<div class="lab-ranking"><p class="small muted">Ranking uses '+(mode==="attention"?"the fictional attention score.":weight+'% evidence quality and '+(100-weight)+'% representation quality. Both are deliberately invented scores.')+'</p>'+
+    '<ol class="lab-feed-list">'+labRankFeed(mode,{evidenceWeight:weight}).map(x=>'<li><div><strong>'+esc(x.title)+'</strong><small>'+esc(x.voice)+'</small></div><span class="lab-score">Score '+x.score+'</span></li>').join("")+'</ol></div>';
    if(seen.includes("attention")&&seen.includes("evidence"))result+='<p class="lab-comparison"><strong>Compare the feeds:</strong> The same five posts appear in a different order. The system goal, not simply the existence of content, shapes what someone sees first.</p>';
   }else if(lab.kind==="evaluation"){
-   const rows=LAB_EVALUATIONS[mode],count=rows.filter(x=>x.passed).length;
-   result='<p><strong>'+count+' of '+rows.length+' invented test cases passed</strong>. This is a small teaching dataset, not a performance guarantee.</p>'+
-    '<ul class="lab-case-list">'+rows.map(x=>'<li><span>'+esc(x.name)+'</span><strong class="'+(x.passed?"lab-correct":"lab-incorrect")+'">'+(x.passed?"Met case":"Failed case")+'</strong></li>').join("")+'</ul>';
+   const report=labEvaluate(mode,settings.errorCost===1);
+   result='<p><strong>'+report.passed+' of '+report.total+' invented test cases passed</strong>. This is a tiny classroom sample, not a performance guarantee.</p>'+
+    '<ul class="lab-case-list">'+report.cases.map(x=>'<li><span>'+esc(x.name)+'</span><strong class="'+(x.passed?"lab-correct":"lab-incorrect")+'">'+(x.passed?"Met case":"Failed case")+'</strong></li>').join("")+'</ul>'+
+    '<p class="small muted">For discussion: '+report.failures.length+' failed cases; '+report.weightedRisk+' fictional concern points under this weighting. These are not medical, safety or model-performance measurements.</p>';
    if(seen.includes("easy")&&seen.includes("mixed"))result+='<p class="lab-comparison"><strong>Compare tests:</strong> The familiar-only test was 4/4; the broader fictional test was 5/8. Which headline would be misleading if shared without scope?</p>';
   }else if(lab.kind==="relationship"){
    const item=LAB_RELATIONSHIP_FEEDBACK[mode];
-   result='<h4>'+esc(item.title)+'</h4><p>'+esc(item.message)+'</p><p><strong>Next step:</strong> '+esc(item.next)+'</p>';
+   result='<h4>'+esc(item.title)+'</h4><p>'+esc(item.message)+'</p><p><strong>Next step:</strong> '+esc(item.next)+'</p><p class="small muted">This is about a fictional chatbot. Do not share private personal experiences here.</p>';
   }else if(lab.kind==="decision"){
-   const item=LAB_DESIGN_CHOICES[mode];
-   result='<h4>'+esc(item.title)+'</h4><dl class="lab-tradeoffs"><dt>Potential benefit</dt><dd>'+esc(item.strength)+'</dd><dt>Potential limitation</dt><dd>'+esc(item.risk)+'</dd><dt>How to strengthen it</dt><dd>'+esc(item.step)+'</dd></dl>';
+   const item=LAB_DESIGN_CHOICES[mode],priority=settings.priority??"inclusion";
+   result='<h4>'+esc(item.title)+'</h4><dl class="lab-tradeoffs"><dt>Potential benefit</dt><dd>'+esc(item.strength)+'</dd><dt>Potential limitation</dt><dd>'+esc(item.risk)+'</dd><dt>How to strengthen it</dt><dd>'+esc(item.step)+'</dd></dl>'+
+   '<p class="lab-interpretation"><strong>Under your priority:</strong> '+esc(LAB_DESIGN_PRIORITIES[priority])+'</p>';
   }
   result='<div class="lab-result" id="lab-result" tabindex="-1" role="status" aria-label="Laboratory observation">'+result+'</div>';
  }
  return '<section class="learning-lab" aria-label="Interactive investigation"><div class="lab-eyebrow">Investigate · Interactive laboratory</div><h3>'+esc(lab.title)+'</h3><p>'+esc(lab.introduction)+'</p>'+
- '<p class="lab-question"><strong>Investigate:</strong> '+esc(lab.question)+'</p>'+choices+
- (result||'<p class="small muted lab-start-hint">Select one condition to see what happens. Try another and compare the evidence.</p>')+
+ '<p class="lab-question"><strong>Investigate:</strong> '+esc(lab.question)+'</p>'+choices+labTuningHtml(l,w)+
+ (result||'<p class="small muted lab-start-hint">Choose one tool or condition. Make a prediction, then try another and compare what changes.</p>')+
  '<p class="lab-progress" role="status">'+(seen.length>=2?'Both conditions explored. You can now attempt the guided challenge below.':seen.length+' of 2 conditions explored · Explore two different choices before checking the guided challenge.')+'</p>'+
+ '<div class="lab-observation-field"><label for="lab-observation"><strong>What changed, and why might that matter?</strong></label><textarea id="lab-observation" data-lab-observation="true" rows="2" maxlength="900" placeholder="I predicted… I observed… This does or does not show…">'+esc(w.labObservation||"")+'</textarea><p class="small muted">Optional learning notes; writing remains in this tab and is not graded, saved or transmitted.</p></div>'+
  '<div class="lab-guidance"><p><strong>What this model cannot show:</strong> '+esc(lab.explanation)+'</p>'+
  '<p><strong>Make sense of it:</strong> '+esc(lab.reflection)+'</p></div>'+
- '<p class="small muted">Your choices in this laboratory are temporary; they are not grades or saved student records.</p></section>';
+ '<p class="small muted">Your laboratory choices and written observations are temporary; they are not student grades or saved records.</p></section>';
 }
 function inquiryBriefHtml(l){
  const brief=INQUIRY_BRIEFS[l.id];if(!brief)return "";
@@ -574,6 +611,19 @@ if(action==="prev"){const w=getPractice(state.lessonId);w.stage=Math.max(0,(w.st
 if(action==="next"){const w=getPractice(state.lessonId),r=getRecord(state.lessonId);if((w.stage===0&&!r.knowledgePassed)||(w.stage===1&&!w.modelSeen)||(w.stage===2&&!r.practicePassed))return;w.stage=Math.min(3,(w.stage||0)+1);checkpoint(state.lessonId,w.stage);goto("lesson",{focusStage:true});return}
 if(action==="reveal-example"){const w=getPractice(state.lessonId);w.exampleOpen=!w.exampleOpen;render();return}
 if(action==="check"){checkActivity();return}
+ if(action==="lab-adjust"){
+  const l=currentLesson(),w=getPractice(l.id),lab=LEARNING_LABS[l.id];
+  if(!lab||!w.labMode)return;
+  const allowed={discriminate:["changed"],classifier:["oakShade","mapleBright","lightingWeight"],feed:["evidenceWeight"],evaluation:["errorCost"],decision:["priority"]};
+  const key=t.dataset.setting,raw=t.dataset.value;
+  if(!allowed[lab.kind]?.includes(key))return;
+  const choices={changed:[0,1],oakShade:[0,1],mapleBright:[0,1],lightingWeight:[0,1,2,3],evidenceWeight:[20,50,65,90],errorCost:[0,1],priority:["inclusion","privacy","speed"]};
+  const value=key==="priority"?raw:Number(raw);
+  if(!choices[key]?.includes(value))return;
+  w.labTuning=w.labTuning||{};w.labTuning[w.labMode]=w.labTuning[w.labMode]||{};
+  w.labTuning[w.labMode][key]=value;
+  render();const result=$("#lab-result");if(result?.focus)result.focus({preventScroll:true});return;
+ }
  if(action==="lab-mode"){
   const l=currentLesson();if(!l||!LEARNING_LABS[l.id])return;
   const lab=LEARNING_LABS[l.id],mode=t.dataset.mode;
@@ -610,7 +660,7 @@ if(t.id==="reflection-confirm"){const w=getPractice(state.lessonId);w.reflection
 function updateProjectButton(){const w=getPractice(state.lessonId),f=w.fields||{},minNotes=w.format==="written"?35:18;const next=$('[data-action="apply-next"]');if(next&&w.applyStep===1)next.disabled=!["purpose","decision","evidence"].every(k=>(f[k]||"").trim().length>=minNotes);const b=$('[data-action="record"]');if(b)b.disabled=!(getRecord(state.lessonId).knowledgePassed&&getRecord(state.lessonId).practicePassed&&w.modelSeen&&w.confirmed&&["purpose","decision","evidence","work","revision"].every(k=>(f[k]||"").trim().length>=minNotes));}
 document.addEventListener("input",(e)=>{
 const t=e.target;
-if(t.id==="practice-reason"){getPractice(state.lessonId).reason=t.value.slice(0,1200);return}
+if(t.id==="practice-reason"){getPractice(state.lessonId).reason=t.value.slice(0,1200);return} if(t.dataset?.labObservation){getPractice(state.lessonId).labObservation=t.value.slice(0,900);return}
 if(t.dataset?.planField){const w=getPractice(state.lessonId);if(!w.fields)w.fields={};w.fields[t.dataset.planField]=t.value.slice(0,2000);w.notesDirty=true;updateProjectButton();return}
 if(t.dataset?.reflectField){const w=getPractice(state.lessonId);if(!w.reflection)w.reflection={};w.reflection[t.dataset.reflectField]=t.value.slice(0,2000);w.notesDirty=true;updateReflectionButton();return}
 });
