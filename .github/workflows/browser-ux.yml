@@ -9,6 +9,9 @@ on:
       - 'styles.css'
       - 'ui/**'
       - 'tests/e2e/**'
+      - 'content/**'
+      - 'curriculum.js'
+      - 'learning-data.js'
       - 'playwright.config.mjs'
       - 'package.json'
       - '.github/workflows/browser-ux.yml'
@@ -33,7 +36,7 @@ permissions:
 jobs:
   cross-device-ux:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,9 +44,9 @@ jobs:
           node-version: '22'
       - name: Install browser test dependencies
         run: npm install --no-audit --no-fund
-      - name: Install headless Chromium
-        run: npx playwright install --with-deps chromium
-      - name: Test student journeys, mobile layouts and WCAG issues
+      - name: Install Chromium, Firefox and WebKit
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Test cross-browser student journeys, mobile layouts and WCAG issues
         run: npm run test:browser
         env:
           CI: 'true'
