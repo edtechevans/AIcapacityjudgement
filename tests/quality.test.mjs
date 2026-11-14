@@ -192,3 +192,100 @@ test("hero refinement shortens vertical spacing without harming mobile layout",(
  assert.match(css,/\.dashboard-hero:before\{opacity:\.035\}/);
  assert.match(css,/@media\(max-width:720px\)\{\.dashboard-hero\{padding-block:30px\}\}/);
 });
+
+
+test("journey card is a genuine, accessible lesson link with a clear learning promise",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({action:"home"});
+ assert.match(h.html,/Learn what AI can do, when it helps, and how to use it thoughtfully in real situations/);
+ assert.match(h.html,/<a class="dashboard-meter dashboard-meter--action" href="#\/lesson\/6-A1" data-lesson="6-A1" aria-label="Start your first lesson: [^"]+">/);
+ assert.match(h.html,/Open the lesson/);
+ await h.click({lesson:"6-A1"});
+ assert.equal(h.hash,"#/lesson/6-A1");
+});
+test("student pages have coherent headings, navigation and a readable welcome",async()=>{
+ const h=app();
+ assert.match(h.html,/Think bigger/);
+ assert.match(h.html,/Step 1 · Choose your grade/);
+ await h.click({action:"pick-grade",pick:"9"});await h.click({action:"guest"});
+ const pages=["home","courses","about","snapshot","profile"];
+ for(const page of pages){
+  await h.click({action:page});
+  assert.match(h.html,/id="main-content"/,"missing main for "+page);
+  assert.match(h.html,/id="main-title"/,"missing page heading for "+page);
+  assert.match(h.html,/<\/main>/,"missing closing main for "+page);
+  assert.match(h.html,/aria-label="Primary navigation"/);
+  assert.doesNotMatch(h.html,/Transformative Learning Framework|TLF Facet/);
+ }
+ await h.click({action:"about"});
+ assert.match(h.html,/Learn first\. Then make something meaningful/);
+ for(const word of ["Learn","Model","Practise","Apply","Reflect"])assert.match(h.html,new RegExp(">"+word+"<"));
+ assert.match(h.html,/Different learning needs, not fixed labels/);
+ assert.doesNotMatch(h.html,/Capable but Unreflective/);
+});
+test("course tabs, module counts and recommendation wording reflect the actual context",async()=>{
+ const h=app();await h.click({action:"guest"});
+ await h.click({action:"courses"});
+ assert.match(h.html,/All 6 modules/);
+ assert.match(h.html,/A good place to begin/);
+ await h.click({action:"track",track:"judgement"});
+ assert.equal(h.hash,"#/grade/6/judgement");
+ assert.match(h.html,/All modules/);
+ assert.match(h.html,/AI Judgement/);
+ await h.click({action:"track",track:"all"});
+ await h.click({lesson:"6-A1"});
+ await h.click({action:"concept-next"});await h.click({action:"concept-next"});
+ h.change({name:"knowledge-choice",value:"0"});
+ await h.click({action:"knowledge-check"});
+ await h.click({action:"courses"});
+ assert.match(h.html,/Pick up where you left off/);
+ assert.match(h.html,/Resume this lesson/);
+});
+test("diagnostic can be completed and feedback remains growth-oriented",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({action:"diagnostic"});
+ assert.match(h.html,/Question 1 of 6/);
+ assert.match(h.html,/aria-label="Check-in question progress"/);
+ for(let i=0;i<6;i++){h.change({name:"diagnostic-choice",value:String(DATA.DIAGNOSTICS[6][i][3])});await h.click({action:"diag-next"});}
+ assert.equal(h.hash,"#/grade/6/snapshot");
+ assert.match(h.html,/Six starting choices suggest where you might practise next/);
+ assert.match(h.html,/The quadrant is a conversation tool, not a placement system/);
+ assert.match(h.html,/Explore the foundations/);
+ assert.doesNotMatch(h.html,/Capable but Unreflective/);
+ assert.match(h.html,/Review my six starting decisions/);
+ await h.click({action:"retake"});
+ assert.match(h.html,/Question 1 of 6/);
+});
+test("profile clear requires a deliberate confirmation and can be cancelled",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({action:"profile"});
+ assert.match(h.html,/Keep a copy of your progress/);
+ assert.match(h.html,/Choose a backup to import/);
+ const before=h.storage["aicj-studio-v2"];
+ await h.click({action:"logout"});
+ assert.match(h.html,/Clear all progress on this device/);
+ assert.equal(h.storage["aicj-studio-v2"],before,"clearing must not occur at first click");
+ await h.click({action:"cancel-clear"});
+ assert.doesNotMatch(h.html,/Clear all progress on this device/);
+ assert.equal(h.storage["aicj-studio-v2"],before);
+ await h.click({action:"logout"});
+ await h.click({action:"confirm-clear"});
+ assert.match(h.html,/Think bigger/);
+ assert.equal(h.storage["aicj-studio-v2"],undefined);
+});
+test("learning stages show completed progress rather than implying instant completion",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({lesson:"6-A1"});
+ assert.match(h.html,/Stage 1 of 5/);
+ assert.match(h.html,/0% completed/);
+ assert.match(h.html,/aria-label="Completed learning stages" aria-valuenow="0"/);
+ assert.match(h.html,/id="stage-title" tabindex="-1"/);
+});
+test("mobile, high-contrast and feedback UI refinements are present",()=>{
+ const css=read("ui/identity.css");
+ assert.match(css,/\.dashboard-meter--action:hover/);
+ assert.match(css,/\.dashboard-meter--action:focus-visible/);
+ assert.match(css,/\.site-toast\.is-visible/);
+ assert.match(css,/\.profile-clear-confirm/);
+ assert.match(css,/@media\(max-width:470px\)/);
+ assert.match(css,/\.about-stage-grid/);
+ const html=read("index.html");
+ assert.ok(html.includes('name="viewport"'));
+ assert.ok(html.includes("ui/identity.css"));
+});
