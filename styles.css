@@ -452,3 +452,9 @@ body{color:var(--ink);font-size:16px}
 .project-phase-head span{font-size:.89rem;line-height:1.5;color:#4B6755}
 .project-notes textarea:focus-visible,.context-card:focus-visible,.mode-option:focus-visible,.concept-pip:focus-visible{outline:3px solid #9B504B;outline-offset:3px}
 @media(max-width:650px){.project-phase-head{align-items:flex-start;flex-direction:column;gap:4px}.project-notes textarea{min-height:114px}}
+
+/* Optional concept listening support */
+.learning-aid{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:12px 0 19px}
+.learning-aid .btn{background:#fff;border-color:#9FB0BE;color:#25415D;min-height:44px}
+.learning-aid span{line-height:1.5;font-size:.8rem}
+@media(max-width:650px){.learning-aid{align-items:flex-start;flex-direction:column;gap:6px}}
