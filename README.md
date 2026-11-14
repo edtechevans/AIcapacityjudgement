@@ -4,6 +4,14 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## v22 — Aligned learning, experimental agency and authentic transfer (November 2026)
+
+The Grade 6–10 curriculum now has **30 rewritten scenario-matched worked examples**, **six** interactive investigations (including Grade 6's visual rule-versus-AI demonstration), and more control over training examples, model feature weighting, feed-ranking criteria, error consequences and design priorities. The toy models disclose their simplifications and do not pretend to measure real-world model reliability.
+
+All **30 modules** now include a genuinely unfamiliar transfer prompt and teacher-accessible, age-relative performance guidance. A four-dimension rubric supports human review of mechanism, evidence, judgement and creation/transfer. Facilitator resources provide preparation notes, offline alternatives, classroom timings and realistic multi-session capstone durations. Free text and laboratory notes remain in this browser tab; nothing is auto-graded or submitted to a third-party AI service. The lesson header now displays **journey stages reached** instead of a misleading percentage of mastery.
+
+The learning-code simulation completed all 30 journeys and six laboratory comparison gates. **This is not a claim of external expert review, teacher-assessed mastery, a completed student pilot, a verified green browser CI run, or formal WCAG certification.** See [v22 Release Readiness](docs/RELEASE_READINESS_V22.md), [Teacher Labs Guide](docs/TEACHER_LABS_GUIDE.md) and [Student Pilot Guide](docs/STUDENT_PILOT_GUIDE.md).
+
 ## v20 — Investigate, test, create and transfer (November 2026)
 
 The curriculum has been rebuilt where comparative benchmarking revealed gaps, while preserving all **30 modules, six strands and five learning stages**. Every module now includes an original, evidence-oriented inquiry brief with an investigation method, authentic work sample and transfer question. Five modules gain interactive, offline laboratories: **G7 A1** (training data and shortcuts), **G8 B2** (algorithmic feeds and missing voices), **G9 A1** (performance evaluation and failure cases), **G9 B1** (AI companionship, privacy and boundaries) and **G10 A3** (design choices and accountability). The accompanying teaching explanations and formative questions have been rewritten to match what students observe.
