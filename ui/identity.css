@@ -526,3 +526,52 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 
 /* Route changes should settle immediately; smooth page scrolling can disorient learners and misplace sticky headers. */
 html{scroll-behavior:auto}
+
+
+/* Learning science upgrade: transparent criteria, strategic scaffolds, genuine reflection. */
+.lesson-success-criteria,.application-success{
+  margin:22px 0;padding:22px 24px;border:1px solid #B8DDD5;border-left:4px solid var(--brand-capacity);border-radius:14px;
+  background:linear-gradient(135deg,#EAF8F4 0%,#F8FCFB 100%);color:var(--brand-ink);
+}
+.lesson-success-criteria h3{font-size:1.18rem;line-height:1.3;font-weight:700;margin:7px 0 12px}
+.lesson-success-criteria ul,.application-success ul{margin:12px 0 8px;padding-left:1.3rem;display:grid;gap:8px}
+.lesson-success-criteria li,.application-success li{font-size:.94rem;line-height:1.55}
+.lesson-success-criteria p,.application-success p{margin:9px 0 0}
+.thinking-prompt{
+  margin:18px 0 24px;padding:17px 21px;background:#EFF7F9;border:1px solid #C4E1E7;border-radius:13px;
+  color:var(--brand-ink);
+}
+.thinking-prompt strong,.transfer-cue strong,.application-success strong{font-weight:700}
+.thinking-prompt p,.transfer-cue p{margin:7px 0 0;line-height:1.6;font-size:.95rem}
+.feedback-next{margin-top:13px;border-top:1px solid rgba(70,98,98,.18);padding-top:12px}
+.learning-support{background:#F6F9FB;border:1px solid #DAE4EA;border-radius:12px;margin:15px 0;padding:0 16px}
+.learning-support summary{min-height:48px;display:flex;align-items:center;font-size:.88rem;color:#235C62;font-weight:700;cursor:pointer;list-style:revert;gap:7px}
+.learning-support summary:focus-visible{outline:3px solid var(--brand-focus);outline-offset:3px;border-radius:5px}
+.learning-support p{font-size:.93rem;line-height:1.65;margin:0 0 17px;color:#355365}
+.learning-stretch{background:#FFF6F0;border-color:#EACDBD}
+.learning-stretch summary{color:#8C493F}
+.transfer-cue{margin:21px 0;padding:18px 21px;background:#F2F8F5;border-left:4px solid var(--brand-capacity);border-radius:9px}
+.application-success{background:#F7FBFA}
+.application-success strong{font-size:1.04rem}
+.reflection-prompt{margin:17px 0 0;padding:19px 21px;background:#F6F9FA;border:1px solid #DDE6EB;border-radius:12px}
+.reflection-prompt strong{display:block;font-weight:750;color:var(--brand-ink)}
+.reflection-prompt p{margin:7px 0 0;font-size:.95rem;line-height:1.65;color:#3A5668}
+.reflection-modes{margin:24px 0 15px;border:0;padding:0}
+.reflection-modes legend{font-size:.94rem;font-weight:700;color:var(--brand-ink);margin-bottom:13px}
+.reflection-mode-option{display:inline-flex;align-items:center;gap:9px;min-height:48px;border-radius:11px;padding:11px 14px;background:#FFF;border:1px solid #B9CDDA;cursor:pointer;font-size:.88rem;font-weight:650}
+.reflection-mode-option.selected{background:#E4F6F1;border-color:#4E9589;color:#145B53}
+.reflection-mode-option input{accent-color:#176C69;width:17px;height:17px}
+.reflection-mode-option:focus-within{outline:3px solid var(--brand-focus);outline-offset:2px}
+.reflection-notes{margin:16px 0 22px}
+.reflection-notes textarea{min-height:108px;line-height:1.6}
+.reflection-offline{margin:20px 0;background:#FFF4EC;border:1px solid #E8CAB9;padding:19px 22px;border-radius:12px}
+.reflection-offline p{margin:9px 0 0;line-height:1.65}
+.reflection-confirm{margin:16px 0;align-items:flex-start;max-width:750px}
+.reflection-confirm input{accent-color:#176C69;flex-shrink:0;margin-top:4px}
+.lesson-panel .application-actions{margin-top:20px}
+@media(max-width:700px){
+  .lesson-success-criteria,.application-success{padding:18px 19px}
+  .reflection-prompt{padding:17px 18px}
+  .reflection-mode-option{width:100%;justify-content:flex-start}
+  .reflection-modes .mode-list{display:grid;grid-template-columns:1fr;gap:8px}
+}
