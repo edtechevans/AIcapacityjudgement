@@ -284,3 +284,24 @@ html[data-reading="comfortable"] .lesson-panel .step-content{font-size:1.06rem}
 html[data-reading="comfortable"] .lesson-panel .step-content .small{font-size:.91rem}
 html[data-reading="comfortable"] .option,.option:focus-visible{line-height:1.65}
 @media(prefers-reduced-data:reduce){.dashboard-hero:before,.dashboard-hero:after{display:none}}
+
+/* Progressive application: choice → plan → creation and feedback */
+.apply-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:23px 0 25px}
+.apply-step{min-height:57px;display:flex;align-items:center;gap:9px;padding:11px 12px;
+  border:1px solid #dde4e8;border-radius:10px;background:#f0f2f3;color:#617185;font-size:.77rem;font-weight:650;line-height:1.45}
+.apply-step span{width:25px;height:25px;flex:0 0 25px;border-radius:50%;background:#e0e7ec;
+  color:#3c566e;display:grid;place-items:center;font-weight:800}
+.apply-step.current{background:#e5edf5;border-color:#aac1d3;color:#1e3e60}
+.apply-step.current span{background:#284e70;color:#fff}
+.apply-step.passed{background:#e6eee8;border-color:#c1d8c7;color:#28583e}
+.apply-step.passed span{background:#538568;color:#fff}
+.apply-heading{font-family:var(--ui-serif);font-size:1.65rem;color:#203852;margin:7px 0 15px}
+.apply-steps{scroll-margin-top:115px}
+.application-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.application-actions .btn:last-child{margin-left:auto}
+@media(max-width:610px){
+ .apply-steps{grid-template-columns:1fr;gap:5px;margin-top:20px}
+ .apply-step{min-height:41px;padding:7px 12px}
+ .apply-step span{width:23px;height:23px;flex-basis:23px}
+ .application-actions .btn{width:100%;margin-left:0!important}
+}
