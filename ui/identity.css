@@ -428,3 +428,49 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
   .site-toast{display:none!important}
   .dashboard-meter--action{transform:none!important}
 }
+
+
+/* My Learning remains useful before any starting check-in. */
+.learning-page{max-width:1180px;padding-top:clamp(30px,4.8vw,64px)}
+.learning-page>h1{font-size:clamp(2.25rem,4.8vw,3.75rem);font-weight:650;letter-spacing:-.04em;margin:9px 0 15px}
+.learning-intro{max-width:770px;margin-bottom:36px}
+.learning-progress-section{margin-bottom:30px}
+.learning-page .section-top{align-items:end;gap:15px}
+.learning-page .section-top h2{font-size:clamp(1.65rem,2.9vw,2.3rem);font-weight:650;margin-top:8px}
+.learning-total{font-size:.83rem;font-weight:750;color:var(--brand-muted);font-variant-numeric:tabular-nums}
+.learning-progress-grid,.learning-evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.learning-progress-card{border:1px solid var(--brand-line);border-radius:18px;padding:clamp(20px,3vw,30px);display:flex;flex-direction:column;align-items:flex-start;background:#fff}
+.learning-progress-capacity{background:linear-gradient(135deg,#E8F8F5,#FFFFFF);border-top:4px solid var(--brand-capacity)}
+.learning-progress-judgement{background:linear-gradient(135deg,#FFF1EB,#FFFFFF);border-top:4px solid var(--brand-judgement)}
+.learning-progress-card h3{font-size:1.65rem;font-weight:650;color:var(--brand-ink);margin:8px 0}
+.learning-progress-card>p{color:var(--brand-muted);font-size:.91rem;flex:1;max-width:45ch}
+.learning-progress-card .lane{width:100%;margin:20px 0 17px}
+.learning-progress-card .lane-capacity .progress-fill{background:var(--brand-capacity)}
+.learning-progress-card .lane-judgement .progress-fill{background:var(--brand-judgement)}
+.learning-progress-card .btn{margin-top:8px}
+.learning-checkin-panel{background:linear-gradient(135deg,#EFF5F8,#F8FBFC);border:1px solid #D9E4EB;border-radius:18px;padding:25px 29px;display:flex;align-items:center;justify-content:space-between;gap:25px;margin:31px 0}
+.learning-checkin-panel h2{font-size:clamp(1.4rem,2.6vw,2rem);font-weight:650;margin:8px 0}
+.learning-checkin-panel p{max-width:680px;font-size:.91rem;color:var(--brand-muted)}
+.learning-checkin-panel .btn{white-space:nowrap;flex-shrink:0}
+.learning-evidence{margin:35px 0}
+.learning-evidence-grid{margin-top:16px}
+.learning-evidence-grid .info-card{padding:22px 26px}
+.learning-evidence-grid h3{font-size:1.2rem}
+.learning-sample-number{font-variant-numeric:tabular-nums;font-size:2rem;font-weight:700;color:var(--brand-ink);line-height:1.3;margin:11px 0}
+.learning-sample-number span{font-size:.82rem;color:var(--brand-muted);font-weight:550}
+.learning-strands{margin:17px 0}
+.learning-strands h3{font-size:1.17rem;margin-bottom:16px}
+.learning-evidence .answer-review{margin-top:22px}
+.learning-next-section{margin-top:40px}
+.learning-return{margin:26px 0 0}
+@media(max-width:730px){
+ .learning-progress-grid,.learning-evidence-grid{grid-template-columns:1fr}
+ .learning-checkin-panel{flex-direction:column;align-items:flex-start;padding:22px}
+ .learning-checkin-panel .btn{white-space:normal}
+ .learning-page .section-top{align-items:flex-start}
+}
+@media(max-width:480px){
+ .learning-page{padding-inline:17px}
+ .learning-checkin-panel .btn{width:100%}
+ .learning-progress-card{padding:22px}
+}
