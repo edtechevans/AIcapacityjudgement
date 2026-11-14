@@ -71,11 +71,11 @@ function home(){
  return '<main id="main-content" class="page dashboard-home">'+
  '<section class="dashboard-hero max"><div class="dashboard-copy"><div class="eyebrow">Your learning studio · Grade '+state.grade+'</div>'+
  '<h1 id="main-title" tabindex="-1">Build your <em>capacity.</em><br>Sharpen your <em>judgement.</em></h1>'+
- '<p class="hero-lead">Explore AI through ideas, decisions and real challenges. Learn first, then practise, create and reflect.</p>'+
+ '<p class="hero-lead">Learn what AI can do, when it helps, and how to use it thoughtfully in real situations.</p>'+
  '<div class="hero-buttons"><button class="btn" data-lesson="'+chosen.id+'">'+actionLabel+' →</button><button class="btn btn-outline" data-action="courses">All Grade '+state.grade+' modules</button></div>'+
- '</div><aside class="dashboard-meter" aria-label="Learning overview"><div class="eyebrow">YOUR JOURNEY</div>'+
+ '</div><a class="dashboard-meter dashboard-meter--action" href="#/lesson/'+chosen.id+'" data-lesson="'+chosen.id+'" aria-label="'+actionLabel+': '+esc(chosen.title)+'"><div class="eyebrow">YOUR JOURNEY</div>'+
  progressDisplay+
- '<p>Progress is practice—not a grade.</p></aside></section>'+
+ '<p>Progress is practice—not a grade.</p><span class="dashboard-meter-action">'+(resume?'Continue learning':review?'Review the module':'Open the lesson')+' <span aria-hidden="true">↗</span></span></a></section>'+
  '<section class="dashboard-main max" aria-label="Your next steps"><div class="dashboard-path-header"><div><div class="eyebrow">Keep moving forward</div><h2>One meaningful step at a time.</h2></div><div class="dashboard-switch"><span>Learning in</span><select aria-label="Choose grade" id="dashboard-grade">'+Object.keys(GRADES).map(x=>'<option value="'+x+'" '+(+x===state.grade?"selected":"")+'>Grade '+x+'</option>').join("")+'</select></div></div>'+
  '<div class="dashboard-next-grid"><article class="dashboard-next-card"><span class="eyebrow">'+(resume?"Continue your learning":review?"Revisit and transfer":"Suggested next module")+' · '+trackLabel(chosen.track)+'</span>'+
  '<div class="next-stage-indicator"><span class="pulse-dot" aria-hidden="true"></span>'+esc(nextStatus)+'</div>'+
