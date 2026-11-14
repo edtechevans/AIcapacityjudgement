@@ -4,9 +4,9 @@ const LEARNING_LABS = {
  "6-A1":{
   kind:"discriminate",
   title:"What makes it AI? Investigate the rule",
-  introduction:"Examine two fictional tools: a timer that follows a fixed rule and a text-classifier trained on examples. Change the input, observe what happens and explain why a clever-looking screen does not tell you how it works.",
+  introduction:"Examine fictional tools: a timer with a fixed rule, a toy text labeler and an unfamiliar app. Change the input and observe what happens, but do not assume that a changed output proves any system uses AI.",
   question:"What evidence distinguishes a fixed instruction from a model using learned patterns?",
-  modes:[["timer","A digital timer"],["classifier","A trained-message labeler"],["unknown","An unfamiliar app"]],
+  modes:[["timer","A digital timer"],["classifier","A toy text labeler"],["unknown","An unfamiliar app"]],
   explanation:"These are teacher-created, simplified demonstrations. The text-classifier is a transparent toy keyword-scoring system, not a deployed language model. You cannot identify AI simply by looking at a screen or one output.",
   reflection:"What changed when you altered the input? Which tool's behaviour has a known rule, and which one would require information about how it was built?"
  },
