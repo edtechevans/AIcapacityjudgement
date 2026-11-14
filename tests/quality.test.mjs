@@ -5,7 +5,7 @@ import {join} from "node:path";
 import {runInContext,createContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=p=>readFileSync(join(root,p),"utf8");
-const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js"];
+const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js"];
 function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,UNSEEN_TRANSFER,TEACHER_RUBRIC,classroomPlan,labClassify,labRankFeed,labGrade6,labEvaluate})",context)}
 const DATA=content(createContext({}));
 function app(seed={},hash=""){
@@ -49,8 +49,8 @@ async function finish(h,l){
  assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records[l.id].completed,true,"Completion requires reflection");
 }
 test("every grade has full teaching, challenge and diagnostic data",()=>{
- assert.equal(DATA.LESSONS.length,30);assert.equal(Object.keys(DATA.KNOWLEDGE).length,30);
- for(const grade of [6,7,8,9,10]){assert.equal(DATA.LESSONS.filter(l=>l.grade===grade).length,6);assert.equal(DATA.DIAGNOSTICS[grade].length,6)}
+ assert.equal(DATA.LESSONS.length,42);assert.equal(Object.keys(DATA.KNOWLEDGE).length,42);
+ for(const grade of [6,7,8,9,10,11,12]){assert.equal(DATA.LESSONS.filter(l=>l.grade===grade).length,6);assert.equal(DATA.DIAGNOSTICS[grade].length,6)}
  for(const l of DATA.LESSONS){const k=DATA.KNOWLEDGE[l.id];assert.ok(k&&DATA.ACTIVITIES[l.id],"Missing module: "+l.id);assert.equal(k.core.length,3);assert.equal(k.contexts.length,2);assert.equal(k.glossary.length,2)}
 });
 test("static site has no font network dependency and has a noscript fallback",()=>{
@@ -72,14 +72,14 @@ test("instruction is required, and a completed checkpoint survives reload",async
  assert.match(h.html,/Stage 3 of 5/);
  assert.match(app(h.storage,"#/lesson/6-A1").html,/Stage 3 of 5/);
 });
-test("all 30 courses still work end-to-end without saving student writing",async()=>{
+test("all 42 courses still work end-to-end without saving student writing",async()=>{
  const h=app();await h.click({action:"guest"});
- for(const grade of [6,7,8,9,10]){
+ for(const grade of [6,7,8,9,10,11,12]){
   if(grade!==6){await h.click({action:"profile"});await h.click({action:"switch-grade"});await h.click({action:"pick-grade",pick:String(grade)});}
   for(const l of DATA.LESSONS.filter(item=>item.grade===grade))await finish(h,l);
  }
  const stored=JSON.parse(h.storage["aicj-studio-v2"]);
- assert.equal(Object.values(stored.records).filter(v=>v.completed).length,30);
+ assert.equal(Object.values(stored.records).filter(v=>v.completed).length,42);
  assert.ok(!JSON.stringify(stored).includes(notes.work));
 });
 test("comfortable reading preference persists",async()=>{
@@ -326,7 +326,7 @@ test("My learning always displays real practice even without a check-in",async()
 test("landing requires only one grade click and hides other grade navigation",async()=>{
  const h=app();
  assert.match(h.html,/Your grade\. Your learning\./);
- for(const grade of [6,7,8,9,10])assert.match(h.html,new RegExp('data-action="pick-grade" data-pick="'+grade+'"'));
+ for(const grade of [6,7,8,9,10,11,12])assert.match(h.html,new RegExp('data-action="pick-grade" data-pick="'+grade+'"'));
  assert.doesNotMatch(h.html,/guest-name|data-action="guest"/);
  await h.click({action:"pick-grade",pick:"8"});
  assert.equal(h.hash,"#/grade/8");
@@ -442,10 +442,10 @@ test("mobile navigation contains reading controls and skip navigation keeps the 
 });
 
 
-test("all 30 modules have distinct, actionable and age-specific learning scaffolds",()=>{
+test("all 42 modules have distinct, actionable and age-specific learning scaffolds",()=>{
  const ids=DATA.LESSONS.map(l=>l.id),guides=DATA.LEARNING_SCAFFOLDS;
- assert.equal(ids.length,30);
- assert.equal(Object.keys(guides).length,30);
+ assert.equal(ids.length,42);
+ assert.equal(Object.keys(guides).length,42);
  const transferred=new Set();
  for(const l of DATA.LESSONS){
   const g=guides[l.id];
@@ -455,7 +455,7 @@ test("all 30 modules have distinct, actionable and age-specific learning scaffol
   for(const c of g.criteria)assert.ok(c.length>=25,"Success indicator is too vague in "+l.id);
   transferred.add(g.transfer);
  }
- assert.equal(transferred.size,30,"Transfer tasks should be individually authored");
+ assert.equal(transferred.size,42,"Transfer tasks should be individually authored");
 });
 test("instruction appears before challenge, includes meaningful support and responsive feedback",async()=>{
  const h=app();await h.click({action:"guest"});await h.click({lesson:"6-A1"});
@@ -575,7 +575,7 @@ test("wrong multiple-choice feedback addresses the chosen response but does not 
 });
 
 
-test("all 30 modules recover from a wrong answer through optional coaching without inventing mastery",async()=>{
+test("all 42 modules recover from a wrong answer through optional coaching without inventing mastery",async()=>{
  const h=app();
  await h.click({action:"guest"});
  for(const l of DATA.LESSONS){
@@ -621,7 +621,7 @@ test("all 30 modules recover from a wrong answer through optional coaching witho
 
 
 test("six interactive laboratories support learner choices without saving their inputs",async()=>{
- const ids=["6-A1","7-A1","8-B2","9-A1","9-B1","10-A3"];
+ const ids=["6-A1","7-A1","8-B2","9-A1","9-B1","10-A3","11-A1","11-B2","12-A2","12-B3"];
  for(const id of ids){
   const h=app();
   await h.click({action:"pick-grade",pick:id.split("-")[0]});
@@ -640,8 +640,8 @@ test("six interactive laboratories support learner choices without saving their 
   assert.match(h.html,/Stage 3 of 5/,id+" lab observation alone must not certify practice");
  }
 });
-test("all 30 applications show a distinct investigation and capstone evidence when relevant",async()=>{
- for(const grade of [6,7,8,9,10]){
+test("all 42 applications show a distinct investigation and capstone evidence when relevant",async()=>{
+ for(const grade of [6,7,8,9,10,11,12]){
   const h=app();await h.click({action:"pick-grade",pick:String(grade)});
   for(const l of DATA.LESSONS.filter(x=>x.grade===grade)){
    const id=l.id,k=DATA.KNOWLEDGE[id],a=DATA.ACTIVITIES[id];
@@ -664,7 +664,7 @@ test("all 30 applications show a distinct investigation and capstone evidence wh
 
 
 test("every lesson has a credible unseen transfer task and realistic offline classroom plan",()=>{
- assert.equal(Object.keys(DATA.UNSEEN_TRANSFER).length,30);
+ assert.equal(Object.keys(DATA.UNSEEN_TRANSFER).length,42);
  for(const l of DATA.LESSONS){
   const p=DATA.classroomPlan(l);
   assert.match(p.time,/minutes|sessions/,l.id+" lacks time range");
