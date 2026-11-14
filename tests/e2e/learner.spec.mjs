@@ -26,7 +26,10 @@ test("welcome, courses, home, learning, about, profile and lessons fit the scree
     await page.goto("/"+route);
     await expect(page.locator("#main-title")).toBeVisible();
     await assertNoOverflow(page,label);
-    await page.evaluate(()=>{document.activeElement?.blur?.();window.scrollTo(0,0)});
+    await page.evaluate(()=>{document.activeElement?.blur?.();document.documentElement.style.scrollBehavior="auto";window.scrollTo(0,0)});
+    const headerY=await page.locator(".topbar").evaluate(el=>el.getBoundingClientRect().top);
+    expect(Math.abs(headerY),"Sticky header should start at the top on "+label).toBeLessThanOrEqual(3);
+    if(label==="Home")await page.screenshot({path:"visual-review/"+info.project.name+"-first-screen.png",fullPage:false,animations:"disabled"});
     await page.screenshot({path:"visual-review/"+info.project.name+"-"+label.toLowerCase().replace(/\s+/g,"-")+".png",fullPage:true,animations:"disabled"});
   }
 });
