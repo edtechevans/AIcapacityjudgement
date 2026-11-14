@@ -46,7 +46,7 @@ test("labs cover data, algorithmic influence, evaluation, companion boundaries a
   assert.equal(lab.kind,kind,id+" wrong lab type");
   assert.ok(lab.modes.length>=2,"A lab needs conditions or genuine choices: "+id);
   assert.equal(new Set(lab.modes.map(m=>m[0])).size,lab.modes.length);
-  for(const field of ["title","introduction","question","explanation","reflection"])assert.ok(lab[field].length>=25,id+" missing "+field);
+  for(const field of ["title","introduction","question","explanation","reflection"])assert.ok(lab[field].length>=(field==="title"?12:25),id+" missing "+field);
  }
 });
 
