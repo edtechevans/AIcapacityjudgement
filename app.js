@@ -226,6 +226,7 @@ function learningLabHtml(l,w){
  (result||'<p class="small muted lab-start-hint">Choose one tool or condition. Make a prediction, then try another and compare what changes.</p>')+
  '<p class="lab-progress" role="status">'+(seen.length>=2?'Both conditions explored. You can now attempt the guided challenge below.':seen.length+' of 2 conditions explored · Explore two different choices before checking the guided challenge.')+'</p>'+
  '<div class="lab-observation-field"><label for="lab-observation"><strong>What changed, and why might that matter?</strong></label><textarea id="lab-observation" data-lab-observation="true" rows="2" maxlength="900" placeholder="I predicted… I observed… This does or does not show…">'+esc(w.labObservation||"")+'</textarea><p class="small muted">Optional learning notes; writing remains in this tab and is not graded, saved or transmitted.</p></div>'+
+ '<details class="learning-support lab-offline"><summary>Try the investigation without a live AI tool</summary><p>'+esc(classroomPlan(l).offline)+'</p></details>'+ 
  '<div class="lab-guidance"><p><strong>What this model cannot show:</strong> '+esc(lab.explanation)+'</p>'+
  '<p><strong>Make sense of it:</strong> '+esc(lab.reflection)+'</p></div>'+
  '<p class="small muted">Your laboratory choices and written observations are temporary; they are not student grades or saved records.</p></section>';
@@ -247,6 +248,18 @@ function capstoneGuideHtml(l){
  '<p><strong>Question for review:</strong> '+esc(guide.review)+'</p>'+
  '<p class="small muted">Your project is reviewed by a teacher or audience using real work, not automatically graded by this website.</p></div></details>';
 }
+function classroomSupportHtml(l){
+ const p=classroomPlan(l);
+ return '<details class="classroom-support"><summary>Facilitator resources · '+esc(p.time)+'</summary><div class="classroom-support-inner"><h4>Prepare</h4><p>'+esc(p.prepare)+'</p><h4>Suggested sequence</h4><p>'+esc(p.setup)+'</p><h4>Without a live AI account</h4><p>'+esc(p.offline)+'</p><h4>Include every learner</h4><p>Accept speech, drawings, paper tables and home languages; support reading and accessibility. Focus on reasoning rather than speed.</p><p class="small muted">Timing is a classroom estimate, not an assessed student outcome.</p></div></details>';
+}
+function evidenceGuideHtml(l){
+ const p=classroomPlan(l);
+ return '<details class="performance-evidence"><summary>What meaningful evidence could look like</summary><div class="performance-evidence-inner"><p><strong>Age-appropriate outcome:</strong> '+esc(p.response)+'</p><p><strong>Required evidence:</strong> '+esc(INQUIRY_BRIEFS[l.id].evidence)+'</p><div class="rubric-table-wrap"><table class="rubric-table"><caption>Teacher-reviewed learning evidence — not automatically scored</caption><thead><tr><th scope="col">Dimension</th><th scope="col">Developing</th><th scope="col">Applying</th><th scope="col">Transferring</th></tr></thead><tbody>'+Object.values(TEACHER_RUBRIC).map(c=>'<tr><th scope="row">'+esc(c.name)+'</th><td>'+esc(c.developing)+'</td><td>'+esc(c.applying)+'</td><td>'+esc(c.transferring)+'</td></tr>').join("")+'</tbody></table></div><p class="small muted">This is a descriptive teacher-review guide. The site cannot assess written reasoning or verify a real-world artefact.</p></div></details>';
+}
+function transferChallengeHtml(l){
+ const p=classroomPlan(l);
+ return '<section class="unseen-transfer" aria-label="Unseen transfer challenge"><div class="eyebrow">Transfer · A new situation</div><h3>Can you use this somewhere unfamiliar?</h3><p>'+esc(p.transfer)+'</p><p><strong>Show your thinking:</strong> Explain how you would gather evidence, make a responsible choice and revise or test your conclusion.</p><p class="small muted">Try independently before asking for support. A teacher or peer can review your work using school-approved tools; this website cannot judge its quality.</p></section>';
+}
 function activityHtml(l,w){const a=ACTIVITIES[l.id];if(!a)return '<p>Activity unavailable.</p>';let body='<div class="eyebrow">Interactive challenge · '+esc(a.kind==="sort"?"Classify":a.kind==="sequence"?"Build a workflow":a.kind==="prompt"?"Compare prompts":a.kind==="evidence"?"Check the evidence":"Make a decision")+'</div><h2>'+esc(a.title)+'</h2><p>'+esc(activityDescription(a))+'</p>';
 if(a.kind==="sort")body+='<div class="sort-list">'+a.items.map((item,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p>'+esc(item[0])+'</p><label class="small" for="sort-'+i+'">Your classification</label><select id="sort-'+i+'" data-sort="'+i+'"><option value="">Choose a category…</option>'+a.categories.map((x,n)=>'<option value="'+n+'" '+(w.sort[i]===n?"selected":"")+'>'+esc(x)+'</option>').join("")+'</select>'+(w.checked?'<div class="item-feedback '+(w.sort[i]===item[1]?"right":"try-again")+'">'+(w.sort[i]===item[1]?"✓ ":"↗ ")+esc(item[2])+'</div>':"")+'</div></div>').join("")+'</div>';
 if(["prompt","decision","evidence"].includes(a.kind))body+='<div class="option-list">'+a.options.map((item,i)=>'<label class="option '+(w.selected===i?"chosen":"")+'"><input type="radio" name="activity-choice" value="'+i+'" '+(w.selected===i?"checked":"")+'><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(item[0])+'</span></label>').join("")+'</div>'+(w.checked&&a.kind==="prompt"&&w.selected!==null?'<div class="example-output"><strong>Illustrative response</strong><p>'+esc(a.options[w.selected][1])+'</p></div>':"");
@@ -267,6 +280,7 @@ if(stage===0){
  '<div class="knowledge-panel"><div class="knowledge-number">0'+(index+1)+'</div><p>'+esc(part)+'</p></div>'+
  (index===0&&previousPractised?'<details class="learning-support prior-learning"><summary>Connect with what you learned before</summary><p>In your earlier module, you explored: <strong>'+esc(previous.principle)+'</strong></p><p>Without looking it up, what do you remember—and how could it help with today’s challenge?</p></details>':"")+
  (index===0&&guide?'<section class="lesson-success-criteria" aria-label="Learning intentions"><div class="eyebrow">What success looks like</div><h3>By the end, I can…</h3><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">These are things to practise and demonstrate, not grades.</p></section>':"")+
+ (index===0?classroomSupportHtml(l):"")+
  '<div class="learning-aid"><button class="btn btn-outline btn-small" data-action="listen">Listen to this idea</button><span class="small muted">Optional device read-aloud; no recording</span></div>'+
  '<div class="concept-pips" aria-label="Teaching sections">'+k.core.map((c,i)=>'<button class="concept-pip '+(i===index?"selected":"")+'" data-action="concept" data-index="'+i+'" '+(i>Math.max(index,w.maxTopic||0)?"disabled":"")+' aria-current="'+(i===index?"step":"false")+'">Idea '+(i+1)+'</button>').join("")+'</div>'+
  (index===2?
@@ -298,7 +312,7 @@ if(stage===2){
  const header='<div class="eyebrow">Apply what you know</div><h2 id="stage-title" tabindex="-1">Make your learning matter.</h2>'+
  '<p>Use what you learned to respond to a meaningful problem. Work with an approved tool, teacher-provided examples or a non-AI alternative as appropriate.</p>'+
  '<div class="application-success"><strong>What good work will show</strong><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">You decide the tool and format. Use the criteria to improve your work—not to earn a score here.</p></div>'+
- '<nav class="apply-steps" aria-label="Your application journey">'+progressNames.map((name,i)=>'<div class="apply-step '+(step===i?"current":i<step?"passed":"")+'" '+(i===step?'aria-current="step"':"")+'><span>'+(i<step?"✓":i+1)+'</span>'+esc(name)+'</div>').join("")+'</nav>'+(step===0?inquiryBriefHtml(l)+capstoneGuideHtml(l):'');
+ '<nav class="apply-steps" aria-label="Your application journey">'+progressNames.map((name,i)=>'<div class="apply-step '+(step===i?"current":i<step?"passed":"")+'" '+(i===step?'aria-current="step"':"")+'><span>'+(i<step?"✓":i+1)+'</span>'+esc(name)+'</div>').join("")+'</nav>'+(step===0?inquiryBriefHtml(l)+capstoneGuideHtml(l)+evidenceGuideHtml(l):'');
  let section="";
  if(step===0){
   const options=ct.map(([title,task],i)=>'<button class="context-card '+(w.context===i?"selected":"")+'" data-action="context-choice" data-index="'+i+'" aria-pressed="'+(w.context===i)+'"><span class="context-num">'+(i+1)+'</span><strong>'+esc(title)+'</strong><span>'+esc(task)+'</span></button>').join("");
@@ -343,7 +357,7 @@ if(stage===4){
   const written=w.reflectionMode==="written";
   const reflectionReady=w.reflectionConfirmed&&(!written||["learning","transfer"].every(x=>(reflect[x]||"").trim().length>=25));
   body='<div class="eyebrow">Make your learning stick</div><h2 id="stage-title" tabindex="-1">Pause, reflect and transfer.</h2>'+
-  '<p>You have applied the skill. Before recording this module as practised, explain what changed in your thinking and where you will use it next. There is no score for your reflection.</p>'+
+  '<p>You have applied the skill. Before recording this module as practised, explain what changed in your thinking and where you will use it next. There is no score for your reflection.</p>'+transferChallengeHtml(l)+
   '<div class="reflection-prompt"><strong>1. What did you learn or change?</strong><p>Look back at your work, a misconception you corrected, feedback you received or a decision you reconsidered. What is your evidence?</p><p class="reflection-evidence-question"><strong>Connect with your investigation:</strong> '+esc(INQUIRY_BRIEFS[l.id]?.evidence||l.evidence)+'</p></div>'+
   '<div class="reflection-prompt"><strong>2. Where could this help next?</strong><p>'+esc(guide.transfer)+'</p></div>'+
   '<fieldset class="reflection-modes"><legend>How would you like to reflect?</legend><div class="mode-list">'+
@@ -396,6 +410,8 @@ function planText(l,w){
   "INVESTIGATION QUESTION:",brief?.question||"",
   "METHOD TO TRY:",brief?.try||"",
   "WHAT EVIDENCE TO SHOW:",brief?.evidence||"",
+  "UNSEEN TRANSFER TASK:",UNSEEN_TRANSFER[l.id]||"",
+  "TEACHER REVIEW EXPECTATION:",GRADE_RESPONSE_EXPECTATIONS[l.grade],
   ...(capstone?["CAPSTONE EVIDENCE CHECKLIST:",...capstone.evidence.map(item=>"- "+item)]:[]),
   "How I chose to share my work:",{written:"Written explanation",visual:"Sketch or storyboard",talk:"Discussion or presentation"}[w.format]||"Written explanation",
   ...headers.flatMap(([title,key])=>[title+":",f[key]||"(Not yet written)"]),
