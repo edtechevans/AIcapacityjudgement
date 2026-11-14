@@ -7,8 +7,8 @@ Object.assign(KNOWLEDGE, {
       "Investigate fairly: define the expected labels, hold the test cases constant, change only the training examples and compare errors. In the fictional lab, a limited set gets two of four test cases right; a more varied set gets four of four. These tiny results illustrate a mechanism, not a real-world accuracy guarantee. Explain who and what could still be missing before using a classifier for a consequential decision."
     ],
     "example": [
-      "'It identified my leaf correctly, so the model is always accurate.'",
-      "'I would try leaves from different trees, seasons and lighting conditions, record mistakes and consider which training examples may be missing.'"
+      "It recognised one leaf, so the model is accurate for every season.",
+      "I will test the same unseen photos with varied training examples, record changed predictions and explain the limits of four small fictional cases."
     ],
     "check": [
       "Why might a model fail on unfamiliar examples?",
@@ -47,8 +47,8 @@ Object.assign(KNOWLEDGE, {
       "A good inquiry plan includes what you already know, what remains uncertain and what evidence could change your view. The AI may offer an idea you had not considered, but the learner chooses which ideas to pursue and which claims to use."
     ],
     "example": [
-      "'Write a report proving that trees always cool cities.'",
-      "'Suggest three researchable questions about urban heat, the kinds of data needed and possible alternative explanations. I will check the evidence myself.'"
+      "Those references look professional; they must exist.",
+      "I will locate each original source, check it supports the claim, remove invented citations and keep a traceable evidence table."
     ],
     "check": [
       "Which AI request most supports genuine inquiry?",
@@ -87,8 +87,8 @@ Object.assign(KNOWLEDGE, {
       "Revision is an important part of creating. Keep a before-and-after version and explain two meaningful decisions. A strong revision improves the work in a way that can be justified to the intended audience, not simply a way that sounds more sophisticated."
     ],
     "example": [
-      "'Use every AI editing suggestion because the result sounds professional.'",
-      "'Write my message first, ask for feedback about clarity, reject the suggestion that changes my voice, and explain the improvements I accept.'"
+      "The edited sentence sounds polished, so I should accept it even if my meaning changed.",
+      "I will compare the suggestion with my intended message, reject misleading revisions, and ask a reader if my own rewrite is clearer."
     ],
     "check": [
       "When should you reject an AI editing suggestion?",
@@ -127,8 +127,8 @@ Object.assign(KNOWLEDGE, {
       "Decide your boundaries before starting. Try a task, identify the part you need help with and seek a limited prompt or explanation. Then return to the work yourself. Explain where the help stopped and your thinking continued."
     ],
     "example": [
-      "'Give me every answer to this new maths exercise.'",
-      "'I will try two problems first, then request a hint on the next step of the one I cannot solve.'"
+      "If AI writes each practice paragraph, I will become a better writer.",
+      "I will draft the argument independently, request focused critique and revise one weakness while keeping my authorship."
     ],
     "check": [
       "Which AI help usually best protects practice?",
@@ -167,8 +167,8 @@ Object.assign(KNOWLEDGE, {
       "A useful fact-check explains the reasoning. Which parts are verified? What remains missing? Could a source have an interest in presenting the information a certain way? When sources disagree, make the disagreement visible rather than forcing a neat answer."
     ],
     "example": [
-      "'Five blogs say this law was passed in 1845, so it is confirmed.'",
-      "'I will trace the blogs to their original reference, inspect a relevant archive record and check that the date matches the exact law.'"
+      "Five matching blogs mean five independent confirmations.",
+      "I will trace each report back to its earliest evidence and locate an original record; copies of one claim are not independent confirmation."
     ],
     "check": [
       "What matters when several websites repeat a claim?",
@@ -207,8 +207,8 @@ Object.assign(KNOWLEDGE, {
       "Fairness matters in how people are represented. Generated images and descriptions can repeat stereotypes. Before publishing, ask whose voice might be missing and whether the subject would recognise themselves in the portrayal. Revise work that could mislead or exclude."
     ],
     "example": [
-      "'A classmate's photo would look great; I'll upload it without asking.'",
-      "'I will request permission through approved procedures, use an approved tool and credit the contributions I make and the AI supports.'"
+      "A good class poster justifies uploading a classmate's photo without consent.",
+      "I will obtain appropriate permission or use an original fictional image and credit contributors and approved AI support."
     ],
     "check": [
       "What does using an AI-generated image responsibly involve?",
