@@ -5,8 +5,8 @@ import {join} from "node:path";
 import {runInContext,createContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=p=>readFileSync(join(root,p),"utf8");
-const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js")];
-function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE})",context)}
+const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js"];
+function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS})",context)}
 const DATA=content(createContext({}));
 function app(seed={},hash=""){
  const hooks={},el={innerHTML:""},store={...seed},location={hash},listeners={},downloads=[];let exportedBlob=null,copiedText="";
@@ -34,6 +34,12 @@ async function finish(h,l){
  for(const key of ["work","revision"])h.input({dataset:{planField:key},value:notes[key]});
  h.change({id:"project-confirm",checked:true,dataset:{}});
  await h.click({action:"record"});assert.match(h.html,/Stage 5 of 5 · Reflect/);
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records[l.id].completed,false,"Application is not reflection");
+ h.input({dataset:{reflectField:"learning"},value:"I changed my thinking after testing my example and looking carefully at what the evidence actually shows."});
+ h.input({dataset:{reflectField:"transfer"},value:"In another lesson I will choose a tool according to the goal, test what it produces and explain why."});
+ h.change({id:"reflection-confirm",checked:true,dataset:{}});
+ await h.click({action:"finish-reflection"});
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records[l.id].completed,true,"Completion requires reflection");
 }
 test("every grade has full teaching, challenge and diagnostic data",()=>{
  assert.equal(DATA.LESSONS.length,30);assert.equal(Object.keys(DATA.KNOWLEDGE).length,30);
