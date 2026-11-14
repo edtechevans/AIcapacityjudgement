@@ -766,3 +766,7 @@ html{scroll-behavior:auto}
 }
 @media(max-width:380px){.lab-control-buttons{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.lab-adjust-choice{transition:none}}
+
+/* Accessibility: horizontally scrollable data tables must be keyboard discoverable. */
+.lab-table-wrap:focus-visible,.rubric-table-wrap:focus-visible{outline:3px solid #A45434;outline-offset:3px;scroll-margin-top:110px}
+.lab-table-wrap:focus,.rubric-table-wrap:focus{scroll-margin-top:110px}
