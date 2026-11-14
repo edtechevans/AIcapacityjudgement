@@ -219,6 +219,9 @@ if(stage===4){
   '<p>You studied the ideas, examined a worked example, practised the skill, applied it to a challenge and reflected on where to use it next.</p>'+
   '<div class="completed-evidence"><div><strong>Understanding</strong><span>✓ Core idea checked</span></div><div><strong>Practice</strong><span>✓ Guided challenge passed</span></div><div><strong>Application</strong><span>✓ Work recorded</span></div><div><strong>Reflection</strong><span>✓ Next-step thinking completed</span></div></div>'+
   '<div class="review-question"><strong>Keep transferring this learning</strong><p>'+esc(guide.transfer)+'</p><p>Try this in a new class or real situation. Seek feedback from someone affected, then explain what changed.</p><p class="small muted">The studio records completed practice, not a judgement of mastery or a teacher-assessed result.</p></div>'+
+ (Object.values(w.fields||{}).some(v=>String(v).trim())||Object.values(w.reflection||{}).some(v=>String(v).trim())?
+ '<div class="reflection-save"><strong>Keep a copy of your learning</strong><p>Your work and reflection are still open in this tab but are not saved with progress. Copy or download them before leaving this lesson.</p><div class="application-actions"><button class="btn btn-outline" data-action="copy-plan">Copy my notes</button><button class="btn btn-outline" data-action="download-notes">Download my notes</button></div></div>':
+ '<p class="small muted">Your earlier notes are not stored by this site. You can revisit the ideas and practise the skill again.</p>')+
   '<div class="hero-buttons">'+(nextSuggested?'<button class="btn" data-lesson="'+nextSuggested.id+'">Next: '+esc(nextSuggested.title)+' →</button>':'<button class="btn" data-action="courses">Explore more courses →</button>')+'<button class="btn btn-outline" data-action="snapshot">Review my learning →</button></div>';
  }else{
   const reflect=w.reflection||{learning:"",transfer:""};
