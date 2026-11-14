@@ -858,3 +858,170 @@ html{scroll-behavior:auto}
 .scope-strand-grid li strong{color:#205A64}
 @media(max-width:720px){.scope-strand-grid{grid-template-columns:1fr}.scope-grade-item{gap:12px}.scope-sequence{padding:18px 15px}.grade-mission{padding:19px 15px}}
 @media(max-width:370px){.scope-grade-item{padding:11px}.scope-grade-number{flex-basis:46px;min-height:50px}.scope-grade-number strong{font-size:1.15rem}}
+
+
+/* v27 · Public curriculum and seven-year progression showcase */
+.curriculum-page{overflow:clip;padding-bottom:42px}
+.curriculum-page .eyebrow{font-size:.75rem;letter-spacing:.105em;font-weight:780;text-transform:uppercase}
+.curriculum-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(290px,.8fr);gap:clamp(25px,5vw,70px);align-items:center;padding-top:clamp(48px,6vw,85px);padding-bottom:40px}
+.curriculum-hero-copy .eyebrow{color:var(--brand-capacity);margin-bottom:16px}
+.curriculum-hero h1{font-family:var(--brand-display);font-size:clamp(2.15rem,4.6vw,4.35rem);font-weight:770;line-height:1.13;letter-spacing:-.052em;color:#142B43;margin:0 0 24px}
+.curriculum-hero h1 em{color:#21716D;font-style:normal}
+.curriculum-hero-copy>p:not(.curriculum-hero-foot){font-size:clamp(.97rem,1.35vw,1.13rem);color:#4D6372;line-height:1.8;max-width:60ch}
+.curriculum-hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:25px 0 18px}
+.curriculum-hero-actions .btn{min-height:44px}
+.curriculum-hero-foot{font-size:.77rem;color:#607580;margin:0}
+.curriculum-hero-pathways{display:grid;gap:12px}
+.curriculum-pathway{border:1px solid #C3DBD9;border-radius:15px;padding:24px 24px 19px;background:#E7F4F1}
+.curriculum-pathway--judgement{background:#FFF0EB;border-color:#ECD3C9}
+.curriculum-pathway span{font-weight:820;letter-spacing:.10em;font-size:.69rem;color:#256A63}
+.curriculum-pathway--judgement span{color:#9D4C42}
+.curriculum-pathway strong{display:block;color:#1E414B;font-size:clamp(1.08rem,1.5vw,1.27rem);line-height:1.38;letter-spacing:-.025em;margin:10px 0}
+.curriculum-pathway--judgement strong{color:#633B3E}
+.curriculum-pathway p{font-size:.86rem;color:#49626A;line-height:1.65;margin:0}
+.curriculum-pathway--judgement p{color:#765B5D}
+.curriculum-pathway-note{margin:0;padding:8px 12px 2px;font-size:.83rem;color:#5A6E7A;line-height:1.6}
+.curriculum-pathway-note strong{color:#2D4E5B}
+.curriculum-counts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-top:0;margin-bottom:70px}
+.curriculum-counts>div{background:#fff;border:1px solid #D8E5EA;border-radius:13px;padding:17px 19px;min-width:0}
+.curriculum-counts strong{font-size:clamp(1.75rem,2.7vw,2.5rem);line-height:1.2;font-weight:810;color:#1B5360;display:block;font-variant-numeric:tabular-nums}
+.curriculum-counts span{display:block;color:#5F7180;font-size:.82rem;margin-top:6px;line-height:1.55}
+.curriculum-section-intro{margin-bottom:25px}
+.curriculum-section-intro .eyebrow{color:#337775}
+.curriculum-section-intro h2{color:#16344B;font-family:var(--brand-display);font-size:clamp(1.55rem,2.65vw,2.4rem);letter-spacing:-.037em;font-weight:770;line-height:1.28;margin:9px 0 10px}
+.curriculum-section-intro p{font-size:.96rem;line-height:1.75;color:#546A77;max-width:80ch}
+.curriculum-atlas{margin-bottom:80px}
+.curriculum-year-nav{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:22px}
+.curriculum-year-tab{display:flex;flex-direction:column;align-items:center;gap:2px;justify-content:flex-start;text-align:center;min-width:0;min-height:98px;background:#fff;border:1.5px solid #D3E0E5;border-radius:11px;padding:11px 6px 10px;cursor:pointer;color:#566D77}
+.curriculum-year-tab span{font-size:.65rem;font-weight:690;letter-spacing:.04em}
+.curriculum-year-tab strong{font-size:1.65rem;font-variant-numeric:tabular-nums;color:#1B4358;line-height:1.22}
+.curriculum-year-tab small{font-size:.66rem;line-height:1.35;color:#56717D;max-width:14ch}
+.curriculum-year-tab:hover{border-color:#78A6A8;background:#F5FBFA}
+.curriculum-year-tab.is-active{background:#153A4C;border-color:#153A4C;box-shadow:0 6px 18px rgba(21,58,76,.12)}
+.curriculum-year-tab.is-active span,.curriculum-year-tab.is-active strong,.curriculum-year-tab.is-active small{color:#fff}
+.curriculum-year-tab:focus-visible,.curriculum-strand-tab:focus-visible,.catalogue-module summary:focus-visible{outline:3px solid #B25D35;outline-offset:3px}
+.curriculum-selected-year{border:1px solid #D5E2E7;background:#fff;border-radius:17px;padding:clamp(19px,3vw,30px);box-shadow:0 8px 23px rgba(20,49,62,.035)}
+.curriculum-year-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 0 18px}
+.curriculum-year-kicker{font-size:.72rem;letter-spacing:.105em;color:#327774;font-weight:830}
+.curriculum-year-heading h3{font-size:clamp(1.35rem,2.3vw,2rem);color:#1A4155;letter-spacing:-.035em;line-height:1.3;margin:6px 0 8px}
+.curriculum-year-heading h3 span{font-weight:570;color:#395E6D}
+.curriculum-year-heading p{font-size:.89rem;color:#59717E;line-height:1.6;margin:0}
+.curriculum-year-big{color:#E2ECEE;font-size:5.2rem;font-weight:800;line-height:1;letter-spacing:-.08em;padding-right:10px}
+.curriculum-concept-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;background:#F1F7F7;padding:19px;border-radius:10px;margin-bottom:27px}
+.curriculum-concept-strip span{font-size:.69rem;letter-spacing:.09em;font-weight:810;color:#31746F}
+.curriculum-concept-strip p{font-size:.9rem;color:#345865;line-height:1.65;margin:7px 0 0}
+.curriculum-modules-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.curriculum-lane-heading{padding:10px 14px 12px;border-bottom:3px solid #4C9489;margin-bottom:10px}
+.curriculum-lane-heading--judgement{border-color:#C8796A}
+.curriculum-lane-heading span{font-size:.69rem;color:#47817B;font-weight:780;letter-spacing:.1em}
+.curriculum-lane-heading--judgement span{color:#AD675D}
+.curriculum-lane-heading h4{font-size:1.13rem;letter-spacing:-.01em;color:#204A54;margin:5px 0 0}
+.curriculum-lane-heading--judgement h4{color:#783F40}
+.catalogue-module-list{display:grid;gap:10px}
+.catalogue-module{border:1px solid #D6E5E5;border-radius:11px;padding:17px;background:#FBFDFD;min-width:0}
+.catalogue-module--judgement{background:#FFFCFB;border-color:#EADCD6}
+.catalogue-module-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.catalogue-module-code{font-size:.7rem;text-transform:uppercase;font-weight:820;color:#357670;letter-spacing:.035em}
+.catalogue-module--judgement .catalogue-module-code{color:#A25B50}
+.catalogue-lab{font-size:.65rem;font-weight:720;color:#235B69;border:1px solid #BAD8D8;background:#EEF7F6;border-radius:99px;padding:3px 7px}
+.catalogue-module h4{font-size:1.04rem;color:#1C4153;line-height:1.38;margin:11px 0 8px;font-weight:760;letter-spacing:-.015em}
+.catalogue-module-objective{color:#526775;font-size:.85rem;line-height:1.65;margin:0 0 13px}
+.catalogue-module-move{border-left:3px solid #73ACA5;padding:2px 0 1px 12px;margin:12px 0}
+.catalogue-module--judgement .catalogue-module-move{border-color:#D29C8C}
+.catalogue-module-move span{font-size:.66rem;letter-spacing:.065em;text-transform:uppercase;color:#3D746F;font-weight:800}
+.catalogue-module-move p{font-size:.84rem;line-height:1.55;color:#345664;margin:4px 0}
+.catalogue-module details{border-top:1px solid #DFE8EA;margin-top:14px;padding-top:10px}
+.catalogue-module summary{font-size:.78rem;font-weight:720;color:#286571;cursor:pointer;line-height:1.6}
+.catalogue-module details p{font-size:.8rem;color:#4B6170;line-height:1.65;margin:9px 0}
+.catalogue-module details p strong{color:#284A56}
+.curriculum-annual-challenge{margin-top:24px;background:linear-gradient(125deg,#15364B,#1D5861);color:white;border-radius:13px;padding:clamp(20px,2.7vw,29px)}
+.curriculum-annual-challenge .eyebrow{color:#B2E5DB}
+.curriculum-annual-challenge h4{font-size:clamp(1.16rem,1.8vw,1.55rem);letter-spacing:-.025em;line-height:1.3;margin:9px 0;color:white}
+.curriculum-annual-question{color:#DFEFED;font-size:.94rem;line-height:1.68;margin-bottom:16px}
+.curriculum-annual-columns{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+.curriculum-annual-columns h5{color:#BFE8DE;font-size:.77rem;text-transform:uppercase;letter-spacing:.055em;margin:14px 0 7px}
+.curriculum-annual-columns p,.curriculum-annual-columns li{font-size:.84rem;line-height:1.65;color:#EDF5F5}
+.curriculum-annual-columns ul{padding-left:20px;margin:8px 0}
+.curriculum-year-cta{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:20px}
+.curriculum-year-cta p{font-size:.79rem;color:#657784;line-height:1.5}
+.curriculum-year-cta .btn{flex-shrink:0;max-width:100%;white-space:normal}
+.curriculum-spiral{background:#EDF4F4;padding:clamp(45px,6vw,73px) 0;margin-bottom:73px;border-top:1px solid #DDE7E7;border-bottom:1px solid #D5E5E5}
+.curriculum-strand-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:25px 0}
+.curriculum-strand-tab{display:flex;align-items:center;gap:11px;min-height:55px;text-align:left;background:#fff;border:1px solid #CDDFE0;border-radius:10px;padding:11px 13px;font-weight:730;color:#355B64;font-size:.83rem;cursor:pointer}
+.curriculum-strand-tab:hover{border-color:#7AAEAC;background:#F8FDFB}
+.curriculum-strand-tab.is-active{background:#164757;color:white;border-color:#164757}
+.curriculum-strand-code{display:grid;place-items:center;min-width:32px;min-height:30px;border-radius:6px;background:#E6F2EE;color:#215F60;font-weight:810;font-size:.75rem}
+.curriculum-strand-tab.is-active .curriculum-strand-code{background:#C6EBE3;color:#174A4E}
+.curriculum-spiral-detail{background:white;border:1px solid #D3E2E5;border-radius:14px;padding:clamp(17px,3vw,27px)}
+.curriculum-spiral-heading{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.curriculum-spiral-heading span{font-size:.7rem;color:#3D827C;letter-spacing:.08em;font-weight:800}
+.curriculum-spiral-heading h3{font-size:1.4rem;letter-spacing:-.02em;color:#21485B;margin:7px 0}
+.curriculum-spiral-heading p{font-size:.87rem;color:#54707B;margin:0 0 7px;line-height:1.6}
+.curriculum-spiral-count{padding:7px 12px;border-radius:99px;background:#E9F5F2;color:#24635D;font-weight:760;font-size:.76rem;white-space:nowrap}
+.curriculum-progression-list{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:0}
+.curriculum-progression-step{display:grid;grid-template-columns:54px minmax(0,1fr);gap:14px;position:relative;padding:0 0 20px}
+.curriculum-progression-step:before{content:"";position:absolute;left:26px;top:40px;bottom:-1px;width:2px;background:#D6E4E6}
+.curriculum-progression-step:last-child:before{display:none}
+.curriculum-progression-marker{z-index:1;display:grid;place-items:center;background:#E8F2F3;border:1px solid #C6DBE1;color:#245E65;border-radius:50%;width:52px;height:52px;font-size:.88rem;font-weight:820}
+.curriculum-progression-step.is-current .curriculum-progression-marker{background:#17525A;color:white;border-color:#17525A}
+.curriculum-progression-step>div:last-child{padding:6px 0 12px}
+.curriculum-progression-step strong{font-size:.94rem;color:#1D4354}
+.curriculum-progression-step p{font-size:.87rem;color:#536E7A;line-height:1.6;margin:5px 0 0}
+.curriculum-progression-current{display:inline-block;font-size:.69rem;color:#276D65;font-weight:800;margin-top:7px}
+.curriculum-outcomes{margin-bottom:20px}
+.curriculum-evidence-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.curriculum-evidence-grid article{border:1px solid #D4E2E7;border-radius:12px;background:white;padding:20px;min-width:0}
+.curriculum-evidence-grid article>span{font-size:.72rem;color:#358780;font-weight:840;letter-spacing:.06em}
+.curriculum-evidence-grid h3{font-size:1.03rem;color:#1E4554;margin:16px 0 9px}
+.curriculum-evidence-grid p{font-size:.85rem;color:#526A76;line-height:1.66}
+.curriculum-integrity-note{margin:25px 0 35px;border-left:4px solid #3F8F87;padding:13px 20px;background:#F0F7F5;border-radius:0 10px 10px 0;font-size:.85rem;color:#47626B;line-height:1.75}
+.curriculum-final-cta{display:flex;justify-content:space-between;align-items:center;gap:25px;padding:29px 30px;border-radius:15px;background:#183B50;color:white}
+.curriculum-final-cta h2{font-size:1.45rem;color:white;margin:6px 0}
+.curriculum-final-cta p{font-size:.89rem;color:#DBE9EC;line-height:1.55;margin:0}
+.curriculum-final-cta .eyebrow{color:#B4E7D9}
+.curriculum-final-cta>div:last-child{display:flex;flex-wrap:wrap;gap:9px}
+.curriculum-final-cta .btn-outline{color:#1E515B;background:#F4FDFC;border-color:#D6ECE5}
+.grade-curriculum-link{display:block;cursor:pointer;border:0;background:transparent;text-decoration:underline;text-underline-offset:4px;color:#1E6F6A;margin:0 auto 23px;font:720 .9rem/1.5 var(--brand-body);padding:7px 10px}
+.grade-curriculum-link:hover{color:#9D5048}
+.grade-curriculum-link:focus-visible{outline:3px solid #AA563B;outline-offset:3px}
+.about-curriculum-preview{padding:26px;margin:31px 0;background:#E9F4F1;border:1px solid #C9DDDA;border-radius:14px}
+.about-curriculum-preview h2{font-size:1.4rem;color:#1C4953;margin:7px 0}
+.about-curriculum-preview p{font-size:.92rem;line-height:1.65;color:#466772;max-width:75ch}
+@media(max-width:950px){
+ .curriculum-hero{grid-template-columns:1fr 1fr;gap:25px}
+ .curriculum-evidence-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .curriculum-year-nav{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .curriculum-year-tab{min-height:82px}
+}
+@media(max-width:720px){
+ .curriculum-hero{grid-template-columns:1fr;padding-top:35px;gap:28px}
+ .curriculum-hero-pathways{grid-template-columns:1fr 1fr}
+ .curriculum-pathway{padding:17px}
+ .curriculum-pathway-note{grid-column:1/-1}
+ .curriculum-counts{margin-bottom:50px;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .curriculum-modules-layout,.curriculum-concept-strip,.curriculum-annual-columns{grid-template-columns:1fr}
+ .curriculum-annual-columns{gap:4px}
+ .curriculum-strand-choices{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .curriculum-year-cta,.curriculum-final-cta{flex-direction:column;align-items:stretch}
+ .curriculum-final-cta>div:last-child{align-items:stretch}
+}
+@media(max-width:475px){
+ .curriculum-hero-pathways{grid-template-columns:1fr}
+ .curriculum-pathway-note{grid-column:auto}
+ .curriculum-hero h1{font-size:2.28rem}
+ .curriculum-year-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .curriculum-year-tab{min-height:73px;align-items:flex-start;text-align:left;padding:11px 13px}
+ .curriculum-year-tab strong{font-size:1.35rem}
+ .curriculum-year-tab small{max-width:unset}
+ .curriculum-year-big{font-size:3.1rem}
+ .curriculum-hero-actions,.curriculum-final-cta>div:last-child{flex-direction:column;align-items:stretch}
+ .curriculum-strand-tab{padding:9px 10px;font-size:.77rem}
+ .curriculum-counts>div{padding:14px}
+ .curriculum-evidence-grid{grid-template-columns:1fr}
+}
+@media print{
+ .curriculum-year-nav,.curriculum-strand-choices,.curriculum-hero-actions,.curriculum-year-cta,.curriculum-final-cta,.topbar,.mobile-menu,.footer,.skip-link{display:none!important}
+ .curriculum-page{overflow:visible}
+ .curriculum-hero,.curriculum-selected-year,.curriculum-spiral,.curriculum-counts{break-inside:avoid}
+ .curriculum-pathway,.curriculum-annual-challenge,.curriculum-final-cta{background:#fff!important;color:#172B3C!important}
+}
