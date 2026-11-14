@@ -127,15 +127,15 @@ test("complete an authentic lesson, download work and resume the final stage",as
   await page.reload();
   await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5");
 });
-test("critical accessibility defects are caught on the student learning pages",async({page})=>{
+test("automated WCAG 2.2 A and AA violations are caught on core student pages",async({page})=>{
   await startGrade(page);
   for(const route of ["#/home","#/grade/6","#/grade/6/snapshot","#/lesson/6-A1"]){
     await page.goto("/"+route);
     await expect(page.locator("#main-title")).toBeVisible();
     const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]).analyze();
-    const important=result.violations.filter(v=>["serious","critical"].includes(v.impact));
-    const readable=important.map(v=>v.id+": "+v.nodes.slice(0,2).map(n=>n.target.join(",")).join(";")).join("\n");
-    expect(readable,"Axe serious/critical findings on "+route).toBe("");
+    const violations=result.violations;
+    const readable=violations.map(v=>v.id+" ["+v.impact+"]: "+v.nodes.slice(0,2).map(n=>n.target.join(",")).join(";")).join("\n");
+    expect(readable,"All automated WCAG A/AA findings must be resolved on "+route).toBe("");
   }
 });
 
