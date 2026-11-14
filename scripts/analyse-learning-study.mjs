@@ -169,7 +169,7 @@ export function analyse(rows,{disclosureMin=5}={}){
    exactRaterAgreementPercent:compared>=disclosureMin*4?round(100*exact/compared):null,
    scorePairsDifferingByMoreThanOneBand:compared>=disclosureMin*4?largeDisagreements:null},
   studio:scoped(primary),comparison:scoped(comparison),
-  studioVsComparison:comparative,byGrade,delayed,
+  studioVsComparison:comparative,byGrade,delayed:retention,
   limitations:["Assessments must be piloted for equivalence; large scores are not automatically valid measures.",
    "Small or uncontrolled cohorts cannot establish the platform caused learning gains.",
    "Individual IDs, student responses, assessor codes and scores are intentionally omitted."]
