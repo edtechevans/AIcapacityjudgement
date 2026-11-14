@@ -108,7 +108,7 @@ A ready-to-use [ten-student pilot guide](docs/STUDENT_PILOT_GUIDE.md) explains h
 
 The student-facing experience has been reviewed and redesigned for faster access to learning and clearer navigation:
 
-- New student entry begins with an explicit **Grade 6–10** choice, a local display alias and direct access to the selected course library.
+- New student entry is a **single Grade 6–10 choice**, directly opening that grade's course library. A local alias can be changed later in the learner profile; it is never required at entry.
 - The course page uses compact **grade chips**, Capacity/Judgement filters, a featured next module and a less crowded library.
 - The lesson player displays **five learning stages** and prevents advancing from the interactive practice step until its check is passed.
 - Successful practice leads to a clearer next action, including an unfinished module or a review task when a grade is complete.
@@ -173,7 +173,7 @@ After changing the scripts, update the version query parameters in \`index.html\
 
 **This is a public, static preview — not a production school learning management system.**
 
-- A student can enter with a **local display alias**. There is currently **no genuine school login** and no validated identity.
+- A student enters by **choosing a grade**. A local display alias is optional in Profile. There is currently **no genuine school login** or verified grade entitlement.
 - Quiz choices, completion status and a display alias are saved in \`localStorage\` on the user's device, not in a central student record. Progress does not sync between devices.
 - Free-text explanation is held in memory while the tab remains open. It is **not sent to a server or saved to localStorage**.
 - All quiz items and answers are present in public JavaScript; **do not use the items for secure or high-stakes testing**.
