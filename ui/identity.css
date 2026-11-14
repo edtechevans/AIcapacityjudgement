@@ -54,10 +54,10 @@ body{font-family:var(--brand-body);color:var(--brand-ink);background:var(--brand
 }
 h1,h2,.display{
  font-family:var(--brand-display);
- font-weight:780;
- letter-spacing:-.045em
+ font-weight:650;
+ letter-spacing:-.038em
 }
-h3{font-family:var(--brand-display);font-weight:725;letter-spacing:-.025em}
+h3{font-family:var(--brand-display);font-weight:650;letter-spacing:-.021em}
 .eyebrow{color:var(--brand-judgement);font-weight:800;letter-spacing:.125em}
 .small,.muted,.breadcrumb,.privacy-note,.course-privacy{color:var(--brand-muted)}
 ::selection{background:#D9F2ED;color:#153A40}
@@ -79,8 +79,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  color:var(--brand-ink);
  font-family:var(--brand-display);
  font-size:.98rem;
- font-weight:800;
- letter-spacing:-.038em;
+ font-weight:700;
+ letter-spacing:-.029em;
  white-space:nowrap
 }
 .brand-wordmark i{font-style:normal;color:var(--brand-judgement);font-weight:850}
@@ -115,7 +115,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .welcome-panel .welcome-brand{display:flex;flex-direction:column;align-items:center;gap:11px}
 .welcome-brand .brand-emblem{width:76px;height:76px;flex-basis:76px;border-radius:20px;box-shadow:0 14px 38px rgba(20,35,57,.16)}
 .welcome-brand span{font-size:.72rem;letter-spacing:.22em;color:var(--brand-capacity);font-weight:800}
-.welcome-panel h1{color:var(--brand-ink);font-weight:800}
+.welcome-panel h1{color:var(--brand-ink);font-weight:650}
 .welcome-panel .auth-selection{background:white;border-color:var(--brand-line)}
 .welcome-grade.selected,.grade-chip.current{background:var(--brand-ink);border-color:var(--brand-ink);color:white}
 .welcome-grade:hover,.grade-chip:hover{border-color:var(--brand-capacity)}
@@ -150,7 +150,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 }
 .dashboard-hero:after{background:radial-gradient(ellipse,rgba(255,156,128,.14),transparent 72%)}
 .dashboard-hero .eyebrow{color:#BDF7ED}
-.dashboard-hero h1{font-size:clamp(2.2rem,4.4vw,4.2rem);font-weight:800;letter-spacing:-.057em}
+.dashboard-hero h1{font-size:clamp(2.2rem,4.4vw,4.2rem);font-weight:650;letter-spacing:-.045em}
 .dashboard-hero h1 em{color:#A5F1E6}
 .dashboard-hero h1 em:nth-of-type(2){color:#FFBEA8}
 .dashboard-hero .hero-lead{color:#DCE7EE}
@@ -175,7 +175,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  width:112px;height:112px;background:url("../assets/brand/mark-transparent.svg") center/contain no-repeat;
  opacity:.12;pointer-events:none
 }
-.dashboard-lane h3{font-family:var(--brand-display);font-size:1.75rem;font-weight:790}
+.dashboard-lane h3{font-family:var(--brand-display);font-size:1.75rem;font-weight:650}
 .dashboard-lane .lane-top{color:var(--brand-ink)}
 .dashboard-lane .lane-capacity .progress-fill{background:#208B84}
 .dashboard-lane .lane-judgement .progress-fill{background:#C55F4C}
