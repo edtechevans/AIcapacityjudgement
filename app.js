@@ -65,7 +65,7 @@ function home(){
  const actionLabel=review?"Revisit a module":resume?"Resume your lesson":"Start learning";
  return '<main id="main-content" class="page dashboard-home">'+
  '<section class="dashboard-hero max"><div class="dashboard-copy"><div class="eyebrow">Your learning studio · Grade '+state.grade+'</div>'+
- '<h1 id="main-title" tabindex="-1">Build what you <em>can do.</em><br>Know when it <em>matters.</em></h1>'+
+ '<h1 id="main-title" tabindex="-1">Build your <em>capacity.</em><br>Sharpen your <em>judgement.</em></h1>'+
  '<p class="hero-lead">Explore AI through ideas, decisions and real challenges. Learn first, then practise, create and reflect.</p>'+
  '<div class="hero-buttons"><button class="btn" data-lesson="'+chosen.id+'">'+actionLabel+' →</button><button class="btn btn-outline" data-action="courses">All Grade '+state.grade+' modules</button></div>'+
  '</div><aside class="dashboard-meter" aria-label="Learning overview"><div class="eyebrow">YOUR JOURNEY</div>'+
