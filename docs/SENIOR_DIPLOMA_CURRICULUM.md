@@ -116,3 +116,7 @@ The public website checks short guided questions and records self-reported pract
 This remains a **public, unauthenticated grade-selection preview**. SharePoint/Entra production access must be grade-authorised at the server; students cannot be restricted by a static client-side grade picker.
 
 **Original work:** The design draws broadly on the progression principles of UNESCO's AI Competency Framework, the OECD/European Commission AI Literacy Framework, Day of AI/MIT RAISE, Experience AI and AI4K12, without copying curriculum content or asserting endorsement.
+
+## v25 bridge — explicit seven-year sequence and performance challenges
+
+The independently authored [v25 scope-and-sequence review](SCOPE_SEQUENCE_REVIEW_V25.md) adds observable competencies and misconception checks to every strand across G6–12. The course library includes an annual integrated challenge for DP1 (community service architecture dossier) and DP2 (original defended impact portfolio). These support, but do not replace, the existing Grade 11 A3 design dossier and Grade 12 A3 Impact Project. Students must not receive two separate capstone obligations simply because both appear on the site; educators may use the integrated challenge as the culminating assessment prompt for the existing capstone.
