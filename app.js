@@ -274,6 +274,9 @@ function planText(l,w){
   "My chosen challenge:",context[0],context[1],
   "How I chose to share my work:",{written:"Written explanation",visual:"Sketch or storyboard",talk:"Discussion or presentation"}[w.format]||"Written explanation",
   ...headers.flatMap(([title,key])=>[title+":",f[key]||"(Not yet written)"]),
+  "REFLECTION — "+({written:"Written notes",spoken:"Spoken explanation",visual:"Visual explanation"}[w.reflectionMode]||"Written notes"),
+  "What changed in my thinking:",w.reflection?.learning||(w.reflectionMode==="written"?"(Not yet written)":"(Completed outside the studio)"),
+  "Where I will apply this next:",w.reflection?.transfer||(w.reflectionMode==="written"?"(Not yet written)":"(Completed outside the studio)"),
   "NEXT STEP\nShare your work and seek feedback through a school-approved process. Your notes have not been uploaded to this website."
  ].join("\n\n");
 }
@@ -377,7 +380,10 @@ passed=w.selected===a.correct;feedback=a.options[w.selected][a.kind==="prompt"?2
 }
 w.checked=true;w.feedback={passed,message:feedback};r.attempts=(r.attempts||0)+1;if(passed){r.practicePassed=true;w.retrying=false;}persist();render();const feedbackEl=$("#activity-feedback");if(feedbackEl)feedbackEl.focus({preventScroll:true});
 }
-function recordReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);const fields=w.fields||{};const sufficient=["purpose","decision","evidence","work","revision"].every(key=>(fields[key]||"").trim().length>=35);if(!r.knowledgePassed||!w.modelSeen||!r.practicePassed||!sufficient||!w.confirmed){notice="Complete the learning sequence and explain your plan before recording it.";render();return;}r.applied=true;r.reflected=true;r.completed=true;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
+function recordReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);const fields=w.fields||{};const sufficient=["purpose","decision","evidence","work","revision"].every(key=>(fields[key]||"").trim().length>=35);if(!r.knowledgePassed||!w.modelSeen||!r.practicePassed||!sufficient||!w.confirmed){showNotice("Complete the learning sequence and explain your application first.");return;}r.applied=true;r.reflected=false;r.completed=false;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
+function reflectionReady(w){return !!(w.reflectionConfirmed&&(w.reflectionMode!=="written"||["learning","transfer"].every(x=>(w.reflection?.[x]||"").trim().length>=25)));}
+function finishReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);if(!r.applied||!r.practicePassed||!reflectionReady(w)){showNotice("Complete both reflection questions, or explain them in your chosen format, before finishing.");return;}r.reflected=true;r.completed=true;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
+function updateReflectionButton(){const w=getPractice(state.lessonId),button=$('[data-action="finish-reflection"]');if(button)button.disabled=!reflectionReady(w);}
 document.addEventListener("click",async(e)=>{
 const t=e.target.closest("[data-action],[data-grade],[data-lesson]");if(!t)return;if(t.tagName==="A"&&typeof e.preventDefault==="function")e.preventDefault();
 if(t.dataset.grade){gradeTo(t.dataset.grade);return;}
@@ -422,6 +428,7 @@ if(action==="check"){checkActivity();return}
 if(action==="retry"){const w=getPractice(state.lessonId);w.checked=false;w.feedback=null;w.retrying=true;render();return}
 if(action==="move"){const w=getPractice(state.lessonId),i=+t.dataset.index,j=i+(+t.dataset.dir);if(j<0||j>=w.order.length)return;const temp=w.order[i];w.order[i]=w.order[j];w.order[j]=temp;w.checked=false;w.feedback=null;render();return}
 if(action==="record"){recordReflection();return}
+if(action==="finish-reflection"){finishReflection();return}
 if(action==="saveprofile"){state.name=($("#profile-name")?.value||"Learner").trim().slice(0,40)||"Learner";persist();goto("profile");showNotice("Your display alias was saved on this device.");return}
 if(action==="logout"){confirmClear=true;render();const warning=$("#clear-warning");if(warning?.focus)warning.focus();return}
 if(action==="cancel-clear"){confirmClear=false;render();return}
@@ -436,12 +443,15 @@ if(t.id==="import-progress"){const file=t.files?.[0];if(file)importProgress(file
 if(t.id==="dashboard-grade"){if(!GRADES[t.value])return;state.grade=+t.value;state.track="all";persist();goto("home");return}
 if(t.dataset?.sort!==undefined){const w=getPractice(state.lessonId);w.sort[+t.dataset.sort]=t.value===""?undefined:+t.value;w.checked=false;w.feedback=null;return}
 if(t.id==="project-confirm"){const w=getPractice(state.lessonId);w.confirmed=!!t.checked;updateProjectButton();return}
+if(t.name==="reflection-mode"){const w=getPractice(state.lessonId);if(["written","spoken","visual"].includes(t.value))w.reflectionMode=t.value;render(true,"stage-title");return}
+if(t.id==="reflection-confirm"){const w=getPractice(state.lessonId);w.reflectionConfirmed=!!t.checked;updateReflectionButton();return}
 });
 function updateProjectButton(){const w=getPractice(state.lessonId),f=w.fields||{};const next=$('[data-action="apply-next"]');if(next&&w.applyStep===1)next.disabled=!["purpose","decision","evidence"].every(k=>(f[k]||"").trim().length>=35);const b=$('[data-action="record"]');if(b)b.disabled=!(getRecord(state.lessonId).knowledgePassed&&getRecord(state.lessonId).practicePassed&&w.modelSeen&&w.confirmed&&["purpose","decision","evidence","work","revision"].every(k=>(f[k]||"").trim().length>=35));}
 document.addEventListener("input",(e)=>{
 const t=e.target;
 if(t.id==="practice-reason"){getPractice(state.lessonId).reason=t.value.slice(0,1200);return}
 if(t.dataset?.planField){const w=getPractice(state.lessonId);if(!w.fields)w.fields={};w.fields[t.dataset.planField]=t.value.slice(0,2000);w.notesDirty=true;updateProjectButton();return}
+if(t.dataset?.reflectField){const w=getPractice(state.lessonId);if(!w.reflection)w.reflection={};w.reflection[t.dataset.reflectField]=t.value.slice(0,2000);w.notesDirty=true;updateReflectionButton();return}
 });
 function syncHistory(){if(!state.name){state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="guest-name"){e.preventDefault();const button=document.querySelector('[data-action="guest"]');if(button&&button.click)button.click();}});
