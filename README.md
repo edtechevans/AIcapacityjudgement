@@ -14,6 +14,16 @@ Three separate release gates are now tracked in [GitHub Issue #4](https://github
 
 For an approved, de-identified local dataset, use `node scripts/analyse-learning-study.mjs /secure/path/anonymous_scores.csv`. The [analysis script](scripts/analyse-learning-study.mjs) reports only aggregates and suppresses small grade/group subgroups; its [tests](tests/study-analysis.test.mjs) use synthetic records.
 
+## v24 — Grades 11 and 12: Investigate, Architect, Create and Steward (November 2026)
+
+Capacity × Judgement now includes **Grades 6–12: 42 modules, seven grade-specific experiences, six unchanged strands and ten offline laboratories**. The senior experience is a distinct DP-style inquiry and design studio. **Grade 11 · Investigate & Architect** develops system evaluation, source provenance, workflow design and stakeholder-accountable architecture. **Grade 12 · Create & Steward** emphasises critical frontier evaluation, reliable orchestration, independent inquiry, defensible non-use and accountable governance.
+
+**New hands-on investigations:** G11 A1 model evaluation under distribution shift; G11 B2 copied sources versus independent evidence; G12 A2 workflow failure and recovery; G12 B3 incident response and accessible redress. All are fictional, inspectable simulations, not real admissions decisions or model performance claims. Senior project milestones remain **session-only planning indicators**, exportable with the student's notes and never automatically scored.
+
+**Authentic DP learning:** The Grade 11 design dossier and Grade 12 Impact Project include stakeholder needs, original artefacts, alternative workflows, evaluation evidence, revision and a teacher/stakeholder defence. Grade 12's Impact Project is deliberately multi-session. DP1/DP2 students may enter directly without taking Grades 6–10 first; their own six-question starting snapshot and optional guidance provide a bridge. The resource supports skills relevant to TOK, EE, CAS and subjects, but **is not an IB-authorised course, formal IB alignment statement or a substitute for subject-specific assessment rules**.
+
+Read the [complete senior curriculum and facilitator guide](docs/SENIOR_DIPLOMA_CURRICULUM.md). Live availability, GitHub CI, accessibility and real learning outcomes require separate checks against the final commit; content creation alone is not evidence of student impact.
+
 ## v22 — Aligned learning, experimental agency and authentic transfer (November 2026)
 
 The Grade 6–10 curriculum now has **30 rewritten scenario-matched worked examples**, **six** interactive investigations (including Grade 6's visual rule-versus-AI demonstration), and more control over training examples, model feature weighting, feed-ranking criteria, error consequences and design priorities. The toy models disclose their simplifications and do not pretend to measure real-world model reliability.
