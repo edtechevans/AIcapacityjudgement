@@ -32,7 +32,7 @@ test("grade explorer shows all six modules and a contextual performance task",as
  await expect(page.locator(".curriculum-annual-challenge")).toContainText("accountable community");
  await page.locator('[data-action="curriculum-grade"][data-cur-grade="12"]').click();
  await expect(page.locator(".curriculum-year-kicker")).toContainText("DP2");
- await expect(page.locator(".catalogue-module")).toContainText("Impact Project");
+ await expect(page.locator(".catalogue-module").filter({hasText:"The Impact Project"})).toHaveCount(1);
  await expect(page.locator(".curriculum-annual-challenge")).toContainText("impact portfolio");
  expect(await page.evaluate(()=>Object.keys(localStorage))).toEqual([]);
 });
