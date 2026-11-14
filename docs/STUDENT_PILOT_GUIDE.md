@@ -1,4 +1,4 @@
-# Student Learning Pilot — Ten Learners (Grades 6–10)
+# Student Learning Pilot — Ten Learners (Grades 6–12)
 
 **Purpose:** Test whether the Learning Studio helps students *learn and apply* AI capability and AI judgement, rather than simply recognise the correct response.
 
@@ -75,3 +75,9 @@ The site is a **public static preview**. Progress is local to the device and tex
 ## After ten sessions
 
 Review recurring problems first: inaccessible instructions, weak explanations, confusing prompts, overly obvious options, missing work samples, and lack of meaningful transfer. Rework three modules, retest them with students, then expand changes across the grade progression.
+
+## DP1 and DP2 senior evaluation supplement
+
+Invite at least two Grade 11 and two Grade 12 students in addition to the G6–10 formative pilot (14 students across seven grades). Check whether DP1 students can design an evaluation, independently assess provenance and identify a responsible non-use condition. Observe whether DP2 students can design a failure-recovery workflow and defend an ethical incident response, including accessible review and redress.
+
+In a separate multi-session pilot, ask students to demonstrate original evidence, revision and defence from Grade 11's design dossier and Grade 12's Impact Project. Record educator observations and work quality only in approved school systems; do not use self-confirmed practice completion as a learning-outcome measure. Small formative pilots do not establish programme impact.
