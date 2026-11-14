@@ -1,6 +1,6 @@
 # AI Capacity × Judgement — Learning Studio
 
-A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two connected curricula: **AI Capacity** (understanding, working with, and creating with AI) and **AI Judgement** (agency, truth, trust, ethics and consequences).
+A student-facing Grades 6–12 formative learning studio (MYP and DP-adjacent), with 42 modules, six connected strands and independently reviewable performance challenges. Two connected curricula: **AI Capacity** (understanding, working with, and creating with AI) and **AI Judgement** (agency, truth, trust, ethics and consequences).
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
@@ -10,9 +10,22 @@ Three separate release gates are now tracked in [GitHub Issue #4](https://github
 
 - **Real CI results:** [Browser UX quality workflow](https://github.com/edtechevans/AIcapacityjudgement/actions/workflows/browser-ux.yml) runs Node curriculum tests and Playwright cross-browser checks and posts run-specific results back to the issue. A committed test is not an executed pass.
 - **WCAG 2.2 AA:** The [WCAG-EM 2.0 evaluation record](docs/validation/WCAG_22_AA_EVALUATION.md) lists all applicable assessment areas, representative pages, assistive technologies and required human sign-off. Axe and browser automation are useful gates, **not formal conformance**.
-- **Student outcomes:** The [evaluation protocol](docs/validation/LEARNING_OUTCOMES_STUDY.md), [parallel Grade 6–10 assessment forms](docs/validation/PARALLEL_ASSESSMENT_FORMS.md) and [blank score template](docs/validation/learning_study_scores_template.csv) support a consented pre/post, comparison and delayed-transfer evaluation. **No actual student learning outcomes have been collected.** Individual scores must remain in school-approved storage, never in this repository.
+- **Student outcomes:** The [evaluation protocol](docs/validation/LEARNING_OUTCOMES_STUDY.md), [parallel Grade 6–12 assessment forms](docs/validation/PARALLEL_ASSESSMENT_FORMS.md) and [blank score template](docs/validation/learning_study_scores_template.csv) support a consented pre/post, comparison and delayed-transfer evaluation. **No actual student learning outcomes have been collected.** Individual scores must remain in school-approved storage, never in this repository.
 
 For an approved, de-identified local dataset, use `node scripts/analyse-learning-study.mjs /secure/path/anonymous_scores.csv`. The [analysis script](scripts/analyse-learning-study.mjs) reports only aggregates and suppresses small grade/group subgroups; its [tests](tests/study-analysis.test.mjs) use synthetic records.
+
+## v25 — Learning design & AI education scope-and-sequence rebuild (November 2026)
+
+A critical, **expert-informed desk review** identified an opportunity to deepen how AI mechanisms are taught and to make the learning progression **observable across all seven years**, rather than adding another disconnected course. No named external expert was consulted and no real student learning outcomes have been demonstrated.
+
+- **42 explicit developmental moves and misconception probes:** Each module now shows the new thinking, earlier and later connections, and an age-appropriate conceptual trap to challenge. Students joining their assigned grade are not required to finish other grades.
+- **Seven integrated performance challenges:** Every grade's My Courses page includes a substantial independent cross-strand challenge with original evidence, three criteria, feedback/revision guidance and a new-context transfer problem. Performance is not automatically scored.
+- **Grade 8 A1 representation laboratory:** Students compare a colour-only, texture-visible and partially hidden representation of the **same four fictional cases**, explaining missing information and why confidence is not warranted. The transparent rule is **not a trained AI model**.
+- **Conceptual depth and responsibility:** Adds a deliberate G6–12 arc through sensing, training/testing, representation and modality, failure evaluation, model-versus-product boundaries, architecture and accountable creation; responsibility grows from privacy to licensing, inclusion, sustainability, redress and stewardship.
+- **Student navigation and evidence:** The About page now provides a full grade-by-grade scope and strand explorer. The modules retain the established Learn → Model → Practise → Apply → Reflect sequence and offline alternatives.
+- **Regression coverage:** Unit tests validate the full 42-module spiral, environmental and intellectual-property themes, seven annual performance briefs and the representation experiment; browser tests cover the new scope explorer and laboratory accessibility.
+
+Read the [complete v25 learning-design review and scope & sequence](docs/SCOPE_SEQUENCE_REVIEW_V25.md). Sources used for directional comparisons are UNESCO, OECD/European Commission and CSTA/AI4K12; the school must commission human subject-specialist review, accessibility audit and a real learner pilot before making external impact or conformance claims.
 
 ## v24 — Grades 11 and 12: Investigate, Architect, Create and Steward (November 2026)
 
