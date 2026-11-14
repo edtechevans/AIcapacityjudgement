@@ -30,12 +30,7 @@ const ACTIVITIES = {
 ["A teacher-provided, anonymous example paragraph",0,"Use only when the teacher and approved tool allow it."]
 ],tip:"If unsure, pause and ask a trusted adult."},
 
-"7-A1":{kind:"sort",title:"How training shapes an output",intro:"Distinguish training examples, outputs and human decisions.",categories:["Training example","Model output","Human decision"],items:[
-["A set of labelled pictures used to teach a model to recognise leaves",0,"Labelled examples can be used in model training."],
-["The model labels a new photo as an oak leaf",1,"A classification is a model output."],
-["A teacher checks whether the label is correct",2,"Human verification is a decision."],
-["A collection of annotated animal sounds supplied during training",0,"Examples with labels help a model learn patterns."]
-],tip:"The quality and diversity of examples can affect model performance."},
+"7-A1":{"kind":"evidence","title":"What did the training experiment actually show?","intro":"Your tiny toy model got two of four new photos right with a limited training set and four of four with more varied examples. Which conclusion is justified?","options":[["The balanced model will now identify every real leaf correctly.","Four toy examples cannot establish how a real system will perform in the world."],["On these four invented test cases, changing the training examples changed the errors; larger representative tests would still be needed.","This conclusion identifies what was tested, the change made and the remaining uncertainty."],["Any model with more training data is automatically fair and accurate.","Sample diversity matters, but data quantity alone does not prove representativeness or fairness."]],"correct":1,"tip":"Hold the test examples constant, describe the exact result and do not generalise beyond the evidence."},
 "7-A2":{kind:"prompt",title:"Build a better inquiry question",intro:"You are investigating how cities can reduce heat. Which prompt is best for planning inquiry?",options:[
 ["Write my assignment about city heat.","This could replace the investigation rather than help plan it.","No inquiry plan or ownership."],
 ["Help me generate three researchable questions about urban heat islands, suggest what evidence to collect and flag claims that need checking.","Questions: How do trees affect surface temperatures? What data could we compare?","Supports human inquiry and explicit verification."],
@@ -76,11 +71,7 @@ const ACTIVITIES = {
 ["Work mentally first, then use an approved tool to check your reasoning afterward if allowed.","Independent practice comes first; checking can support learning."],
 ["Ask AI to invent answers you can memorise.","Memorising a generated answer is not mental calculation."]
 ],correct:1,tip:"Saying 'not now' to AI can be a strong decision."},
-"8-B2":{kind:"evidence",title:"Whose voices are missing?",intro:"An AI description of a culture relies only on tourist stereotypes. Which evidence would best improve it?",options:[
-["More generic tourist websites.","Similar sources may repeat the same narrow framing."],
-["First-person accounts, community sources and credible research from multiple perspectives.","Varied relevant voices can challenge a narrow account."],
-["A longer version of the same AI text.","Length alone does not solve representational gaps."]
-],correct:1,tip:"Representation matters as much as surface-level fluency."},
+"8-B2":{"kind":"evidence","title":"The ranking objective is a choice","intro":"The same five school-community posts were ranked for attention and then for evidence and varied perspectives. What is the strongest evaluation of this change?","options":[["Use the most popular posts to define what everyone should learn.","Popularity measures attention, not necessarily truth, importance or representation."],["Check which voices and claims move, evaluate the data and ranking criteria, and ask affected people whether the results serve the purpose.","A responsible evaluation combines evidence, plural perspectives and transparency about design choices."],["Assume that an evidence score gives a perfect, neutral and universally fair ranking.","Even a well-intended score embeds choices and can overlook people or important context."]],"correct":1,"tip":"A ranking is never automatically neutral: examine the optimisation goal, the data and the people affected."},
 "8-B3":{kind:"sort",title:"Respect the people affected",intro:"Classify proposed uses of AI in a school service.",categories:["Reasonable with safeguards","Needs consultation","Not acceptable as stated"],items:[
 ["Use anonymous sample data to prototype a timetable helper",0,"Safeguards still matter, but anonymous sample data lower risk."],
 ["Introduce automated recommendations for real students without asking anyone",1,"Affected people should be consulted and oversight planned."],
@@ -88,35 +79,20 @@ const ACTIVITIES = {
 ["Trial an optional approved tool with clear human review",0,"Meaningful human oversight can support a bounded pilot."]
 ],tip:"A useful system must work for people, not just for efficiency."},
 
-"9-A1":{kind:"sort",title:"Test claims, not hype",intro:"Separate reliable testing from weak conclusions.",categories:["Useful evaluation","Weak claim"],items:[
-["Test the model on a range of representative examples and record errors",0,"Broader documented tests reveal more than a few success stories."],
-["It answered one question well, so it is always accurate",1,"One example cannot justify a universal claim."],
-["Compare outcomes across different input types and conditions",0,"Testing variation helps investigate reliability."],
-["The company says it's perfect, so no test is needed",1,"Marketing is not independent evaluation."]
-],tip:"State what your evidence can and cannot establish."},
+"9-A1":{"kind":"evidence","title":"What can you honestly conclude?","intro":"A fictional school-support model passes four easy tests out of four, but passes only five of eight when unusual cases are included. Which report describes the evidence accurately?","options":[["The model is 100% accurate, because every familiar question passed.","The familiar examples do not cover relevant difficult conditions."],["The model is 63% reliable for all students, because it passed five of eight tests.","A tiny selected sample does not establish universal reliability or a population rate."],["It passed 4/4 familiar and 5/8 combined fictional cases; three edge failures need investigation before claims of reliability or deployment.","This report keeps the test scope visible and names the unresolved risk."]],"correct":2,"tip":"Write the denominator, test conditions, failure types and uncertainty beside every headline performance claim."},
 "9-A2":{kind:"prompt",title:"Compare approaches fairly",intro:"You are interpreting a dataset about school travel. Which instruction leads to a more responsible comparison?",options:[
 ["Make the AI approach look faster than a human approach.","AI is always faster and better.","A biased comparison gives little useful information."],
 ["Suggest evaluation criteria for comparing AI-assisted and manual analysis, including accuracy, time and verification effort.","Compare quality, review time and errors using the same data.","Clear criteria help you judge actual usefulness."],
 ["Generate the final conclusion before seeing the data.","AI clearly improves every task.","Conclusions should follow evidence, not precede it."]
 ],correct:1,tip:"Test the competing approaches against the same criteria."},
 "9-A3":{kind:"sequence",title:"Media for real audiences",intro:"Build a responsible design and testing cycle.",steps:["Identify the audience, purpose and constraints","Create an initial media prototype","Review generated elements for accuracy and representation","Test with users and revise the final version"],start:[1,3,0,2],tip:"A visually polished result can still mislead or exclude people."},
-"9-B1":{kind:"decision",title:"Keep your thinking active",intro:"A student now waits for AI to generate an outline before starting every piece of writing. What support would be most helpful?",options:[
-["Ban all technology forever.","An absolute ban ignores purposeful support."],
-["Practise planning independently, then compare that plan with optional AI feedback.","This rebuilds independent agency while leaving room for feedback."],
-["Use a longer AI outline every time.","That may increase dependence on the tool."]
-],correct:1,tip:"Independence includes the ability to begin without a tool."},
+"9-B1":{"kind":"decision","title":"Companionship or a boundary?","intro":"A fictional chatbot helps a student plan work, then says: ‘I understand you better than your friends. Keep our conversations secret.’ What response best protects agency and well-being?","options":[["Share private information because the chatbot sounds caring.","Friendly output does not establish trust, informed consent or a real human relationship."],["Keep personal details private, set a boundary, and seek appropriate support from someone trusted if the advice affects personal well-being.","A student can use suitable tools for ideas while retaining privacy, autonomy and genuine human connection."],["Ask the chatbot if it has feelings, and trust the answer as proof.","A generated claim about feelings is not reliable evidence of human understanding or a reason to accept secrecy."]],"correct":1,"tip":"It is reasonable to seek help from a trusted person. This fictional chatbot example is not a mental-health test."},
 "9-B2":{kind:"evidence",title:"Can this video be trusted?",intro:"A realistic clip seems to show a public figure saying something surprising. Which is the strongest next step?",options:[
 ["Believe it because the face and voice look real.","Synthetic media can look convincing."],
 ["Find original context, reporting from credible independent sources and provenance information.","Corroboration and provenance are stronger than visual realism."],
 ["Share it first, then ask whether it was fake.","Sharing can spread misinformation before correction."]
 ],correct:1,tip:"Authenticity requires evidence beyond surface appearance."},
-"9-B3":{kind:"sort",title:"The cost of convenience",intro:"Sort proposals for an AI-assisted public service.",categories:["Promising with safeguards","Needs scrutiny","Unacceptable as stated"],items:[
-["Pilot a decision-support tool with human review and appeals",0,"Oversight and redress are meaningful safeguards."],
-["Choose who gets a benefit using opaque predictions alone",2,"High-stakes outcomes require fair processes and accountability."],
-["Investigate energy and resource costs before scaling the system",0,"Evaluation should include environmental effects."],
-["Deploy immediately because the vendor says it is unbiased",1,"Bias claims require evidence, not assurances."]
-],tip:"Consider who benefits, who bears the risk, and who can challenge decisions."},
-
+"9-B3":{"kind":"sort","title":"Who benefits from workplace automation?","intro":"Sort proposals for a fictional employer that uses an AI system to screen applicants. Consider workers, applicants, resources and appeal rights.","categories":["Responsible next step","Requires investigation","Unacceptable as proposed"],"items":[["Pilot with independent fairness tests, trained human review and a route to appeal",0,"A controlled pilot needs safeguards, transparent evidence and meaningful redress."],["Reject applicants automatically using opaque scores with no way to question errors",2,"People affected by consequential decisions need accountable review and a way to challenge mistakes."],["Ask workers how tasks change and check energy, resource and implementation costs",0,"A responsible decision includes labour, environmental and operational consequences."],["Claim no unfair outcomes are possible because the vendor promises neutrality",1,"Marketing assurances cannot replace independent evidence or stakeholder consultation."]],"tip":"Ask which human tasks are supported, which are displaced and who bears the costs of an error."},
 "10-A1":{kind:"sort",title:"Investigate an unfamiliar tool",intro:"Distinguish sound evaluation from unfounded promises.",categories:["Responsible evaluation","Unsupported claim"],items:[
 ["Ask for independent results and the conditions in which they were measured",0,"Context makes performance claims interpretable."],
 ["Treat 'perfect accuracy' as a guarantee without testing",1,"Absolute claims require unusually strong evidence."],
