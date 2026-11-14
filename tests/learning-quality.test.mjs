@@ -9,7 +9,7 @@ const context=createContext({});
 const paths=[
  "curriculum.js","learning-data.js",
  ...[6,7,8,9,10].map(g=>"content/grade"+g+".js"),
- "content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js"
+ "content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js"
 ];
 for(const path of paths)runInContext(readFileSync(join(root,path),"utf8"),context,{filename:path});
 const data=runInContext("({LESSONS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,LAB_EVALUATIONS,LAB_FEED_POSTS,UNSEEN_TRANSFER,TEACHER_RUBRIC,CLASSROOM_PACING,classroomPlan,labGrade6,labEvaluate,labClassify,labRankFeed})",context);
@@ -35,6 +35,7 @@ test("labs cover data, algorithmic influence, evaluation, companion boundaries a
  const required={
   "6-A1":"discriminate",
   "7-A1":"classifier",
+   "8-A1":"representation",
   "8-B2":"feed",
   "9-A1":"evaluation",
   "9-B1":"relationship",
