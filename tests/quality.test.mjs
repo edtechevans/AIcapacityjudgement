@@ -385,7 +385,7 @@ test("a backup from another grade cannot silently change grade or replace progre
 test("shared lesson links survive the welcome screen and grade confirmation",async()=>{
  const h=app({},"#/lesson/8-A2");
  assert.match(h.html,/Grade 8/);
- assert.match(h.html,/A lesson was shared with you/);
+ assert.match(h.html,/lesson was shared with you/);
  await h.click({action:"pick-grade",pick:"8"});
  assert.equal(h.hash,"#/lesson/8-A2");
  assert.match(h.html,/Stage 1 of 5/);
@@ -563,7 +563,7 @@ test("wrong multiple-choice feedback addresses the chosen response but does not 
  h.change({name:"activity-choice",value:"0"});
  h.input({id:"practice-reason",value:"A complete answer seems easiest, but I need to think about what I am practising."});
  await h.click({action:"check"});
- assert.match(h.html,/This removes the practice/);
+ assert.ok(h.html.includes(DATA.ACTIVITIES["6-B1"].options[0][1]),"Feedback must explain the learner-selected alternative");
  assert.match(h.html,/Try this next/);
  assert.match(h.html,/Use a clue/);
  const stored=JSON.stringify(h.storage);
