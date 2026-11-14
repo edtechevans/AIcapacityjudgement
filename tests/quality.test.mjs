@@ -524,3 +524,43 @@ test("wrong multiple-choice feedback addresses the chosen response but does not 
  assert.match(h.html,/Challenge passed/);
  assert.match(h.html,/has not been assessed/);
 });
+
+
+test("all 30 modules recover from a wrong answer through optional coaching without inventing mastery",async()=>{
+ const h=app();
+ await h.click({action:"guest"});
+ for(const l of DATA.LESSONS){
+  const a=DATA.ACTIVITIES[l.id];
+  await reachPractice(h,l.id);
+  if(a.kind==="sort"){
+   a.items.forEach((item,i)=>h.change({dataset:{sort:String(i)},value:String(i===0?(item[1]+1)%a.categories.length:item[1])}));
+  }else if(a.kind==="sequence"){
+   assert.ok(a.start.some((value,i)=>value!==i),"Expected a meaningful initial sequence challenge "+l.id);
+  }else{
+   h.change({name:"activity-choice",value:String((a.correct+1)%a.options.length)});
+   h.input({id:"practice-reason",value:"I made a plausible choice, but I still need to examine the evidence and learning goal."});
+  }
+  await h.click({action:"check"});
+  assert.match(h.html,/Useful attempt/,l.id+" feedback should be supportive");
+  assert.match(h.html,/Try this next/,l.id+" needs a content-specific next step");
+  assert.match(h.html,/A smaller step may help/,l.id+" should suggest support after an error");
+  await h.click({action:"coach-route",route:"support"});
+  assert.match(h.html,/Check your thinking against this goal/,l.id+" learner controls support");
+  if(a.kind==="sort"){
+   a.items.forEach((item,i)=>h.change({dataset:{sort:String(i)},value:String(item[1])}));
+  }else if(a.kind==="sequence"){
+   const order=a.start.slice();
+   for(let n=0;n<a.steps.length;n++){let j=order.indexOf(n);while(j>n){
+    await h.click({action:"move",index:String(j),dir:"-1"});
+    const tmp=order[j];order[j]=order[j-1];order[j-1]=tmp;j--;
+   }}
+  }else h.change({name:"activity-choice",value:String(a.correct)});
+  await h.click({action:"check"});
+  assert.match(h.html,/Challenge passed/,l.id+" should allow recovery");
+  assert.match(h.html,/Try applying the idea in a harder situation/,l.id+" should suggest stretch after success");
+  const record=JSON.parse(h.storage["aicj-studio-v2"]).records[l.id];
+  assert.equal(record.practicePassed,true);
+  assert.equal(record.completed,false,"Practice is not a mastery declaration: "+l.id);
+ }
+ assert.ok(!JSON.stringify(h.storage).includes("I made a plausible choice"),"The learner's explanation must remain in memory only");
+});
