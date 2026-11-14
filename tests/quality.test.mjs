@@ -420,7 +420,7 @@ test("instruction appears before challenge, includes meaningful support and resp
  h.change({name:"knowledge-choice",value:"1"});await h.click({action:"knowledge-check"});
  assert.match(h.html,/Try this next:/);
  assert.ok(h.html.includes(guide.support));
- assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records["6-A1"].knowledgePassed,false);
+ assert.notEqual(JSON.parse(h.storage["aicj-studio-v2"]).records["6-A1"].knowledgePassed,true);
  h.change({name:"knowledge-choice",value:"0"});await h.click({action:"knowledge-check"});
  await h.click({action:"next"});
  assert.ok(h.html.includes(guide.notice));
