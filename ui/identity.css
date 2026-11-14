@@ -714,3 +714,55 @@ html{scroll-behavior:auto}
 .learning-lab .lab-progress{display:inline-flex;padding:8px 12px;margin:8px 0 0;border-radius:8px;background:#DBEEE9;border:1px solid #B4D9D0;font-size:.82rem;font-weight:720;color:#245D50;line-height:1.4}
 .reflection-evidence-question{margin:10px 0 0!important;padding:10px 13px;background:#EAF4F1;border-left:3px solid #176C69;border-radius:6px;color:#28514D!important;font-size:.88rem!important}
 .reflection-evidence-question strong{display:inline;color:#194E46}
+
+
+/* v22: learner-controlled experiments, visible classroom differentiation and evidence. */
+.lab-tuning{margin:18px 0;padding:16px 17px;background:#fff;border:1px solid #C1D8D5;border-radius:12px}
+.lab-tuning h4{color:#1D4A54;margin:0 0 4px;font-size:1rem;line-height:1.35}
+.lab-tuning>.small{margin:5px 0 14px}
+.lab-control{padding:12px 0;border-top:1px solid #E2EAEB}
+.lab-control:first-of-type{border-top:0}
+.lab-control-label{font-size:.88rem!important;font-weight:700;color:#244956!important;margin:0 0 9px!important}
+.lab-control-buttons{display:flex;flex-wrap:wrap;gap:7px}
+.lab-adjust-choice{min-height:44px;padding:10px 12px;border:1.5px solid #A4BFC3;border-radius:9px;background:#fff;color:#224B53;font:650 .84rem/1.35 var(--brand-body);cursor:pointer;transition:background .14s ease,border-color .14s ease}
+.lab-adjust-choice:hover{border-color:#176C69;background:#E9F6F1}
+.lab-adjust-choice.selected{border-color:#176C69;background:#176C69;color:#fff}
+.lab-adjust-choice:focus-visible,.learning-lab .lab-observation-field textarea:focus-visible{outline:3px solid #A45434;outline-offset:3px}
+.lab-grade6{display:grid;grid-template-columns:auto minmax(0,1fr);gap:17px;align-items:start}
+.lab-grade6-symbol{display:grid;place-items:center;width:70px;height:70px;border:2px solid #B9D7D0;border-radius:15px;background:#E3F3EB;color:#1B6157;font-size:2.3rem;font-weight:800;line-height:1}
+.lab-grade6>div:nth-child(2)>strong{display:block;color:#24465A;font-size:.94rem;margin-bottom:5px}
+.lab-grade6 .lab-interpretation,.lab-interpretation{padding:12px 14px;background:#F2F7FA;border-left:3px solid #50849A;border-radius:7px;color:#36505E;font-size:.87rem;line-height:1.55}
+.lab-observation-field{margin:16px 0 8px}
+.lab-observation-field label{display:block;margin-bottom:9px;color:#244D57;font-size:.9rem;line-height:1.4}
+.lab-observation-field textarea{display:block;box-sizing:border-box;width:100%;min-height:92px;resize:vertical;padding:12px 14px;border:1.5px solid #ACC9C9;border-radius:9px;background:#fff;color:#243D4F;font:400 .93rem/1.55 var(--brand-body)}
+.lab-offline{margin:14px 0;padding:10px 13px;background:#fff;border:1px solid #C0D8D3;border-radius:10px}
+.lab-offline summary{font-weight:680;color:#2C5C55;cursor:pointer}
+.classroom-support,.performance-evidence{margin:17px 0;border:1px solid #CAD7E1;border-radius:12px;background:#F9FBFD}
+.classroom-support summary,.performance-evidence summary{cursor:pointer;padding:15px 17px;font-weight:720;font-size:.9rem;color:#244B65}
+.classroom-support summary:hover,.performance-evidence summary:hover{background:#EEF5F7}
+.classroom-support summary:focus-visible,.performance-evidence summary:focus-visible{outline:3px solid #A45434;outline-offset:3px}
+.classroom-support-inner,.performance-evidence-inner{border-top:1px solid #D6E2E8;padding:14px 18px 17px}
+.classroom-support h4{color:#24546A;font-size:.84rem;margin:13px 0 3px}
+.classroom-support p,.performance-evidence p{font-size:.86rem;line-height:1.65;color:#475E70;margin:3px 0 12px}
+.rubric-table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.rubric-table{border-collapse:collapse;width:100%;min-width:680px;font-size:.8rem;line-height:1.5;color:#263F54}
+.rubric-table caption{text-align:left;padding:6px 0 10px;font-weight:730;color:#32556C}
+.rubric-table th,.rubric-table td{border-bottom:1px solid #D9E5E9;padding:10px 11px;text-align:left;vertical-align:top}
+.rubric-table th{background:#EDF4F6;font-weight:750}
+.rubric-table tbody th{width:20%}
+.rubric-table td{width:26%}
+.unseen-transfer{margin:16px 0 22px;padding:19px 21px;border:1px solid #BDD9D3;border-left:4px solid #176C69;border-radius:12px;background:#F1F8F5}
+.unseen-transfer h3{font:740 1.12rem/1.35 var(--brand-body);color:#224C54;margin:5px 0 9px}
+.unseen-transfer p{color:#35576A;font-size:.9rem;line-height:1.65;margin:8px 0}
+.unseen-transfer .eyebrow{font-size:.74rem;color:#1B655B;font-weight:760}
+@media(max-width:650px){
+ .lab-tuning{padding:15px 13px}
+ .lab-control-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lab-adjust-choice{min-width:0;padding:11px 8px;white-space:normal;text-align:center;min-height:48px}
+ .lab-grade6{gap:10px}
+ .lab-grade6-symbol{width:52px;height:52px;font-size:1.75rem}
+ .unseen-transfer{padding:16px 15px}
+ .classroom-support-inner,.performance-evidence-inner{padding:13px 14px}
+}
+@media(max-width:380px){.lab-control-buttons{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.lab-adjust-choice{transition:none}}
