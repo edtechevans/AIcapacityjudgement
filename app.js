@@ -57,7 +57,7 @@ function pickNext(grade,track="all"){const options=recs(grade).filter(x=>track==
 const progressBar=(percent,label="Modules practised")=>'<div class="progress-line" role="progressbar" aria-label="'+esc(label)+'" aria-valuenow="'+percent+'" aria-valuemin="0" aria-valuemax="100"><div class="progress-fill" style="width:'+percent+'%"></div></div>';
 function trackLabel(track){return track==="capacity"?"AI Capacity":"AI Judgement"}
 const BRAND_MARK='<img src="./assets/brand/mark.svg" alt="" class="brand-emblem" width="48" height="48" decoding="async">';
-function mobileMenu(){return '<details class="mobile-menu"><summary aria-label="Open navigation menu">☰</summary><div class="mobile-menu-links"><button data-action="home">Home</button><button data-action="courses">My courses</button><button data-action="snapshot">My learning</button><button data-action="about">The idea</button><button data-action="profile">My profile</button></div></details>';}
+function mobileMenu(){return '<details class="mobile-menu"><summary aria-label="Open or close navigation menu">☰</summary><div class="mobile-menu-links"><button data-action="home">Home</button><button data-action="courses">My courses</button><button data-action="snapshot">My learning</button><button data-action="about">The idea</button><button data-action="profile">My profile</button></div></details>';}
 function nav(){const comfort='<button class="comfort-toggle" data-action="reading" aria-pressed="'+(state.reading==="comfortable")+'" title="Toggle comfortable reading size" aria-label="'+(state.reading==="comfortable"?"Use standard text size":"Use larger text for reading")+'">Aa</button>';const item=(page,label)=>'<button class="navlink '+(state.page===page?"active":"")+'" data-action="'+page+'" '+(state.page===page?'aria-current="page"':'')+'>'+label+'</button>';return '<header class="topbar"><a href="#/home" class="brand" data-action="home" aria-label="AI Capacity and Judgement home">'+BRAND_MARK+'<span class="brand-wordmark"><strong>AI Capacity <i>×</i> Judgement</strong><small>Learning Studio</small></span></a><nav class="top-actions" aria-label="Primary navigation">'+(state.name?item("home","Home")+item("courses","My courses")+item("snapshot","My learning")+item("about","The idea")+comfort+'<button class="avatar" data-action="profile" aria-label="Open learner profile">'+esc(state.name[0]||"L").toUpperCase()+'</button>':'<button class="btn btn-small" data-action="enter">Get started →</button>')+'</nav>'+(state.name?mobileMenu():"")+'</header>';}
 function foot(){return '<footer class="footer"><div class="row">'+BRAND_MARK+'<span class="footer-signature"><strong>AI Capacity × Judgement</strong><small>Growing capacity. Practising judgement.</small></span></div><span class="license">© 2026 Tim Evans · CC BY-NC-SA 4.0</span></footer>';}
 function grades(){return '<div class="grade-grid">'+Object.entries(GRADES).map(([g,x])=>'<button class="grade-card '+(+g===state.grade?"selected":"")+'" data-grade="'+g+'" aria-label="Open Grade '+g+' courses"><b>'+g+'</b><strong>'+esc(x.headline)+'</strong><span>'+esc(x.subtitle)+'</span></button>').join("")+'</div>';}
@@ -289,9 +289,9 @@ function readRoute(){
  if(["/home","/about","/profile","/welcome"].includes(path)){state.page=path.slice(1);return true;}
  return false;
 }
-function goto(page,opts={}){if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});}
+function goto(page,opts={}){if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();if(page!=="profile")confirmClear=false;state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});}
 function gradeTo(g){if(!GRADES[g])return;state.grade=+g;state.track="all";persist();goto("courses");}
-function openLesson(id){if(!LESSON_BY_ID[id])return;state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");}
+function openLesson(id){if(!LESSON_BY_ID[id])return;if(state.page!=="courses")state.track="all";state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");}
 function checkActivity(){const l=currentLesson(),a=ACTIVITIES[l.id],w=getPractice(l.id),r=getRecord(l.id);let passed=false,feedback="";
 if(a.kind==="sort"){
 const selected=a.items.map((x,i)=>w.sort[i]);if(selected.some(x=>x===undefined)){w.feedback={passed:false,message:"Choose a category for every example before checking."};w.checked=false;render();return;}
@@ -350,7 +350,7 @@ if(t.name==="diagnostic-choice"&&diagnosticRun){diagnosticRun.answers[diagnostic
 if(t.name==="knowledge-choice"){const w=getPractice(state.lessonId);w.knowledgeAnswer=+t.value;w.knowledgeFeedback=null;render();const selected=$('input[name="knowledge-choice"]:checked');if(selected?.focus)selected.focus();return}
 if(t.name==="activity-choice"){const w=getPractice(state.lessonId);w.selected=+t.value;w.checked=false;w.feedback=null;render();const selected=$('input[name="activity-choice"]:checked');if(selected?.focus)selected.focus();return}
 if(t.id==="import-progress"){const file=t.files?.[0];if(file)importProgress(file);return}
-if(t.id==="dashboard-grade"){gradeTo(+t.value);return}
+if(t.id==="dashboard-grade"){if(!GRADES[t.value])return;state.grade=+t.value;state.track="all";persist();goto("home");return}
 if(t.dataset?.sort!==undefined){const w=getPractice(state.lessonId);w.sort[+t.dataset.sort]=t.value===""?undefined:+t.value;w.checked=false;w.feedback=null;return}
 if(t.id==="project-confirm"){const w=getPractice(state.lessonId);w.confirmed=!!t.checked;updateProjectButton();return}
 });
