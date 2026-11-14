@@ -5,8 +5,8 @@ import {join} from "node:path";
 import {runInContext,createContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=p=>readFileSync(join(root,p),"utf8");
-const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js"];
-function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS})",context)}
+const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js"];
+function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,labClassify,labRankFeed})",context)}
 const DATA=content(createContext({}));
 function app(seed={},hash=""){
  const hooks={},el={innerHTML:""},store={...seed},location={hash},listeners={},downloads=[];let exportedBlob=null,copiedText="";
