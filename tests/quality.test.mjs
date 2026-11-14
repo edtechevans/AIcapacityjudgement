@@ -93,3 +93,51 @@ test("earlier local completion is retained as exploration, not mastery",async()=
  const stored=JSON.parse(h.storage["aicj-studio-v2"]);
  assert.equal(stored.records["7-A1"].completed,false);
 });
+
+test("brand assets, favicons, app icons and social metadata stay in sync",()=>{
+ const html=read("index.html");
+ const app=read("app.js");
+ const manifest=JSON.parse(read("site.webmanifest"));
+ const fsPaths=[
+   "favicon.svg","assets/brand/mark.svg","assets/brand/mark-transparent.svg",
+   "assets/brand/lockup.svg","assets/brand/mask-icon.svg",
+   "assets/brand/favicon-16.png","assets/brand/favicon-32.png",
+   "assets/brand/apple-touch-icon.png","assets/brand/icon-192.png",
+   "assets/brand/icon-512.png","assets/brand/icon-maskable-512.png",
+   "assets/brand/social-preview.svg","assets/brand/social-preview.png",
+   "ui/identity.css","brand.html","docs/BRAND_SYSTEM.md"
+ ];
+ for(const name of fsPaths)assert.ok(read(name).length>100,"Missing branding asset: "+name);
+ const png=(name,w,h)=>{
+   const file=readFileSync(join(root,name));
+   assert.equal(file.subarray(1,4).toString(),"PNG");
+   assert.equal(file.readUInt32BE(16),w);
+   assert.equal(file.readUInt32BE(20),h);
+ };
+ png("assets/brand/favicon-16.png",16,16);
+ png("assets/brand/favicon-32.png",32,32);
+ png("assets/brand/apple-touch-icon.png",180,180);
+ png("assets/brand/icon-192.png",192,192);
+ png("assets/brand/icon-512.png",512,512);
+ png("assets/brand/icon-maskable-512.png",512,512);
+ png("assets/brand/social-preview.png",1200,630);
+ assert.ok(html.includes('rel="manifest"'));
+ assert.ok(html.includes('ui/identity.css'));
+ assert.ok(html.includes('og:image'));
+ assert.ok(app.includes('BRAND_MARK'));
+ assert.ok(!app.includes('C<span>×</span>J'));
+ for(const icon of manifest.icons)assert.ok(read(icon.src.replace(/^\.\//,"")).length>100);
+});
+test("accessible core text colour pairings remain above WCAG AA normal-text contrast",()=>{
+ const L=hex=>{
+   const v=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);
+   return .2126*v[0]+.7152*v[1]+.0722*v[2];
+ };
+ const contrast=(a,b)=>{const x=L(a),y=L(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+ const pairs=[
+   ["#142339","#FFFFFF"],["#52657B","#F7F9FC"],
+   ["#176C69","#E1F5F2"],["#AB473B","#FFF0EA"],
+   ["#FFFFFF","#AB473B"],["#69E9D8","#142339"]
+ ];
+ for(const [a,b] of pairs)assert.ok(contrast(a,b)>=4.5,"Contrast failure "+a+" on "+b);
+});
