@@ -1,4 +1,4 @@
-# Facilitator Guide: Five Interactive AI Investigation Labs
+# Facilitator Guide: Six Interactive AI Investigation Labs
 
 **Audience:** G6–10 educators and curriculum reviewers. These original simulations are fictional and work without AI-service accounts, network requests or student submissions. The live website stores existing practice checkpoints locally; laboratory choices are session-only.
 
@@ -12,11 +12,23 @@
 
 **10–15 minutes — Transfer.** Students apply the reasoning in a second subject or authentic school scenario, seek feedback and revise an evidence-backed claim. Record only work approved for the school's assessment environment.
 
+## G6 A1 — AI, fixed rules and uncertainty
+
+**Question:** Does a clever output automatically mean a system uses AI?
+
+Students compare a fictional digital timer with a toy text labeler and an unfamiliar app. They change an input and observe what happens. Explain that these are illustrative rules and fabricated outputs, not a claim that the text labeler contains a truly trained machine-learning model. For the unfamiliar app, **the correct conclusion may be that there is not enough evidence**.
+
+**Facilitate:** Use three illustrated process cards and ask what input, process and output each has. Invite students to predict the change before pressing a control. Highlight that both fixed rules and trained models can respond differently to new inputs; students must investigate how a system is made.
+
+**Transfer challenge:** Investigate a library kiosk or school recommendation tool and determine what evidence would be needed before naming its underlying process.
+
+**Offline alternative:** Three printed process cards and two teacher-authored inputs for each. No live AI tool required.
+
 ## G7 A1 — Training examples and shortcuts
 
 **Question:** How do training examples change results when an algorithm attends to a misleading feature?
 
-The toy model finds the nearest labelled training example using **shape difference + 2 × lighting difference**. The limited set contains an oak in bright light and a maple in dim light. The more varied set includes both kinds in both conditions. The same four new fictional photos are evaluated in both conditions. The toy score changes from **2/4 correct to 4/4 correct**.
+The toy model finds the nearest labelled training example using **shape difference + 2 × lighting difference**. The limited set contains an oak in bright light and a maple in dim light. Learners can now independently add or remove the missing oak-in-shade and maple-in-bright-light examples, and adjust the lighting feature's influence from zero to three times leaf shape. The more varied preset includes both kinds in both conditions. The same four new fictional photos are evaluated in both conditions. The toy score changes from **2/4 correct to 4/4 correct**.
 
 **Facilitate:** Have students identify which of the four examples changed, then demonstrate the distance rule with a short table or manipulatives. Explain the difference between the simple, teacher-made classifier and a real trained image-recognition model. Do not imply that more data always improves fairness.
 
@@ -28,7 +40,7 @@ The toy model finds the nearest labelled training example using **shape differen
 
 **Question:** Who is seen when a feed optimises for engagement versus credible, varied perspectives?
 
-The lab has five invented school-community posts. One ranking uses a fabricated attention metric; the other uses **65% credibility and 35% representation**. This is a simple transparent scoring model, not a replica of any platform. The scores intentionally encode designers' priorities; discuss the limitations and subjectivity of even the “better” metric.
+The lab has five invented school-community posts. One ranking uses a fabricated attention metric; the other uses **65% credibility and 35% representation**. This is a simple transparent scoring model, not a replica of any platform. Learners can change the evidence-versus-representation weighting within the evidence-oriented feed. The scores intentionally encode designers' priorities; discuss the limitations and subjectivity of even the “better” metric.
 
 **Facilitate:** Ask who decides the metrics, who might be misrepresented and whether any ranking rule should be used without consultation. Distinguish the reliability of a claim from the amount of attention it receives.
 
@@ -40,7 +52,7 @@ The lab has five invented school-community posts. One ranking uses a fabricated 
 
 **Question:** Can a model tested on familiar examples be called reliable?
 
-The fictional service passes **4/4 familiar cases**, but passes **5/8 combined cases** after adding four harder examples. Outcomes are invented to illustrate test design, not performance of an actual service.
+The fictional service passes **4/4 familiar cases**, but passes **5/8 combined cases** after adding four harder examples. Outcomes are invented to illustrate test design, not performance of an actual service. Learners can also give consequential failures extra concern points; this is a discussion model rather than a valid real-world harm score.
 
 **Facilitate:** Avoid interpreting 5/8 as a real-world error rate. Ask learners to define the user population, failure severity, cases excluded, what independent evaluations are needed and why some errors carry greater consequences.
 
@@ -62,11 +74,15 @@ The fictional service passes **4/4 familiar cases**, but passes **5/8 combined c
 
 **Question:** What makes a solution actually useful and accountable to people who need it?
 
-The fictional challenge is a multilingual, accessible school welcome resource. Students compare **automation-first, human-only and carefully bounded blended** design options. There is no automatically correct choice: all have advantages, risks and possible safeguards.
+The fictional challenge is a multilingual, accessible school welcome resource. Learners can prioritise inclusive access, information privacy or speed and explain how that changes the proposed safeguards. Students compare **automation-first, human-only and carefully bounded blended** design options. There is no automatically correct choice: all have advantages, risks and possible safeguards.
 
 **Facilitate:** Require a problem definition, stakeholders, comparison criteria, prototype, test plan including an edge case, feedback from an approved audience or teacher-provided persona, revised artefact and a defensible decision record.
 
 **Transfer challenge:** Have students defend how they would change the process if their first prototype failed for a different language group or an accessibility need.
+
+## Classroom pacing
+
+Individual introduction and laboratory sessions may fit a standard lesson, but authentic creation and revision often require longer. The in-site Facilitator resources now provide realistic grade-level estimates, preparation guidance and offline alternatives. Grade 10's design capstone is planned over approximately four 70-minute sessions plus a feedback conference. Do not pressure students to complete actual prototypes during a short demonstration.
 
 ## Inclusion, assessment and data boundaries
 
