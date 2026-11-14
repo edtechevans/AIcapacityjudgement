@@ -654,8 +654,8 @@ test("all 30 applications show a distinct investigation and capstone evidence wh
    else{h.change({name:"activity-choice",value:String(a.correct)});h.input({id:"practice-reason",value:"This is a responsible choice because I can explain the evidence and its effect on the task."})}
    await h.click({action:"check"});await h.click({action:"next"});
    assert.match(h.html,/Authentic investigation/,id+" missing unique application");
-   assert.ok(h.html.includes(DATA.INQUIRY_BRIEFS[id].question),id+" inquiry question missing");
-   assert.ok(h.html.includes(DATA.INQUIRY_BRIEFS[id].evidence),id+" evidence missing");
+   assert.ok(h.html.includes(DATA.INQUIRY_BRIEFS[id].question.replace(/\u0027/g,"&#39;")),id+" inquiry question missing");
+   assert.ok(h.html.includes(DATA.INQUIRY_BRIEFS[id].evidence.replace(/\u0027/g,"&#39;")),id+" evidence missing");
    if(DATA.CAPSTONE_GUIDES[id])assert.ok(h.html.includes(DATA.CAPSTONE_GUIDES[id].name),id+" capstone missing");
   }
  }
