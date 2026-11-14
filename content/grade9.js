@@ -2,9 +2,9 @@
 Object.assign(KNOWLEDGE, {
   "9-A1": {
     "core": [
-      "A system's performance should be evaluated on relevant tasks, not a handful of impressive demonstrations. Build test cases that represent common situations and difficult edge cases. Describe what success looks like before testing, or it becomes too easy to declare a system accurate after seeing the results.",
-      "Accuracy is only one dimension. Investigate consistency across different instructions, how the tool handles uncertainty and whether mistakes matter differently depending on the use. An incorrect restaurant suggestion and an incorrect medical claim have very different consequences.",
-      "Record both successes and failures, as well as the limits of your test. A small classroom experiment cannot prove a model is reliable everywhere. It can show patterns, generate new questions and help people make more informed decisions about appropriate use."
+      "Claims about an AI system need a defined task, relevant test cases and transparent success criteria. A demonstration on four easy questions does not tell us whether the tool handles unusual languages, accessibility needs or uncertain situations. Decide what to measure before testing: accuracy, harmful errors, consistency, uncertainty and what the tool does when it does not know.",
+      "An average can hide unequal performance or especially consequential failures. In the fictional testing laboratory, the tool passes four familiar cases but fails three of four additional cases. The broader sample therefore changes the interpretation from four of four to five of eight. Neither figure represents the reliability of a real model or proves its future performance; each is tied to a particular selection of invented examples.",
+      "Write an evaluation card that identifies the system's intended use, test conditions, observed results, important missing groups and error costs. Make an evidence-based recommendation about whether another controlled test is justified. Do not present a small sample's percentage as a promise about all people or all future situations."
     ],
     "example": [
       "'It answered nine easy examples correctly, so it is 90% reliable for everything.'",
@@ -122,9 +122,9 @@ Object.assign(KNOWLEDGE, {
   },
   "9-B1": {
     "core": [
-      "A tool can become so convenient that a learner stops starting independently. Notice when help is useful and when it begins to replace planning, drafting or reasoning. The goal is not an absolute ban; it is to preserve the ability to think and choose without automatic dependence.",
-      "Dependence is often contextual. AI may help overcome a genuine language or accessibility barrier while also replacing unnecessary effort in another task. Avoid judging people simply by the tool they use. Ask which thinking remains with the learner and which support removes a barrier.",
-      "Develop personal boundaries: draft a starting idea first, seek targeted feedback, schedule time without tools or test whether you can explain your work independently. Review your habits against real progress rather than only how much time a tool saved."
+      "AI can support planning, language access or practice, yet some tools are also designed to be easy to return to and to respond as if they were companions. A chatbot may sound caring, agree with you or claim it understands you deeply; fluent emotional language is not proof of human empathy, reliable judgement or a real reciprocal relationship. Notice the difference between helpful assistance and a system beginning to substitute for your own thinking or important human support.",
+      "Context matters. Language support and accessibility tools can expand agency; a student should not be judged simply for using them. But a system encouraging secrecy, asking for sensitive information or implying that people do not need other people raises different concerns. In the fictional scenario, consider privacy, the tool's incentives, human relationships and whether its advice can be checked. A chatbot is not an appropriate substitute for urgent safety, health or mental-health support.",
+      "Protect autonomy through practical boundaries: begin a familiar task independently where appropriate, request hints instead of completed work, do not share private details with unapproved tools and seek support from trusted people when personal or safety issues arise. Evaluate your habits by the quality of your decisions and connections, not just the time AI saves or how friendly it sounds."
     ],
     "example": [
       "'I cannot begin an essay until an AI produces my outline.'",
@@ -202,9 +202,9 @@ Object.assign(KNOWLEDGE, {
   },
   "9-B3": {
     "core": [
-      "The benefits and costs of AI systems are not always shared equally. A service might save time for many users while disadvantaging others, consume substantial energy or make errors that are difficult to challenge. A good decision looks beyond the average outcome.",
-      "Evaluate effects on different groups and the wider environment. Ask who designed the system, whose information it uses and who carries responsibility for mistakes. Claims that a system is unbiased, low-impact or accurate need relevant evidence rather than marketing assurances.",
-      "Make a recommendation with conditions. Identify safeguards, meaningful consultation, independent evaluation and a path for someone to appeal or opt out when appropriate. Explain what might change your decision. This is more useful than a simple vote for or against AI."
+      "AI can change particular tasks within occupations without simply making every job disappear. A hiring assistant, medical documentation tool or school scheduling system might reduce repetitive work, create new review duties and change who has influence over decisions. Ask whose time is saved, whose work becomes less visible and whose opportunities or rights could be affected. A faster process is not automatically a fairer one.",
+      "Trace the wider impacts: the people whose data train or support a system, workers who review outputs, applicants who face errors, and communities affected by energy or water consumption. Environmental impact depends on deployment, hardware, energy sources and scale; avoid inventing precise emissions claims without reliable evidence. Consult affected groups and consider accessibility, fairness, labour and opportunities to contest mistakes.",
+      "Make a conditional recommendation rather than a simple vote for or against automation. Identify what tasks should remain under human responsibility, how applicants could appeal, how accuracy would be tested across relevant groups and what environmental information would need verification. Explain what new evidence might change your judgement."
     ],
     "example": [
       "'The tool saves most people time, so the occasional unfair result doesn't matter.'",
