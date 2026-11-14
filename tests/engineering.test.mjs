@@ -64,7 +64,7 @@ test("every activity has a checkable interaction, explanatory feedback and teach
       }
     }else if(activity.kind==="sequence"){
       assert.ok(activity.steps.length>=3,id+" insufficient workflow steps");
-      assert.deepEqual([...activity.start].sort((a,b)=>a-b),activity.steps.map((_,i)=>i),id+" invalid sequence permutation");
+      assert.deepEqual([...activity.start].sort((a,b)=>a-b),Array.from(activity.steps,(_,i)=>i),id+" invalid sequence permutation");
     }else{
       assert.ok(activity.options.length>=2,id+" insufficient alternatives");
       assert.ok(Number.isInteger(activity.correct)&&activity.correct>=0&&activity.correct<activity.options.length,id+" invalid correct answer");
