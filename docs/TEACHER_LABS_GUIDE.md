@@ -1,6 +1,6 @@
-# Facilitator Guide: Six Interactive AI Investigation Labs
+# Facilitator Guide: Ten Interactive AI Investigation Labs
 
-**Audience:** G6–10 educators and curriculum reviewers. These original simulations are fictional and work without AI-service accounts, network requests or student submissions. The live website stores existing practice checkpoints locally; laboratory choices are session-only.
+**Audience:** G6–12 educators and curriculum reviewers. These original simulations are fictional and work without AI-service accounts, network requests or student submissions. The live website stores existing practice checkpoints locally; laboratory choices are session-only.
 
 ## Structure for any lab (25–40 minutes)
 
@@ -91,3 +91,14 @@ Offer read-aloud, subtitles/transcripts for any teacher-added videos, bilingual 
 A real assessment requires the *reasoning* behind the choice, appropriate citations, an authentic work sample and transfer beyond the practice item. Teachers should document one strength and one specific next step, rather than infer mastery from lesson completion.
 
 For any deployment with authenticated students, use approved SharePoint/Entra architecture and server-authorised grade access, not these public preview controls.
+## DP1 and DP2 advanced inquiry laboratories
+
+**G11 A1 · System evaluation:** Compare familiar, shifted and access-related synthetic cases. Change threshold and the relative concern assigned to false exclusions. Compute and explain the four-case results, but never present them as genuine admissions performance or a certified fairness score. Ask learners to propose an independent test and defensible stop rule.
+
+**G11 B2 · Evidence provenance:** Map five articles and their original sources. Students compare headline counts with verifiable independent origins, then critique the quality of methods and uncertainty. Paper alternative: source cards linked with arrows and a separate methods audit.
+
+**G12 A2 · Workflow stress test:** Compare autonomous, bounded verified and human-led publication processes under three injected failures—missing source, outage and private data. Students design an accountable verification and recovery route. Paper alternative: process maps and tool-permission/incident cards.
+
+**G12 B3 · Governance and redress:** Examine a fictional consequential error and the response to an affected user with varying language/access needs. Students propose an accessible appeal, independent review, correction and conditions for restart. Concealment is intentionally a poor fictional option for critique, not policy advice. Paper alternative: an ethically framed stakeholder hearing.
+
+**DP projects:** G11 A3 is an independent stakeholder design dossier, normally three substantial studios plus feedback. G12 A3 is an authentic impact portfolio, approximately six to eight weekly blocks and an audience conference. Neither can be completed responsibly merely by ticking the website's practice checklist. Seek original work, consent and approvals, test results, revisions and a human defence. Connections to TOK, Extended Essay and CAS are exploratory only: follow the school's current IB and subject academic-integrity rules.
