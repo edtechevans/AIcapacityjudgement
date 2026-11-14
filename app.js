@@ -42,7 +42,7 @@ function hasLearningCheckpoint(record){return !!(record&&(record.knowledgePassed
 function resumeLesson(grade){return LESSONS.filter(l=>{const record=state.records[l.id];return l.grade===+grade&&record&&!record.completed&&hasLearningCheckpoint(record);}).sort((a,b)=>(state.records[b.id].lastOpenedAt||0)-(state.records[a.id].lastOpenedAt||0))[0]||null;}
 function checkpoint(id,stage){const record=getRecord(id);record.lastStage=Math.max(record.lastStage||0,stage);record.lastOpenedAt=Date.now();persist();}
 function gradeLane(grade,track){const n=pathInfo(grade,track);const pct=Math.round(n.done/n.total*100);return '<div class="lane lane-'+track+'"><div class="lane-top"><span>'+trackLabel(track)+'</span><strong>'+n.done+' / '+n.total+'</strong></div>'+progressBar(pct,trackLabel(track)+' modules practised')+'</div>';}
-function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,reflection:"",topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,reason:"",context:0,format:"written",fields:{purpose:"",decision:"",evidence:"",work:"",revision:""},applyStep:0,confirmed:false};}return practice[id]}
+function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,reflection:"",topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,reason:"",context:0,format:"written",fields:{purpose:"",decision:"",evidence:"",work:"",revision:""},applyStep:0,confirmed:false,notesDirty:false};}return practice[id]}
 function pathInfo(grade,track){const a=LESSONS.filter(l=>l.grade===+grade && l.track===track);return {done:a.filter(l=>state.records[l.id]?.completed).length,total:a.length}}
 function score(grade){const d=state.diagnostics[grade];if(!d||!d.completed)return null;const correct={};d.answers.forEach((answer,i)=>{correct[DIAGNOSTICS[grade][i][0]]=answer===DIAGNOSTICS[grade][i][3]});const cap=["A1","A2","A3"].filter(s=>correct[s]).length;const jud=["B1","B2","B3"].filter(s=>correct[s]).length;return {correct,capacity:cap,judgement:jud};}
 function recs(grade){const s=score(grade);return ["capacity","judgement"].map(track=>{
@@ -201,9 +201,10 @@ if(stage===3){
  body=header+section+'<div class="application-actions">'+
  (step>0?'<button class="btn btn-outline" data-action="apply-prev">← Previous</button>':"")+
  '<button class="btn btn-outline" data-action="copy-plan">Copy my notes</button>'+
+ '<button class="btn btn-outline" data-action="download-notes">Download my notes</button>'+
  (step<2?'<button class="btn" data-action="apply-next" '+(step===1&&!planned?"disabled":"")+'>Continue →</button>':
  '<button class="btn" data-action="record" '+(!r.practicePassed||!enough||!w.confirmed?"disabled":"")+'>Record my application →</button>')+
- '</div><p class="privacy-note">Written notes stay in this open tab only. Copy them before leaving, refreshing or closing the tab. Do not include personal or sensitive data.</p>';
+ '</div><p class="privacy-note">Your notes are not saved by this website. Copy or download them before refreshing or closing the tab. Keep files private and avoid personal or sensitive data.</p>';
 }
 if(stage===4){
  body='<div class="eyebrow">Review and move forward</div><h2 id="stage-title" tabindex="-1">What will you do differently?</h2><div class="completion-mark" aria-hidden="true">✓</div>'+
@@ -233,6 +234,34 @@ function profile(){const d=state.diagnostics[state.grade],n=count(state.grade);r
 '<button class="btn btn-small btn-outline" data-action="logout">Review clearing my local profile</button>')+'</div>'+
  (notice?'<div class="profile-feedback" role="status">'+esc(notice)+'</div>':"")+
  '<div class="hero-buttons"><button class="btn" data-action="saveprofile">Save alias</button><button class="btn btn-outline" data-action="courses">Return to courses</button></div></section></main>';}
+function planText(l,w){
+ const context=KNOWLEDGE[l.id]?.contexts?.[w.context]||["Chosen challenge",""];
+ const f=w.fields||{},headers=[
+  ["My goal and audience","purpose"],["My AI-use or non-use decision","decision"],
+  ["How I will check evidence and seek feedback","evidence"],
+  ["What I actually created or tried","work"],["What I tested or revised","revision"]
+ ];
+ return ["AI CAPACITY × JUDGEMENT — LEARNING NOTES",
+  "Grade "+l.grade+" · "+l.title+" · "+trackLabel(l.track),
+  "My chosen challenge:",context[0],context[1],
+  "How I chose to share my work:",{written:"Written explanation",visual:"Sketch or storyboard",talk:"Discussion or presentation"}[w.format]||"Written explanation",
+  ...headers.flatMap(([title,key])=>[title+":",f[key]||"(Not yet written)"]),
+  "NEXT STEP\nShare your work and seek feedback through a school-approved process. Your notes have not been uploaded to this website."
+ ].join("\n\n");
+}
+function downloadPlan(){
+ const l=currentLesson();if(!l)return;
+ const w=getPractice(l.id);
+ try{
+  const blob=new Blob([planText(l,w)],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="AI-CJ-"+l.id+"-learning-notes.txt";
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  w.notesDirty=false;
+  showNotice("Notes downloaded. Keep the file private and save it somewhere you can find it.");
+ }catch(_){showNotice("Downloading was unavailable. Try copying your notes instead.");}
+}
 function exportProgress(){
  try{
   const payload={schemaVersion:STORAGE_SCHEMA,format:"AI-CJ-local-progress",exportedAt:new Date().toISOString(),grade:state.grade,records:state.records,diagnostics:state.diagnostics,legacyDone:state.legacyDone};
@@ -339,7 +368,15 @@ if(action==="apply-prev"){const w=getPractice(state.lessonId);w.applyStep=Math.m
 if(action==="apply-next"){const w=getPractice(state.lessonId);const fields=w.fields||{};if(w.applyStep===1&& !["purpose","decision","evidence"].every(k=>(fields[k]||"").trim().length>=35))return;w.applyStep=Math.min(2,(w.applyStep||0)+1);render(true,"apply-heading");return}
 if(action==="context-choice"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n===0||n===1)w.context=n;render();const selected=$(`[data-action="context-choice"][data-index="${n}"]`);if(selected?.focus)selected.focus({preventScroll:true});return}
 if(action==="format-choice"){const w=getPractice(state.lessonId);if(["written","visual","talk"].includes(t.dataset.format))w.format=t.dataset.format;render();const chosen=$(`[data-action="format-choice"][data-format="${w.format}"]`);if(chosen?.focus)chosen.focus({preventScroll:true});return}
-if(action==="copy-plan"){const l=currentLesson(),w=getPractice(l.id),c=KNOWLEDGE[l.id].contexts[w.context],f=w.fields;const plan=[l.title,c[0],c[1],"My goal and audience:",f.purpose||"","My AI-use decision:",f.decision||"","My evidence plan:",f.evidence||"","My work sample:",f.work||"","My test and revision:",f.revision||""].join("\n\n");if(typeof navigator!=="undefined"&&navigator.clipboard?.writeText){navigator.clipboard.writeText(plan).then(()=>showNotice("Your learning plan was copied.")).catch(()=>showNotice("Copy was unavailable. You can select your text from the fields."));}else{showNotice("Copy was unavailable. Select the text from the fields instead.");}return}
+if(action==="copy-plan"){
+ const l=currentLesson(),w=getPractice(l.id),text=planText(l,w);
+ if(typeof navigator!=="undefined"&&navigator.clipboard?.writeText){
+  navigator.clipboard.writeText(text).then(()=>{w.notesDirty=false;showNotice("Notes copied. Paste them into a school-approved place to keep them.");})
+   .catch(()=>showNotice("Copy was unavailable. Download your notes instead."));
+ }else showNotice("Copy is unavailable in this browser. Download your notes instead.");
+ return;
+}
+if(action==="download-notes"){downloadPlan();return}
 if(action==="stage"){const l=currentLesson(),w=getPractice(l.id),step=+t.dataset.stage,r=getRecord(l.id);if((step===1&&!r.knowledgePassed)||(step===2&&!w.modelSeen)||(step===3&&!r.practicePassed)||(step===4&&!r.applied))return;w.stage=Math.min(4,Math.max(0,step));checkpoint(l.id,w.stage);goto("lesson",{focusStage:true});return}
 if(action==="prev"){const w=getPractice(state.lessonId);w.stage=Math.max(0,(w.stage||0)-1);checkpoint(state.lessonId,w.stage);goto("lesson",{focusStage:true});return}
 if(action==="next"){const w=getPractice(state.lessonId),r=getRecord(state.lessonId);if((w.stage===0&&!r.knowledgePassed)||(w.stage===1&&!w.modelSeen)||(w.stage===2&&!r.practicePassed))return;w.stage=Math.min(3,(w.stage||0)+1);checkpoint(state.lessonId,w.stage);goto("lesson",{focusStage:true});return}
@@ -367,10 +404,15 @@ function updateProjectButton(){const w=getPractice(state.lessonId),f=w.fields||{
 document.addEventListener("input",(e)=>{
 const t=e.target;
 if(t.id==="practice-reason"){getPractice(state.lessonId).reason=t.value.slice(0,1200);return}
-if(t.dataset?.planField){const w=getPractice(state.lessonId);if(!w.fields)w.fields={};w.fields[t.dataset.planField]=t.value.slice(0,2000);updateProjectButton();return}
+if(t.dataset?.planField){const w=getPractice(state.lessonId);if(!w.fields)w.fields={};w.fields[t.dataset.planField]=t.value.slice(0,2000);w.notesDirty=true;updateProjectButton();return}
 });
 function syncHistory(){if(!state.name){state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="guest-name"){e.preventDefault();const button=document.querySelector('[data-action="guest"]');if(button&&button.click)button.click();}});
+window.addEventListener("beforeunload",e=>{
+ if(Object.values(practice).some(w=>w?.notesDirty)){
+  e.preventDefault();e.returnValue="";
+ }
+});
 window.addEventListener("popstate",syncHistory);
 window.addEventListener("hashchange",syncHistory);
 if(state.name){if(!readRoute()||state.page==="welcome")state.page="home";}else{const initialHash=window.location?.hash||"";
