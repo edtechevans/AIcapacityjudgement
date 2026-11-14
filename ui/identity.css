@@ -813,3 +813,48 @@ html{scroll-behavior:auto}
  .senior-portfolio{padding:16px 13px}
 }
 @media(max-width:365px){.grade-entry-grid{grid-template-columns:1fr}}
+
+
+/* v26 · seven-year developmental scope, independent challenges and concept bridges */
+.learning-progression{margin:16px 0;border:1px solid #BBD4D4;border-radius:12px;background:#F0F7F7;overflow:hidden}
+.learning-progression summary{padding:13px 16px;color:#1E505B;font-weight:760;cursor:pointer;font-size:.88rem;line-height:1.6}
+.learning-progression summary:hover{background:#E4F0EE}
+.learning-progression summary:focus-visible,.grade-mission-details summary:focus-visible,.scope-strands summary:focus-visible{outline:3px solid #A45434;outline-offset:-4px}
+.learning-progression-body{padding:1px 17px 15px;border-top:1px solid #C9DFDB}
+.learning-progression-body p{margin:10px 0;line-height:1.55;font-size:.87rem;color:#395764}
+.learning-progression-body strong{color:#1A4A55}
+.grade-mission{margin:28px auto 24px;max-width:1200px;background:linear-gradient(135deg,#EFF5F6 0%,#F6F9F9 100%);border:1px solid #C9DDE0;border-radius:17px;padding:clamp(20px,2.6vw,28px)}
+.grade-mission .eyebrow{font-size:.73rem;letter-spacing:.09em;color:#28636C;font-weight:800}
+.grade-mission h2{font-size:clamp(1.18rem,2.15vw,1.6rem);font-weight:760;line-height:1.28;letter-spacing:-.02em;margin:10px 0;color:#17394B}
+.grade-mission-question{font-size:1rem;line-height:1.6;color:#345764;margin:9px 0 15px}
+.grade-mission-details{border:1px solid #B8CED3;background:#fff;border-radius:11px;overflow:hidden}
+.grade-mission-details summary{cursor:pointer;padding:13px 16px;font-weight:740;color:#1C5C66;font-size:.89rem}
+.grade-mission-details summary:hover{background:#F0F7F7}
+.grade-mission-details>div{padding:4px 17px 17px;border-top:1px solid #E0E9EA}
+.grade-mission-details h3{color:#214656;font-size:.95rem;font-weight:770;margin:17px 0 5px}
+.grade-mission-details p,.grade-mission-details li{color:#3C5361;font-size:.9rem;line-height:1.7}
+.grade-mission-details ul{padding-left:22px;margin:10px 0 18px}
+.scope-sequence{margin:36px auto 40px;padding:clamp(20px,3vw,33px);background:#F6F9FA;border:1px solid #D2DFE4;border-radius:17px}
+.scope-sequence .eyebrow{color:#315E70;font-weight:780;font-size:.74rem;letter-spacing:.08em}
+.scope-sequence h2{font-size:clamp(1.25rem,2.4vw,1.8rem);color:#1B3C50;margin:10px 0 13px;line-height:1.3;letter-spacing:-.02em}
+.scope-sequence>p{font-size:.92rem;line-height:1.7;color:#496171;max-width:72ch;margin-bottom:18px}
+.scope-grade-list{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.scope-grade-item{display:flex;gap:16px;align-items:flex-start;border:1px solid #D6E1E4;background:#fff;border-radius:11px;padding:13px 14px;min-width:0}
+.scope-grade-number{flex:0 0 54px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:9px;background:#193B50;color:#fff;min-height:56px;gap:1px}
+.scope-grade-number small{font-size:.57rem;letter-spacing:.08em;line-height:1.2;color:#D5EAEC}
+.scope-grade-number strong{font-size:1.36rem;font-weight:810;font-variant-numeric:tabular-nums;line-height:1.2}
+.scope-grade-item>div:last-child{flex:1;min-width:0}
+.scope-grade-item>div:last-child>strong{color:#193F50;font-size:.96rem;line-height:1.5}
+.scope-grade-item p{margin:4px 0;font-size:.85rem;color:#4E6070;line-height:1.6}
+.scope-grade-item .scope-evidence{margin-top:8px;color:#315963}
+.scope-grade-item .scope-evidence strong{color:#1E5B68}
+.scope-strands{margin-top:16px;border:1px solid #CBDCE0;border-radius:11px;background:#fff}
+.scope-strands summary{cursor:pointer;color:#20576A;font-weight:740;padding:14px 16px;line-height:1.5}
+.scope-strand-grid{padding:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;border-top:1px solid #E3EBED}
+.scope-strand-grid section{border:1px solid #D9E5E6;border-radius:10px;padding:14px;min-width:0;background:#FAFCFC}
+.scope-strand-grid h3{font-size:.94rem;color:#1F4C5E;margin:0 0 10px;font-weight:760}
+.scope-strand-grid ol{margin:0;padding-left:23px}
+.scope-strand-grid li{font-size:.82rem;line-height:1.6;color:#415E69;margin-bottom:7px}
+.scope-strand-grid li strong{color:#205A64}
+@media(max-width:720px){.scope-strand-grid{grid-template-columns:1fr}.scope-grade-item{gap:12px}.scope-sequence{padding:18px 15px}.grade-mission{padding:19px 15px}}
+@media(max-width:370px){.scope-grade-item{padding:11px}.scope-grade-number{flex-basis:46px;min-height:50px}.scope-grade-number strong{font-size:1.15rem}}
