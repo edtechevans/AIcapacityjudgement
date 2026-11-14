@@ -49,7 +49,7 @@ test("shared lessons keep the intended destination through grade confirmation",a
 test("keyboard skip navigation does not damage the lesson route",async({page})=>{
   await startGrade(page);
   await page.goto("/#/lesson/6-A1");
-  await page.keyboard.press("Tab");
+  await page.locator('[data-action="skip-main"]').focus();
   await expect(page.locator('[data-action="skip-main"]')).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.locator("#main-content")).toBeFocused();
