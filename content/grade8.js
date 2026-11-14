@@ -7,8 +7,8 @@ Object.assign(KNOWLEDGE, {
       "Be careful about the conclusions you draw. Testing a small set of examples can reveal patterns and limitations, but it cannot establish reliability in every situation. A responsible report says what you tested, what happened and what you would test next."
     ],
     "example": [
-      "'Model A used longer words, so it is more accurate.'",
-      "'I will compare both systems on the same five tasks, verify claims and explain where each succeeds or fails.'"
+      "The longer answer must come from a more reliable model.",
+      "I will give both tools the same questions and criteria, verify important claims independently, record errors and limit my conclusion to the observed tasks."
     ],
     "check": [
       "What is essential in a fair comparison of two AI models?",
@@ -47,8 +47,8 @@ Object.assign(KNOWLEDGE, {
       "Build checkpoints into the workflow. What would cause you to revise the approach? What signs would show the tool is making the task harder? Compare the AI-supported workflow with a reasonable non-AI alternative rather than assuming technology always improves it."
     ],
     "example": [
-      "'Ask AI to write the report, then publish it.'",
-      "'Investigate the issue, generate possible comparisons, verify data, draft conclusions and ask a peer to challenge the evidence.'"
+      "The AI report is ready, so no one needs to review the workflow.",
+      "I will build checkpoints for evidence, privacy and accessibility, assign a human decision owner, and test the workflow against a non-AI option."
     ],
     "check": [
       "What step should follow AI-generated research suggestions?",
@@ -87,8 +87,8 @@ Object.assign(KNOWLEDGE, {
       "The first version is rarely the best. Ask intended users to try the prototype, notice barriers and collect specific feedback. Revise one important feature and describe how you know the change helps. A design is successful because it works for people, not because it looks technically advanced."
     ],
     "example": [
-      "'Make a flashy AI poster about school routines, then ask if people like the colour.'",
-      "'Talk to new students about what is confusing, prototype a guide, check whether it is accessible and revise using their feedback.'"
+      "Our prototype looks impressive, so users will benefit.",
+      "I will ask intended users what they need, measure whether the design works, record one barrier and revise based on their feedback."
     ],
     "check": [
       "What should happen before choosing an AI tool for a design?",
@@ -127,8 +127,8 @@ Object.assign(KNOWLEDGE, {
       "A strong judgement can be defended. State the goal, name the choices, weigh benefits and costs and explain what would make you change your mind. The aim is not to produce a universal rule but to become better at evaluating each situation."
     ],
     "example": [
-      "'Using AI for every calculation saves time, so it is always best.'",
-      "'If the goal is mental fluency, I will calculate without AI and use an approved tool to check my work afterward, if permitted.'"
+      "AI always makes mental calculation better because it is faster.",
+      "Mental fluency is the goal, so I will calculate independently first; an approved tool may help me check and reflect afterwards."
     ],
     "check": [
       "When might not using AI be the better decision?",
@@ -167,8 +167,8 @@ Object.assign(KNOWLEDGE, {
       "Change one ranking objective at a time in the fictional laboratory. Observe how the same posts move, then question the values behind the metric. A more responsible design might give users meaningful choice, explain ranking decisions and invite perspectives from affected communities. Evidence and diversity both matter, but neither can be reduced to one perfect score."
     ],
     "example": [
-      "'This AI summary lists only traditional clothing and food, so that must tell us everything about the culture.'",
-      "'I will compare community perspectives, historical context and credible sources, then explain what the summary missed.'"
+      "The first results in the feed are the most important and fair.",
+      "The ranking goal changed the order of the same posts. I will compare attention and evidence rankings, identify missing voices and question the metrics."
     ],
     "check": [
       "How can you improve a narrow, stereotyped AI-generated description?",
@@ -207,8 +207,8 @@ Object.assign(KNOWLEDGE, {
       "A responsible proposal balances usefulness, privacy, fairness and accountability. Compare at least two approaches, including a non-AI alternative, and recommend practical safeguards. Good judgement makes consequences visible rather than hiding them behind impressive technology."
     ],
     "example": [
-      "'The automated system is faster, so let it decide everything about students.'",
-      "'Pilot only with approved anonymous data, consult affected users and keep human review and an appeals process.'"
+      "If an automated system is faster, unequal outcomes do not matter.",
+      "I will investigate who gains and who is harmed, consult affected people and require human oversight, transparency and a route to appeal."
     ],
     "check": [
       "What should accompany an AI recommendation that affects real people?",
