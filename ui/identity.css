@@ -523,3 +523,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
   .lesson-panel .step-track{scrollbar-width:thin;scrollbar-color:#8BAEAA transparent;padding-bottom:11px}
   .step-scroll-hint{display:block;margin:4px 0 14px;text-align:right;font-size:.76rem;color:#435E6B;font-weight:650}
 }
+
+/* Route changes should settle immediately; smooth page scrolling can disorient learners and misplace sticky headers. */
+html{scroll-behavior:auto}
