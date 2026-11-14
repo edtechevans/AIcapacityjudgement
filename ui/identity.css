@@ -474,3 +474,40 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  .learning-checkin-panel .btn{width:100%}
  .learning-progress-card{padding:22px}
 }
+
+
+/* Student UX reliability pass: navigation clarity, shared links, and portable work. */
+.brand-wordmark-short{display:none;align-items:center;gap:2px;white-space:nowrap;color:var(--brand-ink);
+  font-family:var(--brand-display);font-weight:750;letter-spacing:-.035em;font-size:1rem}
+.brand-wordmark-short span{color:var(--brand-judgement)}
+.mobile-menu-links button[aria-current="page"]{background:var(--brand-capacity-soft);color:var(--brand-capacity);font-weight:800}
+.mobile-menu-links button[aria-pressed="true"]{background:#E5F2F1;color:#165E57}
+.mobile-menu summary:focus-visible{outline:3px solid var(--brand-focus);outline-offset:3px}
+.skip-link{font-family:var(--brand-body);font-size:.9rem;cursor:pointer;min-height:44px}
+.welcome-deeplink{text-align:left;color:#245852!important;background:#E7F7F3;border:1px solid #B1DED4;
+ border-radius:11px;padding:13px 16px;margin:10px 0 19px!important;font-size:.88rem!important;line-height:1.6}
+.welcome-deeplink strong{font-weight:750}
+.application-actions [data-action="download-notes"]{background:#F2F8F7;color:var(--brand-capacity);border-color:#95C7BC}
+.application-actions [data-action="download-notes"]:hover{background:#DDF3EF;border-color:#5DA99E}
+.application-actions{gap:9px}
+.application-actions .btn{min-height:46px}
+.lesson-panel #stage-title{scroll-margin-top:100px}
+@media(max-width:650px){
+ .topbar .top-actions .comfort-toggle{display:none}
+ .mobile-menu-links{min-width:min(270px,calc(100vw - 36px));padding:11px}
+ .mobile-menu-links button{min-height:46px;padding:12px 14px}
+}
+@media(max-width:430px){
+ .topbar .brand-wordmark{display:none}
+ .topbar .brand .brand-wordmark-short{display:inline-flex;font-size:1rem;letter-spacing:-.02em}
+ .topbar .brand{gap:8px;min-width:0}
+ .topbar .top-actions{gap:7px}
+ .topbar{padding-inline:14px;gap:8px}
+ .mobile-menu summary{width:42px;height:42px}
+ .topbar .avatar{width:39px;height:39px;min-width:39px}
+}
+@media(max-width:360px){
+ .topbar .brand .brand-emblem{width:34px;height:34px;flex-basis:34px}
+ .topbar .brand .brand-wordmark-short{font-size:.9rem}
+ .topbar .avatar{width:36px;height:36px;min-width:36px}
+}
