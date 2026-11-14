@@ -5,7 +5,7 @@ import {join} from "node:path";
 import {runInContext,createContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=p=>readFileSync(join(root,p),"utf8");
-const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js"];
+const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js","content/public-curriculum.js"];
 function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,UNSEEN_TRANSFER,TEACHER_RUBRIC,classroomPlan,labClassify,labRankFeed,labGrade6,labEvaluate})",context)}
 const DATA=content(createContext({}));
 function app(seed={},hash=""){
@@ -704,4 +704,43 @@ test("unseen transfer and age-relative evidence criteria are distinct from autom
  assert.match(h.html,/What meaningful evidence could look like/);
  assert.match(h.html,/Journey steps 3 of 5/);
  assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records[l.id].completed,false,"A prepared rubric is not automatic mastery");
+});
+
+
+test("public curriculum is accessible without choosing a grade and does not create learner records",async()=>{
+ const h=app({},"#/curriculum");
+ assert.equal(h.hash,"#/curriculum");
+ assert.match(h.html,/Seven years/);
+ assert.match(h.html,/Two pathways/);
+ assert.match(h.html,/Grade 8/);
+ assert.match(h.html,/AI Capacity/);
+ assert.match(h.html,/AI Judgement/);
+ assert.match(h.html,/More than completing a module/);
+ assert.equal((h.html.match(/class="curriculum-year-tab/g)||[]).length,7);
+ assert.equal((h.html.match(/class="catalogue-module catalogue-module--/g)||[]).length,6);
+ assert.deepEqual(Object.keys(h.storage),[],"Public curriculum viewing must not save student information");
+ await h.click({action:"curriculum-grade",curGrade:"12"});
+ assert.match(h.html,/Create & Steward/);
+ assert.match(h.html,/The Impact Project/);
+ assert.match(h.html,/Stewardship & Accountability/);
+ assert.deepEqual(Object.keys(h.storage),[]);
+ await h.click({action:"curriculum-strand",curStrand:"B3"});
+ assert.match(h.html,/7 stages/);
+ assert.match(h.html,/Ethics & Consequences/);
+ assert.match(h.html,/meaningful review or correction/i);
+ assert.deepEqual(Object.keys(h.storage),[]);
+ await h.click({action:"copy-curriculum"});
+ assert.equal(h.copiedText,"https://edtechevans.github.io/AIcapacityjudgement/#/curriculum");
+});
+test("curriculum sharing never bypasses a selected learner's grade permissions",async()=>{
+ const h=app();await h.click({action:"pick-grade",pick:"7"});
+ await h.click({action:"curriculum"});
+ assert.equal(h.hash,"#/curriculum");
+ await h.click({action:"curriculum-grade",curGrade:"11"});
+ await h.click({action:"curriculum-open-grade",curGrade:"11"});
+ assert.equal(h.hash,"#/curriculum","Viewing the public curriculum cannot switch a learner's selected grade");
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).grade,7);
+ await h.click({action:"curriculum-grade",curGrade:"7"});
+ await h.click({action:"curriculum-open-grade",curGrade:"7"});
+ assert.equal(h.hash,"#/grade/7");
 });
