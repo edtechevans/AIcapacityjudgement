@@ -709,3 +709,8 @@ html{scroll-behavior:auto}
  .capstone-guide{padding:17px 16px}
 }
 @media(prefers-reduced-motion:reduce){.lab-choice{transition:none}}
+
+/* Evidence-first progression: compare before the selected-response check. */
+.learning-lab .lab-progress{display:inline-flex;padding:8px 12px;margin:8px 0 0;border-radius:8px;background:#DBEEE9;border:1px solid #B4D9D0;font-size:.82rem;font-weight:720;color:#245D50;line-height:1.4}
+.reflection-evidence-question{margin:10px 0 0!important;padding:10px 13px;background:#EAF4F1;border-left:3px solid #176C69;border-radius:6px;color:#28514D!important;font-size:.88rem!important}
+.reflection-evidence-question strong{display:inline;color:#194E46}
