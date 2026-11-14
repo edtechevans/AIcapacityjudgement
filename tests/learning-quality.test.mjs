@@ -9,18 +9,18 @@ const context=createContext({});
 const paths=[
  "curriculum.js","learning-data.js",
  ...[6,7,8,9,10].map(g=>"content/grade"+g+".js"),
- "content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js"
+ "content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js"
 ];
 for(const path of paths)runInContext(readFileSync(join(root,path),"utf8"),context,{filename:path});
 const data=runInContext("({LESSONS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,LAB_EVALUATIONS,LAB_FEED_POSTS,UNSEEN_TRANSFER,TEACHER_RUBRIC,CLASSROOM_PACING,classroomPlan,labGrade6,labEvaluate,labClassify,labRankFeed})",context);
 const {LESSONS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS}=data;
 
-test("all 30 modules now contain original, actionable and age-appropriate inquiry tasks",()=>{
+test("all 42 modules now contain original, actionable and age-appropriate inquiry tasks",()=>{
  const lessonIds=LESSONS.map(l=>l.id);
- assert.equal(LESSONS.length,30);
- assert.equal(Object.keys(INQUIRY_BRIEFS).length,30);
- assert.equal(new Set(lessonIds).size,30);
- assert.equal(new Set(lessonIds.map(id=>INQUIRY_BRIEFS[id]?.title)).size,30,"Investigations should be distinct");
+ assert.equal(LESSONS.length,42);
+ assert.equal(Object.keys(INQUIRY_BRIEFS).length,42);
+ assert.equal(new Set(lessonIds).size,42);
+ assert.equal(new Set(lessonIds.map(id=>INQUIRY_BRIEFS[id]?.title)).size,42,"Investigations should be distinct");
  for(const id of lessonIds){
   const task=INQUIRY_BRIEFS[id];
   assert.ok(task,"Missing authentic inquiry for "+id);
@@ -38,7 +38,8 @@ test("labs cover data, algorithmic influence, evaluation, companion boundaries a
   "8-B2":"feed",
   "9-A1":"evaluation",
   "9-B1":"relationship",
-  "10-A3":"decision"
+  "10-A3":"decision",
+   "11-A1":"benchmark","11-B2":"provenance","12-A2":"workflow","12-B3":"governance"
  };
  assert.deepEqual(Object.keys(LEARNING_LABS).sort(),Object.keys(required).sort());
  for(const [id,kind] of Object.entries(required)){
@@ -82,7 +83,7 @@ test("reliability lab shows how sampling choices change the interpretation",()=>
 });
 
 test("capstones provide concrete production, testing and conference evidence",()=>{
- for(const id of ["8-A3","9-A3","10-A3","10-B3"]){
+ for(const id of ["8-A3","9-A3","10-A3","10-B3","11-A3","11-B3","12-A3","12-B3"]){
   const guide=CAPSTONE_GUIDES[id];
   assert.ok(guide,id+" missing capstone guide");
   assert.ok(guide.phases.length>=4,id+" insufficient phases");
@@ -103,7 +104,7 @@ test("new investigations are included before the app and do not add external scr
 });
 
 
-test("all 30 modules have distinct, genuinely unfamiliar transfer tasks and realistic classroom plans",()=>{
+test("all 42 modules have distinct, genuinely unfamiliar transfer tasks and realistic classroom plans",()=>{
  const ids=LESSONS.map(l=>l.id);
  assert.equal(Object.keys(data.UNSEEN_TRANSFER).sort().join("|"),Array.from(ids).sort().join("|"));
  assert.equal(Object.keys(data.TEACHER_RUBRIC).length,4);
