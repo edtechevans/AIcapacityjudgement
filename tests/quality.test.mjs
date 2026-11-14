@@ -141,3 +141,54 @@ test("accessible core text colour pairings remain above WCAG AA normal-text cont
  ];
  for(const [a,b] of pairs)assert.ok(contrast(a,b)>=4.5,"Contrast failure "+a+" on "+b);
 });
+
+test("new learners see an invitation, not a zero-progress score",async()=>{
+ const h=app();
+ await h.click({action:"guest"});
+ await h.click({action:"home"});
+ assert.match(h.html,/Start your first lesson/);
+ assert.match(h.html,/progress-orbit--empty/);
+ assert.match(h.html,/Start here/);
+ assert.doesNotMatch(h.html,/<strong>0<span> \/ 6<\/span><\/strong>/);
+ assert.match(h.html,/Progress is practice—not a grade/);
+ await h.click({lesson:"6-A1"});
+ await h.click({action:"home"});
+ assert.match(h.html,/Start your first lesson/,"Opening a lesson is not yet meaningful progress");
+ assert.doesNotMatch(h.html,/Resume your lesson/);
+});
+test("resume appears after meaningful learning, before module completion",async()=>{
+ const h=app();
+ await h.click({action:"guest"});
+ await h.click({lesson:"6-A1"});
+ await h.click({action:"concept-next"});
+ await h.click({action:"concept-next"});
+ h.change({name:"knowledge-choice",value:"0"});
+ await h.click({action:"knowledge-check"});
+ await h.click({action:"next"});
+ await h.click({action:"home"});
+ assert.match(h.html,/Resume your lesson/);
+ assert.match(h.html,/Keep going/);
+ assert.match(h.html,/progress-orbit--empty/);
+});
+test("completed learning displays real progress and the next-lesson action",async()=>{
+ const record={knowledgePassed:true,modelSeen:true,practicePassed:true,applied:true,completed:true,lastStage:4,lastOpenedAt:1000,attempts:1};
+ const seed={"aicj-studio-v2":JSON.stringify({name:"Learner",grade:6,track:"all",records:{"6-A1":record},diagnostics:{},legacyDone:{}})};
+ const h=app(seed);
+ await h.click({action:"home"});
+ assert.match(h.html,/Start your next lesson/);
+ assert.match(h.html,/1<span> \/ 6<\/span>/);
+ assert.doesNotMatch(h.html,/progress-orbit--empty/);
+ const all={};for(const l of DATA.LESSONS.filter(l=>l.grade===6))all[l.id]={...record};
+ const allDone=app({"aicj-studio-v2":JSON.stringify({name:"Learner",grade:6,track:"all",records:all,diagnostics:{},legacyDone:{}})});
+ await allDone.click({action:"home"});
+ assert.match(allDone.html,/Revisit a module/);
+ assert.match(allDone.html,/6<span> \/ 6<\/span>/);
+});
+test("hero refinement shortens vertical spacing without harming mobile layout",()=>{
+ const css=read("ui/identity.css");
+ assert.match(css,/padding-block:clamp\(28px,2\.7vw,42px\)/);
+ assert.match(css,/\.dashboard-hero h1\{\s*font-weight:600/);
+ assert.match(css,/\.dashboard-path-header h2\{\s*font-weight:600/);
+ assert.match(css,/\.dashboard-hero:before\{opacity:\.035\}/);
+ assert.match(css,/@media\(max-width:720px\)\{\.dashboard-hero\{padding-block:30px\}\}/);
+});
