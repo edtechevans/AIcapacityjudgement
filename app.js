@@ -699,7 +699,7 @@ if(t.name==="activity-choice"){const w=getPractice(state.lessonId);w.selected=+t
 if(t.id==="import-progress"){const file=t.files?.[0];if(file)importProgress(file);return}
 
 if(t.dataset?.sort!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.sort;w.sort[i]=t.value===""?undefined:+t.value;w.checked=false;w.feedback=null;render();const choice=$("#sort-"+i);if(choice?.focus)choice.focus({preventScroll:true});return}
-if(t.dataset?.seniorMilestone!==undefined){const l=currentLesson(),w=getPractice(l.id),i=Number(t.dataset.seniorMilestone),guide=CAPSTONE_GUIDES[l.id];if(!guide||!Number.isInteger(i)||i<0||i>=guide.phases.length)return;w.seniorMilestones[i]=!!t.checked;render();return;}
+if(t.dataset?.seniorMilestone!==undefined){const l=currentLesson(),w=getPractice(l.id),i=Number(t.dataset.seniorMilestone),guide=CAPSTONE_GUIDES[l.id];if(!guide||!Number.isInteger(i)||i<0||i>=guide.phases.length)return;w.seniorMilestones[i]=!!t.checked;render();const next=$('[data-senior-milestone="'+i+'"]');if(next?.focus)next.focus({preventScroll:true});return;}
 if(t.id==="project-confirm"){const w=getPractice(state.lessonId);w.confirmed=!!t.checked;updateProjectButton();return}
 if(t.name==="reflection-mode"){const w=getPractice(state.lessonId);if(["written","spoken","visual"].includes(t.value))w.reflectionMode=t.value;render(true,"stage-title");return}
 if(t.id==="reflection-confirm"){const w=getPractice(state.lessonId);w.reflectionConfirmed=!!t.checked;updateReflectionButton();return}
