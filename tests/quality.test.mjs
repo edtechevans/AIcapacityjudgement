@@ -5,7 +5,7 @@ import {join} from "node:path";
 import {runInContext,createContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=p=>readFileSync(join(root,p),"utf8");
-const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js"];
+const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js"];
 function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,UNSEEN_TRANSFER,TEACHER_RUBRIC,classroomPlan,labClassify,labRankFeed,labGrade6,labEvaluate})",context)}
 const DATA=content(createContext({}));
 function app(seed={},hash=""){
@@ -620,8 +620,8 @@ test("all 42 modules recover from a wrong answer through optional coaching witho
 });
 
 
-test("six interactive laboratories support learner choices without saving their inputs",async()=>{
- const ids=["6-A1","7-A1","8-B2","9-A1","9-B1","10-A3","11-A1","11-B2","12-A2","12-B3"];
+test("eleven interactive laboratories support learner choices without saving their inputs",async()=>{
+ const ids=["6-A1","7-A1","8-A1","8-B2","9-A1","9-B1","10-A3","11-A1","11-B2","12-A2","12-B3"];
  for(const id of ids){
   const h=app();
   await h.click({action:"pick-grade",pick:id.split("-")[0]});
