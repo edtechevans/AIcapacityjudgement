@@ -384,22 +384,32 @@ function routePath(page){if(page==="courses")return "/grade/"+state.grade+(state
 function writeRoute(replace){const url="#"+routePath(state.page);if(!window.location||window.location.hash===url)return;if(window.history&&typeof window.history.pushState==="function"){window.history[replace?"replaceState":"pushState"]({},"",url);}else{window.location.hash=url;}}
 function readRoute(){
  const hash=window.location?.hash||"";
- if(!hash.startsWith("#/"))return false;
+ if(!state.gradeChosen||!hash.startsWith("#/"))return false;
  const path=hash.slice(1);
- const allowed=(v)=>Object.prototype.hasOwnProperty.call(GRADES,String(v));
+ const allowed=v=>Object.prototype.hasOwnProperty.call(GRADES,String(v));
+ // Preview navigation barrier only: an authenticated SharePoint deployment must
+ // enforce grade entitlements at the server, not by trusting this JavaScript.
+ const outsideGrade=g=>{
+  if(+g===state.grade)return false;
+  state.page="courses";state.track="all";state.lessonId="";
+  notice="You are in the Grade "+state.grade+" learning space. Use your profile to return to the preview grade selector.";
+  writeRoute(true);return true;
+ };
  let m=path.match(/^\/grade\/(\d+)\/(capacity|judgement)$/);
- if(m&&allowed(m[1])){state.grade=+m[1];state.track=m[2];state.page="courses";return true;}
+ if(m&&allowed(m[1])){if(outsideGrade(m[1]))return true;state.track=m[2];state.page="courses";return true;}
  m=path.match(/^\/grade\/(\d+)\/(snapshot|check-in)$/);
- if(m&&allowed(m[1])){state.grade=+m[1];state.page=m[2]==="snapshot"?"snapshot":"diagnostic";return true;}
+ if(m&&allowed(m[1])){if(outsideGrade(m[1]))return true;state.page=m[2]==="snapshot"?"snapshot":"diagnostic";return true;}
  m=path.match(/^\/grade\/(\d+)$/);
- if(m&&allowed(m[1])){state.grade=+m[1];state.track="all";state.page="courses";return true;}
+ if(m&&allowed(m[1])){if(outsideGrade(m[1]))return true;state.track="all";state.page="courses";return true;}
  m=path.match(/^\/lesson\/(\d+)-([A-Z]\d+)$/);
  if(m&&allowed(m[1])&&LESSON_BY_ID[m[1]+"-"+m[2]]){
-  state.lessonId=m[1]+"-"+m[2];state.grade=+m[1];state.page="lesson";
-  getPractice(state.lessonId);if(state.gradeChosen)checkpoint(state.lessonId,getPractice(state.lessonId).stage);
+  if(outsideGrade(m[1]))return true;
+  state.lessonId=m[1]+"-"+m[2];state.page="lesson";
+  getPractice(state.lessonId);checkpoint(state.lessonId,getPractice(state.lessonId).stage);
   return true;
  }
- if(["/home","/about","/profile","/welcome"].includes(path)){state.page=path.slice(1);return true;}
+ if(path==="/welcome"){state.page="courses";state.track="all";writeRoute(true);return true;}
+ if(["/home","/about","/profile"].includes(path)){state.page=path.slice(1);return true;}
  return false;
 }
 function goto(page,opts={}){if(!state.gradeChosen&&page!=="welcome")page="welcome";if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();if(page!=="profile")confirmClear=false;state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});}
