@@ -770,3 +770,46 @@ html{scroll-behavior:auto}
 /* Accessibility: horizontally scrollable data tables must be keyboard discoverable. */
 .lab-table-wrap:focus-visible,.rubric-table-wrap:focus-visible{outline:3px solid #A45434;outline-offset:3px;scroll-margin-top:110px}
 .lab-table-wrap:focus,.rubric-table-wrap:focus{scroll-margin-top:110px}
+
+
+/* v24 · DP1 and DP2 senior inquiry studio. Older grades retain their experience. */
+.grade-entry-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.senior-studio{margin:0 auto 30px;padding:clamp(20px,3.4vw,31px);background:linear-gradient(130deg,#14263D 0%,#17334A 63%,#1B4C59 100%);border:1px solid #496276;color:#F7F9FB;border-radius:18px;box-shadow:0 12px 28px rgba(12,31,46,.12)}
+.senior-studio-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:22px}
+.senior-studio .eyebrow{color:#9DD8D0;font-size:.73rem;letter-spacing:.10em;font-weight:800}
+.senior-studio h2{color:#fff;font-size:clamp(1.17rem,2.15vw,1.55rem);line-height:1.35;font-weight:750;letter-spacing:-.02em;margin:10px 0}
+.senior-studio p{font-size:.9rem;line-height:1.65;color:#D1DEE6;margin:7px 0 12px;max-width:70ch}
+.senior-studio .btn-outline{background:#fff;color:#153C47;border:1px solid #fff;white-space:normal;text-align:center;flex-shrink:0}
+.senior-studio .btn-outline:hover{background:#DFF1EB}
+.senior-milestone-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:19px 0 18px}
+.senior-milestone-chip{display:flex;align-items:center;gap:8px;min-height:48px;padding:9px 10px;border:1px solid #718B9B;border-radius:9px;color:#EDF8F7;background:rgba(255,255,255,.06);font-size:.75rem;font-weight:650;line-height:1.4}
+.senior-milestone-chip small{display:inline-grid;place-items:center;flex-shrink:0;border-radius:99px;width:24px;height:24px;background:#B4DED7;color:#173E46;font-size:.71rem;font-weight:850}
+.senior-bridge{background:rgba(255,255,255,.06);border:1px solid #5A7F8B;border-radius:10px;margin:15px 0 10px;padding:12px 15px}
+.senior-bridge summary{cursor:pointer;color:#F3FAFA;font-size:.88rem;font-weight:750;line-height:1.5}
+.senior-bridge p{color:#E1EDEE;padding-top:5px;margin:9px 0}
+.senior-bridge .btn{margin:5px 0 7px}
+.senior-bridge summary:focus-visible{outline:3px solid #FFE69A;outline-offset:4px}
+.senior-portfolio{background:#F2F7FA;border:1px solid #BDD0DE;border-top:4px solid #275F7B;border-radius:13px;padding:20px;margin:18px 0 23px}
+.senior-portfolio h3{font:760 1.12rem/1.35 var(--brand-body);color:#1F3E56;margin:7px 0 10px}
+.senior-portfolio p{font-size:.88rem;color:#3D5869;line-height:1.6}
+.senior-portfolio-progress{background:#E0F0EE;border-radius:8px;padding:10px 13px;color:#1C5556!important;font-weight:730}
+.senior-portfolio-checklist{display:grid;grid-template-columns:1fr;gap:9px;margin:14px 0}
+.senior-portfolio-check{display:flex;gap:13px;align-items:flex-start;border:1px solid #C9D9E1;background:#fff;border-radius:10px;padding:12px 13px;color:#315063;font-size:.87rem;line-height:1.6;cursor:pointer}
+.senior-portfolio-check:hover{border-color:#7DB5B9}
+.senior-portfolio-check input{flex:0 0 auto;width:19px;height:19px;margin:2px 0 0;accent-color:#1E6B6F}
+.senior-portfolio-check input:focus-visible{outline:3px solid #A45434;outline-offset:3px}
+.senior-portfolio-check strong{display:block;color:#1D4C5D;margin-bottom:3px}
+@media(max-width:920px){
+ .grade-entry-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .senior-milestone-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .senior-studio-heading{flex-direction:column}
+ .senior-studio .btn-outline{max-width:100%}
+}
+@media(max-width:620px){
+ .grade-entry-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .senior-studio{padding:19px 16px;margin-bottom:22px}
+ .senior-milestone-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .senior-milestone-chip{min-height:42px}
+ .senior-portfolio{padding:16px 13px}
+}
+@media(max-width:365px){.grade-entry-grid{grid-template-columns:1fr}}
