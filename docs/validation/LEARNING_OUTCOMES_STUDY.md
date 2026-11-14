@@ -1,14 +1,14 @@
 # AISG Capacity × Judgement — Evaluation of Student Learning
 
 **Version:** Study protocol v1, 14 November 2026  
-**Purpose:** Determine whether Grades 6–10 students develop AI understanding, evidence-based reasoning, responsible judgement and independent transfer—not whether they can click through the course.  
+**Purpose:** Determine whether Grades 6–12 students develop AI understanding, evidence-based reasoning, responsible judgement and independent transfer—not whether they can click through the course.  
 **Status:** **Study instruments and analysis preparation only. No students have been assessed, no scores collected and no evidence of improvement is claimed.**
 
 ## 1. Two distinct phases
 
 ### A. Feasibility, usability and safeguarding pilot
 
-Use **10 students: two from each Grade 6–10**, with school approval and varied language, accessibility and prior experience. Run a 45–60-minute observation session on an appropriate module, with longer follow-up for capstones. Measure confusion, usability barriers, emotional safety, tool suitability and whether the student can explain an unfamiliar transfer example.
+Use **10 students: two from each Grade 6–12**, with school approval and varied language, accessibility and prior experience. Run a 45–60-minute observation session on an appropriate module, with longer follow-up for capstones. Measure confusion, usability barriers, emotional safety, tool suitability and whether the student can explain an unfamiliar transfer example.
 
 **Do not use this small exploratory pilot as statistical evidence of improved learning outcomes.**
 
@@ -111,3 +111,10 @@ Do not set an arbitrary universal "10/10" or require all learners to show the sa
 - [ ] Revision cycle and re-test schedule approved.
 
 **No learning study has been executed at the time of this document.**
+## Grade 11–12 senior evaluation extension
+
+The G11/12 curriculum requires evidence beyond a short factual check. For DP1, independently assess how students explain model mechanisms, design reproducible tests, identify uncertainty, and justify human/AI system architecture. For DP2, independently assess a research-and-design portfolio's evidence, stakeholder involvement, revision, accountable non-use or deployment decision and oral defence.
+
+The parallel Grade 11–12 forms in `PARALLEL_ASSESSMENT_FORMS.md` target these competencies. Counterbalance versions A/B as at earlier grades, reserve T2 for unfamiliar transfer, and allow accessible expression, bilingual support and teacher moderation without allowing assistance to replace independent reasoning. Use a separate extended capstone review and stakeholder feedback; it must not be conflated with the short pre/post rubric.
+
+The offline study analysis now accepts Grades 6–12, but the public demo collects no students' scores. School approval, a suitable sample and external validity are still required before claiming improved outcomes.
