@@ -4,6 +4,21 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## UX excellence — responsive and accessibility validation (November 2026)
+
+The latest learner experience includes usability improvements and **real browser quality checks**:
+
+- Shared lesson URLs retain the intended module through first-time grade selection and entry.
+- Mobile navigation adapts at 320px and includes the comfortable-reading option.
+- The Skip to main content control safely focuses the page without affecting lesson URLs.
+- Students can copy or download **application notes** as a private text file. Editing notes marks them as unsaved, so browsers can warn before refresh or exit; free-text remains outside the stored progress record.
+- Mobile lesson stages give swipe guidance, keep the current stage visible and avoid duplicating a disabled Next button on the first teaching screen.
+- Accessibility fixes include legible footer text, visible-content-based accessible names for lesson cards, navigation and the learner journey panel.
+- [Cross-device browser suite](tests/e2e/learner.spec.mjs): real Chromium tests at 320px, 375px, 768px and 1440px, with keyboard navigation, deep links, full authentic lesson, download, accessibility checks and visual screenshots.
+- [UX Excellence Gates](docs/UX_EXCELLENCE_GATES.md): proposed measurable acceptance criteria and a ten-student pilot to validate an exceptional learning experience.
+
+The resource remains a **formative prototype**, not an authenticated or teacher-assessed learning management system. Browser checks complement—but do not replace—manual accessibility review and student observation.
+
 ## November 2026 — Student journey and cross-page UX refinement (v14)
 
 The latest release strengthens the full experience, not just the homepage:
