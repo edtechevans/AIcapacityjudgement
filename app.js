@@ -13,8 +13,10 @@ const esc=(value)=>String(value??"").replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"
 function saved(key){try{return JSON.parse(localStorage.getItem(key))||{}}catch(_){return {}}}
 const legacy=saved(OLD_KEY);
 const previously=saved(KEY);
-const defaults={name:"",grade:6,track:"all",records:{},diagnostics:{},legacyDone:legacy.done||{},reading:"standard",page:"welcome",lessonId:""};
+const defaults={name:"",grade:6,gradeChosen:false,track:"all",records:{},diagnostics:{},legacyDone:legacy.done||{},reading:"standard",page:"welcome",lessonId:""};
 const state=Object.assign({},defaults,previously);
+// Existing learners keep their previously selected grade.
+state.gradeChosen=typeof previously.gradeChosen==="boolean"?previously.gradeChosen:!!previously.name;
 state.records=state.records||{};
 state.diagnostics=state.diagnostics||{};
 state.legacyDone=state.legacyDone||{};
@@ -24,14 +26,14 @@ Object.entries(state.records).forEach(([id,r])=>{if(r&&r.completed&&!r.knowledge
 state.grade=Object.prototype.hasOwnProperty.call(GRADES,String(state.grade))?+state.grade:+Object.keys(GRADES)[0];
 state.track=["all","capacity","judgement"].includes(state.track)?state.track:"all";
 state.reading=["standard","comfortable"].includes(state.reading)?state.reading:"standard";
-state.page=state.name?"home":"welcome";
+state.page=state.gradeChosen?"home":"welcome";
 let practice={};
 let diagnosticRun=null;
 let notice="";
 let confirmClear=false;
 let pendingSharedLesson="";
 function showNotice(message){notice=message;const el=$("#global-announcer");if(el){el.textContent=message;el.classList?.add("is-visible");}}
-function persist(){try{const data={schemaVersion:STORAGE_SCHEMA,name:state.name,grade:state.grade,track:state.track,reading:state.reading,records:state.records,diagnostics:state.diagnostics,legacyDone:state.legacyDone};localStorage.setItem(KEY,JSON.stringify(data))}catch(_){notice="Progress cannot be saved in this browser. Avoid private or restricted browsing modes.";}}
+function persist(){try{const data={schemaVersion:STORAGE_SCHEMA,name:state.name,grade:state.grade,gradeChosen:state.gradeChosen,track:state.track,reading:state.reading,records:state.records,diagnostics:state.diagnostics,legacyDone:state.legacyDone};localStorage.setItem(KEY,JSON.stringify(data))}catch(_){notice="Progress cannot be saved in this browser. Avoid private or restricted browsing modes.";}}
 if(migratedLegacy)persist();
 function count(grade){const a=LESSONS.filter(l=>l.grade===+grade);return {done:a.filter(l=>state.records[l.id]?.completed).length,total:a.length}}
 function summary(grade){const k=count(grade);return Math.round(k.done/k.total*100)}
@@ -65,7 +67,7 @@ function mobileMenu(){
  item("home","Home")+item("courses","My courses")+item("snapshot","My learning")+item("about","The idea")+item("profile","My profile")+
  '<button type="button" data-action="reading" aria-pressed="'+(state.reading==="comfortable")+'">'+(state.reading==="comfortable"?"Standard reading size":"Larger reading size")+'</button></nav></details>';
 }
-function nav(){const comfort='<button class="comfort-toggle" data-action="reading" aria-pressed="'+(state.reading==="comfortable")+'" title="Toggle comfortable reading size" aria-label="'+(state.reading==="comfortable"?"Use standard text size":"Use larger text for reading")+'">Aa</button>';const item=(page,label)=>'<button class="navlink '+(state.page===page?"active":"")+'" data-action="'+page+'" '+(state.page===page?'aria-current="page"':'')+'>'+label+'</button>';return '<header class="topbar"><a href="#/home" class="brand" data-action="home">'+BRAND_MARK+'<span class="brand-wordmark"><strong>AI Capacity <i>×</i> Judgement</strong><small>Learning Studio</small></span><span class="brand-wordmark-short">AI C<span>×</span>J</span><span class="sr-only">Home</span></a><nav class="top-actions" aria-label="Primary navigation">'+(state.name?item("home","Home")+item("courses","My courses")+item("snapshot","My learning")+item("about","The idea")+comfort+'<button class="avatar" data-action="profile" aria-label="Open learner profile">'+esc(state.name[0]||"L").toUpperCase()+'</button>':'<button class="btn btn-small" data-action="enter">Get started →</button>')+'</nav>'+(state.name?mobileMenu():"")+'</header>';}
+function nav(){const comfort='<button class="comfort-toggle" data-action="reading" aria-pressed="'+(state.reading==="comfortable")+'" title="Toggle comfortable reading size" aria-label="'+(state.reading==="comfortable"?"Use standard text size":"Use larger text for reading")+'">Aa</button>';const item=(page,label)=>'<button class="navlink '+(state.page===page?"active":"")+'" data-action="'+page+'" '+(state.page===page?'aria-current="page"':'')+'>'+label+'</button>';return '<header class="topbar"><a href="'+(state.gradeChosen?"#/home":"#/welcome")+'" class="brand" data-action="'+(state.gradeChosen?"home":"enter")+'">'+BRAND_MARK+'<span class="brand-wordmark"><strong>AI Capacity <i>×</i> Judgement</strong><small>Learning Studio</small></span><span class="brand-wordmark-short">AI C<span>×</span>J</span><span class="sr-only">Home</span></a><nav class="top-actions" aria-label="Primary navigation">'+(state.gradeChosen?item("home","Home")+item("courses","My courses")+item("snapshot","My learning")+item("about","The idea")+comfort+'<button class="avatar" data-action="profile" aria-label="Open learner profile">'+esc(state.name[0]||"L").toUpperCase()+'</button>':'<button class="btn btn-small" data-action="enter">Choose grade →</button>')+'</nav>'+(state.gradeChosen?mobileMenu():"")+'</header>';}
 function foot(){return '<footer class="footer"><div class="row">'+BRAND_MARK+'<span class="footer-signature"><strong>AI Capacity × Judgement</strong><small>Growing capacity. Practising judgement.</small></span></div><span class="license">© 2026 Tim Evans · CC BY-NC-SA 4.0</span></footer>';}
 function grades(){return '<div class="grade-grid">'+Object.entries(GRADES).map(([g,x])=>'<button class="grade-card '+(+g===state.grade?"selected":"")+'" data-grade="'+g+'" aria-label="Open Grade '+g+' courses"><b>'+g+'</b><strong>'+esc(x.headline)+'</strong><span>'+esc(x.subtitle)+'</span></button>').join("")+'</div>';}
 function linkLesson(l,why){const record=state.records[l.id]||{},started=hasLearningCheckpoint(record),previously=!!state.legacyDone[l.id]&&!record.completed&&!started,stage=previously?"Previously explored":stageName(record),st=STRANDS.find(s=>s.id===l.strand),action=record.completed?"Revisit":started?"Continue":"Explore";return '<button type="button" class="lesson-card track-'+l.track+'" data-lesson="'+l.id+'"><div class="lesson-tag"><span>'+esc(st.id)+' · '+esc(st.name)+'</span><span class="lesson-status '+(record.completed?"complete":previously?"legacy":started?"in-progress":"")+'">'+(record.completed?"✓ ":"")+stage+'</span></div><h3>'+esc(l.title)+'</h3><p>'+esc(l.objective)+'</p>'+(why?'<p class="recommend-reason">'+esc(why)+'</p>':"")+'<div class="end"><span>'+trackLabel(l.track)+'</span><span aria-hidden="true">'+action+' module ↗</span></div></button>';}
@@ -351,7 +353,24 @@ async function importProgress(file){
  }catch(_){notice="We couldn't read that progress file. Your existing progress is unchanged.";render();}
 }
 
-function welcome(){return '<main id="main-content" class="welcome-panel page"><div class="welcome-brand">'+BRAND_MARK+'<span>THE LEARNING STUDIO</span></div><div class="eyebrow" style="margin-top:18px">AI Capacity × Judgement · Learning Studio</div><h1 id="main-title" tabindex="-1">Think bigger.<br>Choose wisely.</h1><p>Build skills to use AI well, and the judgement to know when, why and whether to use it.</p><div class="auth-selection"><div class="eyebrow">Step 1 · Choose your grade</div><div class="welcome-grades" role="group" aria-label="Choose your grade">'+Object.keys(GRADES).map(g=>'<button class="welcome-grade '+(state.grade===+g?"selected":"")+'" data-action="pick-grade" data-pick="'+g+'" aria-pressed="'+(state.grade===+g)+'">Grade '+g+'</button>').join("")+'</div><p class="welcome-stage">Grade '+state.grade+' · '+esc(GRADES[state.grade].headline)+'</p>'+(pendingSharedLesson&&LESSON_BY_ID[pendingSharedLesson]?.grade===state.grade?'<p class="welcome-deeplink">A lesson was shared with you: <strong>'+esc(LESSON_BY_ID[pendingSharedLesson].title)+'</strong>. Continue to open it.</p>':"")+'<div class="field"><label for="guest-name">Step 2 · Display alias <span class="muted">(optional)</span></label><input maxlength="40" id="guest-name" placeholder="Learner" autocomplete="off" aria-describedby="alias-help"><p id="alias-help" class="field-help">Use a nickname, not your full name. This is a local preview, not a school login.</p></div><button class="btn" data-action="guest" style="width:100%">Explore Grade '+state.grade+' courses →</button><p class="privacy-note">No school account · Progress stays on this device · No cloud sync</p></div></main>';}
+function welcome(){
+ const linked=pendingSharedLesson&&LESSON_BY_ID[pendingSharedLesson];
+ return '<main id="main-content" class="welcome-panel grade-entry page">'+
+ '<div class="welcome-brand">'+BRAND_MARK+'<span>THE LEARNING STUDIO</span></div>'+
+ '<div class="eyebrow">AI Capacity × Judgement</div>'+
+ '<h1 id="main-title" tabindex="-1">Your grade. Your learning.</h1>'+
+ '<p class="grade-entry-intro">Choose your grade to explore AI Capacity and AI Judgement through learning designed for you.</p>'+
+ (linked?'<p class="welcome-deeplink" role="status">A Grade '+linked.grade+' lesson was shared with you: <strong>'+esc(linked.title)+'</strong>. Choose Grade '+linked.grade+' to open it.</p>':"")+
+ '<div class="grade-entry-grid" role="group" aria-label="Choose your grade">'+Object.entries(GRADES).map(([g,details])=>
+ '<button type="button" class="grade-entry-card" data-action="pick-grade" data-pick="'+g+'" aria-label="Enter Grade '+g+': '+esc(details.headline)+'">'+
+ '<span class="grade-entry-number">Grade <strong>'+g+'</strong></span>'+
+ '<strong class="grade-entry-title">'+esc(details.headline)+'</strong>'+
+ '<span class="grade-entry-description">'+esc(details.subtitle)+'</span>'+
+ '<span class="grade-entry-arrow">Explore Grade '+g+' <span aria-hidden="true">↗</span></span></button>').join("")+'</div>'+
+ '<p class="grade-entry-footnote">One grade at a time · Six modules per grade · Two connected pathways</p>'+
+ '<p class="privacy-note grade-entry-privacy">Public preview: your selection is saved only in this browser. School login and verified grade access are not yet enabled.</p>'+
+ '</main>';
+}
 function render(focus,targetId="main-title"){if(document.documentElement?.dataset)document.documentElement.dataset.reading=state.reading;$("#app").innerHTML='<div class="site"><button type="button" class="skip-link" data-action="skip-main">Skip to main content</button>'+nav()+(state.page==="welcome"?welcome():state.page==="home"?home():state.page==="courses"?courses():state.page==="diagnostic"?diagnostic():state.page==="snapshot"?snapshot():state.page==="lesson"?lesson():state.page==="about"?about():profile())+foot()+'<div id="global-announcer" class="site-toast '+(notice?"is-visible":"")+'" role="status" aria-live="polite">'+esc(notice)+'</div></div>';
 const track=$(".step-track");
 if(track?.querySelector){
