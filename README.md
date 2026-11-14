@@ -4,6 +4,14 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## v18 — Responsive formative feedback and learner choice (November 2026)
+
+Students can now choose among **Work it out**, **Use a clue**, and **Go further** during each of the 30 Grade 6–10 practice activities. The support path connects the lesson's authored hint, success criterion and worked example; stretch offers an optional, authentic deeper challenge and a transfer cue. Incorrect choices lead to item-specific corrective feedback, and an unsuccessful attempt suggests (but never forces) support. A successful selected-response check suggests extension.
+
+This is **transparent, rule-based, teacher-authored coaching**, not AI grading or automated evaluation of student writing. Learners are never assigned fixed ability labels; free-text remains within the current browser tab and is not saved with progress. Completion continues to require application and reflection. See [Adaptive Feedback Design](docs/ADAPTIVE_FEEDBACK_DESIGN.md) and the [engineering release gates](docs/ENGINEERING_LEARNING_QUALITY_PLAN.md).
+
+New Node regression checks exercise wrong-answer recovery in all 30 modules; a Playwright test validates the learner-choice UI. Cross-browser CI has been configured, but source-level implementation and simulated journeys do not replace verified CI runs, a formal accessibility review or classroom trials.
+
 ## Learning depth — expert-informed instructional upgrade (November 2026)
 
 Every Grades 6–10 learning module now includes **clear success criteria, a worked-example noticing prompt, targeted optional support, a stretch challenge and a transfer task**. The 30 individually authored learning scaffolds are maintained in [`content/learning-scaffolds.js`](content/learning-scaffolds.js).
