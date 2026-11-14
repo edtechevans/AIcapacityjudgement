@@ -4,6 +4,21 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## November 2026 — Student journey and cross-page UX refinement (v14)
+
+The latest release strengthens the full experience, not just the homepage:
+
+- The entire **Your Journey** card is now a genuine accessible link to the correct first, unfinished or review lesson.
+- The hero says **“Learn what AI can do, when it helps, and how to use it thoughtfully in real situations.”**
+- **My Learning** shows Capacity and Judgement practice progress **even without** the optional six-question starting check-in.
+- Course recommendations distinguish starting, resuming and reviewing, with content-derived counts.
+- Lesson progress reflects **stages completed**, and focus moves to the next stage or feedback for clearer keyboard and screen-reader navigation.
+- The **About** page explains the two pathways and learning sequence before presenting the quadrant as an optional conversation tool.
+- Profile clearing now requires explicit confirmation; the backup import control and feedback messages have been refined.
+- Responsive styling supports the new content and the two-step privacy confirmation.
+
+See the [cross-page UX audit and validation notes](docs/UX_AUDIT_2026-11-14.md). The automated suite exercises all 30 learning modules and each main page, but the public static prototype still needs a live visual/accessibility audit and moderated student testing before claiming production-grade readiness.
+
 ## The Intersection — a refreshed identity (November 2026)
 
 The Learning Studio now has a **complete, original visual identity**. Its symbol represents two distinct pathways—AI Capacity (aqua) and AI Judgement (coral)—meeting at a considered choice. The identity avoids generic AI imagery while remaining recognisable from a 16px favicon to a presentation-size social graphic.
