@@ -572,7 +572,7 @@ function welcome(){
  '<p class="privacy-note grade-entry-privacy">Public preview: your selection is saved only in this browser. School login and verified grade access are not yet enabled.</p>'+
  '</main>';
 }
-function render(focus,targetId="main-title"){if(document.documentElement?.dataset)document.documentElement.dataset.reading=state.reading;$("#app").innerHTML='<div class="site"><button type="button" class="skip-link" data-action="skip-main">Skip to main content</button>'+nav()+(state.page==="welcome"?welcome():state.page==="home"?home():state.page==="courses"?courses():state.page==="diagnostic"?diagnostic():state.page==="snapshot"?snapshot():state.page==="lesson"?lesson():state.page==="about"?about():profile())+foot()+'<div id="global-announcer" class="site-toast '+(notice?"is-visible":"")+'" role="status" aria-live="polite">'+esc(notice)+'</div></div>';
+function render(focus,targetId="main-title"){if(document.documentElement?.dataset)document.documentElement.dataset.reading=state.reading;$("#app").innerHTML='<div class="site"><button type="button" class="skip-link" data-action="skip-main">Skip to main content</button>'+nav()+(state.page==="welcome"?welcome():state.page==="home"?home():state.page==="courses"?courses():state.page==="diagnostic"?diagnostic():state.page==="snapshot"?snapshot():state.page==="lesson"?lesson():state.page==="about"?about():state.page==="curriculum"?publicCurriculum({grade:curriculumView.grade,strand:curriculumView.strand,escape:esc,gradeChosen:state.gradeChosen,assignedGrade:state.grade}):profile())+foot()+'<div id="global-announcer" class="site-toast '+(notice?"is-visible":"")+'" role="status" aria-live="polite">'+esc(notice)+'</div></div>';
 const track=$(".step-track");
 if(track?.querySelector){
   const active=track.querySelector(".step-dot.active");
@@ -581,11 +581,12 @@ if(track?.querySelector){
     track.scrollLeft=Math.max(0,left);
   }
 }
-const mainElement=$("#main-content");if(mainElement)mainElement.tabIndex=-1;const pageTitle=state.page==="lesson"?(currentLesson()?.title||"Lesson"):state.page==="courses"?"Grade "+state.grade+" courses":state.page==="snapshot"?"My learning":state.page==="diagnostic"?"Starting snapshot":state.page==="profile"?"My profile":state.page==="about"?"About the approach":state.page==="home"?"Home":"Learning Studio";document.title=pageTitle+" · AI Capacity × Judgement";if(focus){const main=$("#"+targetId)||$("#main-title");if(main)main.focus({preventScroll:true})}}
+const mainElement=$("#main-content");if(mainElement)mainElement.tabIndex=-1;const pageTitle=state.page==="lesson"?(currentLesson()?.title||"Lesson"):state.page==="courses"?"Grade "+state.grade+" courses":state.page==="snapshot"?"My learning":state.page==="diagnostic"?"Starting snapshot":state.page==="profile"?"My profile":state.page==="about"?"About the approach":state.page==="curriculum"?"Curriculum and progression":state.page==="home"?"Home":"Learning Studio";document.title=pageTitle+" · AI Capacity × Judgement";if(focus){const main=$("#"+targetId)||$("#main-title");if(main)main.focus({preventScroll:true})}}
 function routePath(page){if(page==="courses")return "/grade/"+state.grade+(state.track!=="all"?"/"+state.track:"");if(page==="snapshot")return "/grade/"+state.grade+"/snapshot";if(page==="diagnostic")return "/grade/"+state.grade+"/check-in";if(page==="lesson")return "/lesson/"+state.lessonId;return "/"+(page==="welcome"?"welcome":page);}
 function writeRoute(replace){const url="#"+routePath(state.page);if(!window.location||window.location.hash===url)return;if(window.history&&typeof window.history.pushState==="function"){window.history[replace?"replaceState":"pushState"]({},"",url);}else{window.location.hash=url;}}
 function readRoute(){
  const hash=window.location?.hash||"";
+ if(hash==="#/curriculum"){state.page="curriculum";return true;}
  if(!state.gradeChosen||!hash.startsWith("#/"))return false;
  const path=hash.slice(1);
  const allowed=v=>Object.prototype.hasOwnProperty.call(GRADES,String(v));
@@ -614,7 +615,7 @@ function readRoute(){
  if(["/home","/about","/profile"].includes(path)){state.page=path.slice(1);return true;}
  return false;
 }
-function goto(page,opts={}){if(!state.gradeChosen&&page!=="welcome")page="welcome";if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();if(page!=="profile")confirmClear=false;state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});}
+function goto(page,opts={}){if(!state.gradeChosen&&!["welcome","curriculum"].includes(page))page="welcome";if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();if(page!=="profile")confirmClear=false;state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});}
 function gradeTo(g){
  if(!Object.prototype.hasOwnProperty.call(GRADES,String(g)))return;
  if(state.gradeChosen&&state.grade!==+g){showNotice("You are viewing Grade "+state.grade+". Use Change grade in your profile to return to the preview selector.");return;}
@@ -667,7 +668,7 @@ if(t.dataset.grade){gradeTo(t.dataset.grade);return;}
 if(t.dataset.lesson){openLesson(t.dataset.lesson);return;}
 const action=t.dataset.action;
 if(action==="skip-main"){const main=$("#main-content");if(main?.focus)main.focus({preventScroll:true});return}
-if(["home","courses","about","snapshot","profile"].includes(action)){goto(action);return}
+if(["home","courses","about","curriculum","snapshot","profile"].includes(action)){goto(action);return}
 if(action==="enter"){goto("welcome");return}
 if(action==="pick-grade"){gradeTo(t.dataset.pick);return}
 // Backward-compatible action for older local tests; no extra welcome step is displayed.
@@ -756,7 +757,7 @@ if(t.id==="practice-reason"){getPractice(state.lessonId).reason=t.value.slice(0,
 if(t.dataset?.planField){const w=getPractice(state.lessonId);if(!w.fields)w.fields={};w.fields[t.dataset.planField]=t.value.slice(0,2000);w.notesDirty=true;updateProjectButton();return}
 if(t.dataset?.reflectField){const w=getPractice(state.lessonId);if(!w.reflection)w.reflection={};w.reflection[t.dataset.reflectField]=t.value.slice(0,2000);w.notesDirty=true;updateReflectionButton();return}
 });
-function syncHistory(){if(!state.gradeChosen){state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
+function syncHistory(){if(!state.gradeChosen){if(!readRoute())state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
 window.addEventListener("beforeunload",e=>{
  if(Object.values(practice).some(w=>w?.notesDirty)){
   e.preventDefault();e.returnValue="";
@@ -768,7 +769,7 @@ if(state.gradeChosen){if(!readRoute()||state.page==="welcome")state.page="home";
 const shared=initialHash.match(/^#\/lesson\/(\d+)-([A-Z]\d+)$/);
 if(shared&&LESSON_BY_ID[shared[1]+"-"+shared[2]]){pendingSharedLesson=shared[1]+"-"+shared[2];state.grade=+shared[1];}
 else{const requested=initialHash.match(/^#\/(?:grade\/|lesson\/)(\d+)/);if(requested&&GRADES[requested[1]])state.grade=+requested[1];}
-state.page="welcome";}
+state.page=initialHash==="#/curriculum"?"curriculum":"welcome";}
 if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};
 render();
 })();
