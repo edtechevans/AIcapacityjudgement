@@ -1,4 +1,4 @@
-# Parallel AI Learning Assessment Tasks — Grades 6–10
+# Parallel AI Learning Assessment Tasks — Grades 6–12
 
 **Use:** Independent, grade-specific pre (T0), post (T1) and delayed transfer (T2) performance assessments. **Status: Draft; not piloted, calibrated or administered.**
 
@@ -116,3 +116,28 @@ A neighbourhood group wants an AI-assisted emergency-information resource. It mu
 - Moderation outcome (after independent rating): ____
 
 These items need moderation and pilot calibration to demonstrate equivalence before interpreting improvement. A student can reason well while choosing *not* to use AI. Strong conclusions clearly distinguish observed evidence from uncertainty.
+---
+
+## Grade 11 — Investigate and architect
+
+### Form A: A model with an impressive benchmark
+A fictional school accessibility assistant achieves 93% agreement with its reference labels in ordinary English-language queries, but new users with different language or access needs were underrepresented in the evaluation. The vendor requests approval for a schoolwide pilot. Apply the four assessment questions: explain the system components and possible distribution shift; design representative held-out tests and error-cost analysis; choose safeguards or a non-AI alternative; and propose a reproducible evaluation card with a condition that would stop deployment.
+
+### Form B: A successful demo with unseen failures
+A fictional public-information model performs well in four familiar benchmark cases but is inconsistent with an unfamiliar multilingual request and a person using assistive technology. A sponsor says this shows the model is ready for high-impact use. Apply the same questions: map components and human decisions, test shifting context, compare baselines and recommend an accountable pilot or non-use choice with honest limitations.
+
+### T2 delayed: Source provenance and architectural failure
+A research agent produces six apparently corroborating reports, but five trace to one unchecked source and the sixth to a separate small study. Design a provenance audit and verified publication workflow, identify meaningful independent evidence and propose fail-safe recovery when the original source cannot be located.
+
+## Grade 12 — Create and steward
+
+### Form A: Community service information system
+A community organisation needs an accessible multilingual information service but an AI-powered system has already published an incorrect eligibility message. Apply the four questions: explain what failed, design an independent evaluation and humane correction, compare AI/non-AI options, and sketch a revised service with stakeholder consultation, tests and a defensible stop-or-restart decision.
+
+### Form B: Public-interest project under pressure
+A student team creates a prototype for community translation and navigation. The initial AI-supported version looks polished but produces unverified local details and fails for a screen-reader user. Apply the four questions: investigate architecture and evidence, define accountable alternatives, produce a user-centred revision plan and explain what would demonstrate genuine improvement rather than appearance.
+
+### T2 delayed: Governance incident and oral defence
+A fictional automated allocation system wrongly excludes a family, and the operator proposes to conceal the error. Design a stakeholder-informed incident response, accessible explanation, appeal and remedy, independent review and evidence needed to consider restarting. Defend your choices against a counterargument prioritising speed.
+
+**Senior scoring note:** Use the same four dimensions at more demanding age-relative criteria, plus a separately moderated portfolio and oral defence for authentic projects. Participation, high vocabulary, presentation polish and use of sophisticated AI features do not independently demonstrate transferable learning.
