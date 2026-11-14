@@ -661,3 +661,47 @@ test("all 30 applications show a distinct investigation and capstone evidence wh
   }
  }
 });
+
+
+test("every lesson has a credible unseen transfer task and realistic offline classroom plan",()=>{
+ assert.equal(Object.keys(DATA.UNSEEN_TRANSFER).length,30);
+ for(const l of DATA.LESSONS){
+  const p=DATA.classroomPlan(l);
+  assert.match(p.time,/minutes|sessions/,l.id+" lacks time range");
+  assert.ok(p.offline.length>40,l.id+" lacks a usable offline option");
+  assert.ok(p.prepare.length>35,l.id+" lacks a teacher preparation note");
+  assert.ok(p.transfer.length>75,l.id+" has an underspecified transfer task");
+  assert.notEqual(p.transfer,DATA.INQUIRY_BRIEFS[l.id].transfer,l.id+" transfer must be unfamiliar");
+ }
+ for(const key of ["mechanism","evidence","judgement","creation"])assert.ok(DATA.TEACHER_RUBRIC[key].applying.length>45);
+});
+test("Grade 7 lab accepts adjustable training examples and feature weighting without saving choices",async()=>{
+ const h=app();await h.click({action:"pick-grade",pick:"7"});await reachPractice(h,"7-A1");
+ await h.click({action:"lab-mode",mode:"skewed"});
+ assert.match(h.html,/2 training examples/);
+ await h.click({action:"lab-adjust",setting:"oakShade",value:"1"});
+ assert.match(h.html,/3 training examples/);
+ await h.click({action:"lab-adjust",setting:"mapleBright",value:"1"});
+ assert.match(h.html,/4 training examples/);
+ await h.click({action:"lab-adjust",setting:"lightingWeight",value:"0"});
+ assert.match(h.html,/lighting 0 times/);
+ h.input({dataset:{labObservation:"true"},value:"These changed the predictions on the same new cases."});
+ assert.ok(!JSON.stringify(h.storage).includes("These changed the predictions"));
+ assert.ok(!JSON.stringify(h.storage).includes("oakShade"));
+});
+test("unseen transfer and age-relative evidence criteria are distinct from automated scores",async()=>{
+ const h=app();await h.click({action:"pick-grade",pick:"10"});
+ await h.click({lesson:"10-A3"});
+ assert.match(h.html,/Facilitator resources/);
+ assert.match(h.html,/4 × 70-minute sessions/);
+ const l=DATA.LESSONS.find(x=>x.id==="10-A3"),k=DATA.KNOWLEDGE[l.id],a=DATA.ACTIVITIES[l.id];
+ await h.click({action:"concept-next"});await h.click({action:"concept-next"});
+ h.change({name:"knowledge-choice",value:String(k.check[2])});await h.click({action:"knowledge-check"});await h.click({action:"next"});
+ await h.click({action:"model-reveal"});await h.click({action:"next"});await exploreLab(h,l.id);
+ const order=a.start.slice();for(let n=0;n<a.steps.length;n++){let j=order.indexOf(n);while(j>n){await h.click({action:"move",index:String(j),dir:"-1"});[order[j],order[j-1]]=[order[j-1],order[j]];j--;}}
+ await h.click({action:"check"});await h.click({action:"next"});
+ assert.match(h.html,/Teacher-reviewed learning evidence/);
+ assert.match(h.html,/What meaningful evidence could look like/);
+ assert.match(h.html,/Journey steps 3 of 5/);
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records[l.id].completed,false,"A prepared rubric is not automatic mastery");
+});
