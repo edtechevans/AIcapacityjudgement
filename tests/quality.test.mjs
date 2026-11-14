@@ -609,3 +609,45 @@ test("all 30 modules recover from a wrong answer through optional coaching witho
  }
  assert.ok(!JSON.stringify(h.storage).includes("I made a plausible choice"),"The learner's explanation must remain in memory only");
 });
+
+
+test("five interactive laboratories work as real choices, and never save simulated results",async()=>{
+ const ids=["7-A1","8-B2","9-A1","9-B1","10-A3"];
+ for(const id of ids){
+  const h=app();
+  await h.click({action:"pick-grade",pick:id.split("-")[0]});
+  await reachPractice(h,id);
+  assert.match(h.html,/Interactive laboratory/,id+" needs the learning lab");
+  assert.match(h.html,/What this model cannot show/,id+" must explain its limits");
+  for(const [mode] of DATA.LEARNING_LABS[id].modes){
+   await h.click({action:"lab-mode",mode});
+   assert.match(h.html,/Laboratory observation/,id+" "+mode+" did not produce an observation");
+  }
+  assert.match(h.html,/Make sense of it/,id+" should require interpretation");
+  const stored=JSON.stringify(h.storage);
+  assert.ok(!stored.includes("labMode")&&!stored.includes("labModesSeen"),id+" lab choices should remain private in memory");
+  await h.click({action:"next"});
+  // Students still need to complete their selected-response check to advance.
+  assert.match(h.html,/Stage 3 of 5/,id+" lab observation alone must not certify practice");
+ }
+});
+test("all 30 applications show a distinct investigation and capstone evidence when relevant",async()=>{
+ for(const grade of [6,7,8,9,10]){
+  const h=app();await h.click({action:"pick-grade",pick:String(grade)});
+  for(const l of DATA.LESSONS.filter(x=>x.grade===grade)){
+   const id=l.id,k=DATA.KNOWLEDGE[id],a=DATA.ACTIVITIES[id];
+   await h.click({lesson:id});
+   await h.click({action:"concept-next"});await h.click({action:"concept-next"});
+   h.change({name:"knowledge-choice",value:String(k.check[2])});await h.click({action:"knowledge-check"});
+   await h.click({action:"next"});await h.click({action:"model-reveal"});await h.click({action:"next"});
+   if(a.kind==="sort")a.items.forEach((item,i)=>h.change({dataset:{sort:String(i)},value:String(item[1])}));
+   else if(a.kind==="sequence"){const order=a.start.slice();for(let n=0;n<a.steps.length;n++){let j=order.indexOf(n);while(j>n){await h.click({action:"move",index:String(j),dir:"-1"});const tmp=order[j];order[j]=order[j-1];order[j-1]=tmp;j--}}}
+   else{h.change({name:"activity-choice",value:String(a.correct)});h.input({id:"practice-reason",value:"This is a responsible choice because I can explain the evidence and its effect on the task."})}
+   await h.click({action:"check"});await h.click({action:"next"});
+   assert.match(h.html,/Authentic investigation/,id+" missing unique application");
+   assert.ok(h.html.includes(DATA.INQUIRY_BRIEFS[id].question),id+" inquiry question missing");
+   assert.ok(h.html.includes(DATA.INQUIRY_BRIEFS[id].evidence),id+" evidence missing");
+   if(DATA.CAPSTONE_GUIDES[id])assert.ok(h.html.includes(DATA.CAPSTONE_GUIDES[id].name),id+" capstone missing");
+  }
+ }
+});
