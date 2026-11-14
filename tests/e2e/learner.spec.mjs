@@ -105,6 +105,18 @@ test("complete an authentic lesson, download work and resume the final stage",as
   expect(download.suggestedFilename()).toBe("AI-CJ-6-A1-learning-notes.txt");
   await page.locator('[data-action="record"]').click();
   await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5");
+  await expect(page.locator('[data-action="finish-reflection"]')).toBeDisabled();
+  await expect(page.locator(".lesson-progress-heading")).toContainText("80% completed");
+  await page.locator("#reflection-learning").fill("I used to trust confident explanations. Comparing evidence and testing examples made me look for what is supported.");
+  await page.locator("#reflection-transfer").fill("Next time in science, I will check an AI explanation against a reliable source before sharing it.");
+  await page.locator("#reflection-confirm").check();
+  await expect(page.locator('[data-action="finish-reflection"]')).toBeEnabled();
+  await page.locator('[data-action="finish-reflection"]').click();
+  await expect(page.locator(".lesson-progress-heading")).toContainText("100% completed");
+  await expect(page.locator(".reflection-save")).toBeVisible();
+  const finalNotes=page.waitForEvent("download");
+  await page.locator(".reflection-save [data-action='download-notes']").click();
+  await finalNotes;
   const stageVisible=await page.evaluate(()=>{
     const track=document.querySelector(".step-track"),active=track?.querySelector(".step-dot.active");
     if(!track||!active)return false;
