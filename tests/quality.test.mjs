@@ -246,7 +246,8 @@ test("diagnostic can be completed and feedback remains growth-oriented",async()=
  assert.match(h.html,/aria-label="Check-in question progress"/);
  for(let i=0;i<6;i++){h.change({name:"diagnostic-choice",value:String(DATA.DIAGNOSTICS[6][i][3])});await h.click({action:"diag-next"});}
  assert.equal(h.hash,"#/grade/6/snapshot");
- assert.match(h.html,/Six starting choices suggest where you might practise next/);
+ assert.match(h.html,/Your six starting choices/);
+ assert.match(h.html,/They do not measure your overall ability/);
  assert.match(h.html,/The quadrant is a conversation tool, not a placement system/);
  assert.match(h.html,/Explore the foundations/);
  assert.doesNotMatch(h.html,/Capable but Unreflective/);
@@ -288,4 +289,36 @@ test("mobile, high-contrast and feedback UI refinements are present",()=>{
  const html=read("index.html");
  assert.ok(html.includes('name="viewport"'));
  assert.ok(html.includes("ui/identity.css"));
+});
+
+test("My learning always displays real practice even without a check-in",async()=>{
+ const completed={knowledgePassed:true,modelSeen:true,practicePassed:true,applied:true,completed:true,lastStage:4,lastOpenedAt:1000,attempts:1};
+ const seed={"aicj-studio-v2":JSON.stringify({name:"Learner",grade:6,records:{"6-A1":completed},diagnostics:{},legacyDone:{}})};
+ const h=app(seed);await h.click({action:"snapshot"});
+ assert.match(h.html,/Your learning is taking shape/);
+ assert.match(h.html,/Progress at a glance/);
+ assert.match(h.html,/1 of 6 modules practised/);
+ assert.match(h.html,/Curious where to focus next/);
+ assert.match(h.html,/You can start any lesson without taking the check-in/);
+ assert.match(h.html,/What could you try next/);
+ assert.doesNotMatch(h.html,/Your six starting choices/);
+});
+test("changing grades on Home keeps the learner on their dashboard",async()=>{
+ const h=app();await h.click({action:"guest"});await h.click({action:"home"});
+ h.change({id:"dashboard-grade",value:"8"});
+ assert.equal(h.hash,"#/home");
+ assert.match(h.html,/Your learning studio · Grade 8/);
+ assert.match(h.html,/All Grade 8 modules/);
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).grade,8);
+});
+test("completed lesson cards remain accessible and grade switching does not lose progress",async()=>{
+ const h=app();await h.click({action:"guest"});
+ await h.click({action:"track",track:"judgement"});
+ await h.click({action:"home"});
+ await h.click({lesson:"6-A1"});
+ await h.click({action:"courses"});
+ assert.match(h.html,/All 6 modules/);
+ await h.click({grade:"9"});
+ assert.equal(h.hash,"#/grade/9");
+ assert.match(h.html,/Grade 9:/);
 });
