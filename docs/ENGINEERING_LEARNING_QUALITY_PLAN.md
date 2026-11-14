@@ -1,5 +1,13 @@
 # Engineering and learning quality plan — November 2026
 
+## Phase 1 learning-engine implementation (v18, 14 November 2026)
+
+Implemented across all 30 modules: student-selected independent, supported and extension routes; error-specific feedback for classifications, sequences and selected alternatives; targeted hints and worked-model revisitation; adaptive *suggestions* after incorrect attempts and correct responses; and a strengthened distinction between checked answers and unassessed written reasoning.
+
+Implementation is purely client-side using existing teacher-authored learning scaffolds. No learner text, feedback or route choice is stored or transmitted. There is no model-based scoring, fixed learner classification or authenticated student tracking. See [Adaptive Feedback Design](ADAPTIVE_FEEDBACK_DESIGN.md).
+
+Added repeatable unit and browser regressions, including deliberately incorrect answers and successful retries across the 30-module matrix. Completion of a technical simulation is not a verified CI pass or evidence of student learning. The remaining roadmap below covers genuinely richer rubric feedback and school-approved architecture.
+
 ## What changed in this development pass
 
 - Added `tests/engineering.test.mjs`: curriculum integrity, 30 unique lesson identifiers, required instructional scaffolds, valid interaction data, explanatory answer feedback, and static-preview privacy guardrails.
