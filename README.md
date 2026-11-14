@@ -4,6 +4,16 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## Learning depth — expert-informed instructional upgrade (November 2026)
+
+Every Grades 6–10 learning module now includes **clear success criteria, a worked-example noticing prompt, targeted optional support, a stretch challenge and a transfer task**. The 30 individually authored learning scaffolds are maintained in [`content/learning-scaffolds.js`](content/learning-scaffolds.js).
+
+The learning sequence remains **Learn → Model → Practise → Apply → Reflect**. Importantly, **submitting an application no longer marks the module complete**: students must now reflect on changed understanding and a future use before recording completion. Writing, discussion and sketching are supported; free text remains private to the open browser tab and can be copied or downloaded. The system records completed *practice*, never verified mastery.
+
+Previously completed modules in a strand can also cue a brief, optional recall exercise when students work on the next grade's version. Spoken/visual projects can be described with shorter notes, keeping rigour in the learning criteria rather than typing volume.
+
+See the full [Learning Experience Review](docs/LEARNING_EXPERIENCE_REVIEW.md) for six specialist lenses, the pedagogical rationale and the student-validation plan. This is an **expert-informed audit**, not a claim that external specialists or students have endorsed the product.
+
 ## UX excellence — responsive and accessibility validation (November 2026)
 
 The latest learner experience includes usability improvements and **real browser quality checks**:
