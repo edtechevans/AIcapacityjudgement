@@ -137,7 +137,7 @@ function lessonSteps(){return ["Learn","Model","Practise","Apply","Reflect"];}
 function coachingOptions(l,w,r){
  const guide=LEARNING_SCAFFOLDS[l.id];
  const needsSupport=!!(w.feedback&&!w.feedback.passed)||(r.attempts||0)>=2&&!r.practicePassed;
- const suggested=r.practicePassed?"stretch":needsSupport?"support":"independent";
+ const suggested=needsSupport?"support":r.practicePassed?"stretch":"independent";
  const messages={support:"A smaller step may help: use a clue, then try the challenge again.",stretch:"You passed the selected-response check. Try applying the idea in a harder situation.",independent:"Start by making your own decision. You can request support at any time."};
  const choices=[["independent","Work it out"],["support","Use a clue"],["stretch","Go further"]];
  const selector='<div class="learning-coach-choices" role="group" aria-label="Choose your learning pathway">'+choices.map(([mode,label])=>'<button type="button" class="learning-coach-choice '+(w.coachMode===mode?"is-active":"")+'" data-action="coach-route" data-route="'+mode+'" aria-pressed="'+(w.coachMode===mode)+'">'+label+(suggested===mode?'<span class="learning-coach-suggested">Suggested</span>':"")+'</button>').join("")+'</div>';
@@ -482,7 +482,7 @@ if(t.name==="knowledge-choice"){const w=getPractice(state.lessonId);w.knowledgeA
 if(t.name==="activity-choice"){const w=getPractice(state.lessonId);w.selected=+t.value;w.checked=false;w.feedback=null;render();const selected=$('input[name="activity-choice"]:checked');if(selected?.focus)selected.focus();return}
 if(t.id==="import-progress"){const file=t.files?.[0];if(file)importProgress(file);return}
 if(t.id==="dashboard-grade"){if(!GRADES[t.value])return;state.grade=+t.value;state.track="all";persist();goto("home");return}
-if(t.dataset?.sort!==undefined){const w=getPractice(state.lessonId);w.sort[+t.dataset.sort]=t.value===""?undefined:+t.value;w.checked=false;w.feedback=null;return}
+if(t.dataset?.sort!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.sort;w.sort[i]=t.value===""?undefined:+t.value;w.checked=false;w.feedback=null;render();const choice=$("#sort-"+i);if(choice?.focus)choice.focus({preventScroll:true});return}
 if(t.id==="project-confirm"){const w=getPractice(state.lessonId);w.confirmed=!!t.checked;updateProjectButton();return}
 if(t.name==="reflection-mode"){const w=getPractice(state.lessonId);if(["written","spoken","visual"].includes(t.value))w.reflectionMode=t.value;render(true,"stage-title");return}
 if(t.id==="reflection-confirm"){const w=getPractice(state.lessonId);w.reflectionConfirmed=!!t.checked;updateReflectionButton();return}
