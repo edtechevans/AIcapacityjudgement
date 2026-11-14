@@ -120,6 +120,6 @@ test("critical accessibility defects are caught on the student learning pages",a
     const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]).analyze();
     const important=result.violations.filter(v=>["serious","critical"].includes(v.impact));
     const readable=important.map(v=>v.id+": "+v.nodes.slice(0,2).map(n=>n.target.join(",")).join(";")).join("\n");
-    expect(important, "Axe serious/critical findings on "+route+"\n"+readable).toEqual([]);
+    expect(readable,"Axe serious/critical findings on "+route).toBe("");
   }
 });
