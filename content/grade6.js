@@ -7,8 +7,8 @@ const KNOWLEDGE = {
       "When investigating an AI tool, name its task, describe one capability and identify a limitation. Check a real claim against a reliable independent source. A useful response explains what the system did, what you still do not know, and what evidence would help you decide whether to trust the result."
     ],
     "example": [
-      "It sounds sure, so the computer must understand the discovery.",
-      "Confident words do not establish understanding or truth. I would identify one factual claim, check it against a trustworthy science source and explain what the system cannot show."
+      "The answer sounds confident, so it must understand the discovery.",
+      "Confidence is not proof of truth or understanding. I will identify a claim and check it against a trustworthy science source before repeating it."
     ],
     "check": [
       "Why can a confident AI-generated answer still be wrong?",
@@ -47,8 +47,8 @@ const KNOWLEDGE = {
       "A learning prompt should help you develop understanding, not simply produce a finished assignment. If you already have a draft, use AI to ask questions about clarity rather than surrendering authorship. Check important information using your class materials or independent sources."
     ],
     "example": [
-      "The explanation is too hard. I'll ask the exact same question again.",
-      "I will name my audience, ask for one simple example, compare two versions against the same goal, and check whether the science remains correct."
+      "The explanation is too hard. I'll ask the same question again.",
+      "I will specify my audience, request one everyday example, compare versions against a learning goal and check that the science stays accurate."
     ],
     "check": [
       "Which change most improves a learning prompt?",
@@ -87,8 +87,8 @@ const KNOWLEDGE = {
       "A prototype can be a sketch, storyboard or simple model. Show it to someone who would use it, invite specific feedback and change one feature. Your explanation should connect the feedback to the revision rather than simply saying the new version is better."
     ],
     "example": [
-      "The tool gave me 20 ideas. I'll use the first without checking the problem.",
-      "I will observe what users really need, choose an idea for a reason, sketch it, and test it before deciding whether any AI suggestion helps."
+      "The AI suggested 20 ideas, so the first must solve our problem.",
+      "I will observe what people need, select a practical idea, sketch it and test it with a user before adopting any suggestion."
     ],
     "check": [
       "What turns a list of AI suggestions into your own design?",
@@ -127,8 +127,8 @@ const KNOWLEDGE = {
       "Try the task independently when appropriate. If you get stuck, request a small hint or example and try again. Be ready to explain why you used AI, limited its use or decided not to use it. The goal is better learning, not maximum tool use."
     ],
     "example": [
-      "If an assistant finishes my worksheet, I must be learning faster.",
-      "I need to practise the skill myself. I will try the first question, ask for a hint if needed, then explain the method without the assistant."
+      "If AI finishes my worksheet, I must be learning faster.",
+      "I need to practise the skill myself. I will attempt the problem first, request a hint if needed and explain the method without help."
     ],
     "check": [
       "What should guide the amount of AI help you use?",
@@ -167,8 +167,8 @@ const KNOWLEDGE = {
       "After checking, explain whether the claim is supported, contradicted or still uncertain. Honest uncertainty is stronger than invented certainty. If information is missing, say what would be needed before sharing it with someone else."
     ],
     "example": [
-      "That exact butterfly number sounds official, so I'll share it.",
-      "I will find the original survey, check its date, location and method, and label the number uncertain if I cannot verify it."
+      "The number sounds precise, so I can share it as fact.",
+      "I will find the original survey, check its date, location and method, and say I am unsure if the number cannot be verified."
     ],
     "check": [
       "What is the best way to evaluate a precise AI-generated statistic?",
@@ -207,8 +207,8 @@ const KNOWLEDGE = {
       "Being responsible also means protecting people who are described or represented in AI outputs. Consider stereotypes, missing perspectives and whether your work treats others respectfully. You can often achieve the same learning goal with invented information or approved illustrations."
     ],
     "example": [
-      "A school poster is a good reason to send someone's private details to a chatbot.",
-      "I will not upload classmates' names or health details. I can use made-up examples or approved images and ask permission through school procedures."
+      "It's for a school poster, so I can upload a friend's health details.",
+      "I will not share classmates' private details. I can use invented examples or approved images and follow school consent procedures."
     ],
     "check": [
       "Before using someone else's personal photograph with AI, you should…",
