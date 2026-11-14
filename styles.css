@@ -445,3 +445,10 @@ body{color:var(--ink);font-size:16px}
  .lesson-panel .step-controls{align-items:flex-start}
  .application-actions .btn{width:100%}
 }
+
+/* Authentic creation and test evidence */
+.project-phase-head{display:flex;gap:14px;align-items:baseline;border-top:2px solid #CBD9D0;padding-top:22px;margin:12px 0 4px;flex-wrap:wrap}
+.project-phase-head strong{font-family:'DM Serif Display',Georgia,serif;font-size:1.52rem;color:#2D5B46;font-weight:400}
+.project-phase-head span{font-size:.89rem;line-height:1.5;color:#4B6755}
+.project-notes textarea:focus-visible,.context-card:focus-visible,.mode-option:focus-visible,.concept-pip:focus-visible{outline:3px solid #9B504B;outline-offset:3px}
+@media(max-width:650px){.project-phase-head{align-items:flex-start;flex-direction:column;gap:4px}.project-notes textarea{min-height:114px}}
