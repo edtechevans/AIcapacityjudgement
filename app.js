@@ -143,6 +143,7 @@ if(!getRecord(l.id).practicePassed||w.retrying)body+='<button class="btn" data-a
 return body;}
 function lesson(){const l=currentLesson();if(!l)return courses();const k=KNOWLEDGE[l.id],w=getPractice(l.id),r=getRecord(l.id),stage=Math.min(4,Number(w.stage)||0);if(!k)return '<main id="main-content" class="lesson-layout"><h1>Lesson not available</h1><button class="btn" data-action="courses">Return to courses</button></main>';
 const guide=LEARNING_SCAFFOLDS[l.id];
+const previous=LESSON_BY_ID[(l.grade-1)+"-"+l.strand],previousPractised=!!(previous&&state.records[previous.id]?.completed);
 const example=k.example,ct=k.contexts||[],labels=lessonSteps();const activeContext=ct[w.context]||ct[0];const nextSuggested=recs(l.grade).map(x=>x.lesson).find(x=>x.id!==l.id&&!state.records[x.id]?.completed)||LESSONS.find(x=>x.grade===l.grade&&x.id!==l.id&&!state.records[x.id]?.completed);let body="";
 if(stage===0){
  const index=Math.min(2,w.topicIndex||0),part=k.core[index];
@@ -150,6 +151,7 @@ if(stage===0){
  '<h2 id="stage-title" tabindex="-1">'+esc(["Start with the idea","Explore what it means","Use what you know"][index])+'</h2>'+
  '<p class="lesson-essence">'+esc(k.essential||l.principle)+'</p>'+
  '<div class="knowledge-panel"><div class="knowledge-number">0'+(index+1)+'</div><p>'+esc(part)+'</p></div>'+
+ (index===0&&previousPractised?'<details class="learning-support prior-learning"><summary>Connect with what you learned before</summary><p>In your earlier module, you explored: <strong>'+esc(previous.principle)+'</strong></p><p>Without looking it up, what do you remember—and how could it help with today’s challenge?</p></details>':"")+
  (index===0&&guide?'<section class="lesson-success-criteria" aria-label="Learning intentions"><div class="eyebrow">What success looks like</div><h3>By the end, I can…</h3><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">These are things to practise and demonstrate, not grades.</p></section>':"")+
  '<div class="learning-aid"><button class="btn btn-outline btn-small" data-action="listen">Listen to this idea</button><span class="small muted">Optional device read-aloud; no recording</span></div>'+
  '<div class="concept-pips" aria-label="Teaching sections">'+k.core.map((c,i)=>'<button class="concept-pip '+(i===index?"selected":"")+'" data-action="concept" data-index="'+i+'" '+(i>Math.max(index,w.maxTopic||0)?"disabled":"")+' aria-current="'+(i===index?"step":"false")+'">Idea '+(i+1)+'</button>').join("")+'</div>'+
@@ -177,8 +179,9 @@ if(stage===2){
 if(stage===3){
  const step=Math.min(2,w.applyStep||0);
  const fs=w.fields||{purpose:"",decision:"",evidence:"",work:"",revision:""};
- const planned=["purpose","decision","evidence"].every(x=>(fs[x]||"").trim().length>=35);
- const enough=planned&&["work","revision"].every(x=>(fs[x]||"").trim().length>=35);
+ const minNotes=w.format==="written"?35:18;
+ const planned=["purpose","decision","evidence"].every(x=>(fs[x]||"").trim().length>=minNotes);
+ const enough=planned&&["work","revision"].every(x=>(fs[x]||"").trim().length>=minNotes);
  const progressNames=["Choose your challenge","Plan your approach","Create, test & improve"];
  const header='<div class="eyebrow">Apply what you know</div><h2 id="stage-title" tabindex="-1">Make your learning matter.</h2>'+
  '<p>Use what you learned to respond to a meaningful problem. Work with an approved tool, teacher-provided examples or a non-AI alternative as appropriate.</p>'+
@@ -193,7 +196,7 @@ if(stage===3){
   '<p class="small muted">You may use paper, approved applications or a discussion with someone else. You are still responsible for the work and the decisions.</p><div class="transfer-cue"><strong>Use it beyond this lesson</strong><p>'+esc(guide.transfer)+'</p></div>';
  }
  if(step===1){
-  section='<h3 id="apply-heading" tabindex="-1" class="apply-heading">Think it through before you create.</h3><p class="small muted">Describe your purpose and the evidence you will use. Write at least a full sentence for each response; the form checks length, not quality.</p><details class="learning-support"><summary>Need a planning scaffold?</summary><p>'+esc(guide.support)+'</p></details>'+
+  section='<h3 id="apply-heading" tabindex="-1" class="apply-heading">Think it through before you create.</h3><p class="small muted">'+(w.format==="written"?"Write at least a full sentence for each response.":"Brief notes are enough to describe your spoken or visual work.")+' The form checks length, not quality.</p><details class="learning-support"><summary>Need a planning scaffold?</summary><p>'+esc(guide.support)+'</p></details>'+
   '<div class="project-notes"><label for="plan-purpose"><strong>1. What will you do, and who will benefit?</strong><span>Describe the problem, your goal and your audience.</span></label><textarea id="plan-purpose" data-plan-field="purpose" maxlength="2000" rows="3" placeholder="My goal is… The people who need this are…">'+esc(fs.purpose||"")+'</textarea>'+
   '<label for="plan-decision"><strong>2. Where does AI belong—or not belong?</strong><span>Explain your decision using something you learned.</span></label><textarea id="plan-decision" data-plan-field="decision" maxlength="2000" rows="3" placeholder="I would… because… I would avoid…">'+esc(fs.decision||"")+'</textarea>'+
   '<label for="plan-evidence"><strong>3. How will you check, listen and improve?</strong><span>Plan how you will gather evidence, test and seek feedback.</span></label><textarea id="plan-evidence" data-plan-field="evidence" maxlength="2000" rows="3" placeholder="I will test… Ask… Revise…">'+esc(fs.evidence||"")+'</textarea></div>';
@@ -383,7 +386,7 @@ passed=w.selected===a.correct;feedback=a.options[w.selected][a.kind==="prompt"?2
 }
 w.checked=true;w.feedback={passed,message:feedback};r.attempts=(r.attempts||0)+1;if(passed){r.practicePassed=true;w.retrying=false;}persist();render();const feedbackEl=$("#activity-feedback");if(feedbackEl)feedbackEl.focus({preventScroll:true});
 }
-function recordReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);const fields=w.fields||{};const sufficient=["purpose","decision","evidence","work","revision"].every(key=>(fields[key]||"").trim().length>=35);if(!r.knowledgePassed||!w.modelSeen||!r.practicePassed||!sufficient||!w.confirmed){showNotice("Complete the learning sequence and explain your application first.");return;}r.applied=true;r.reflected=false;r.completed=false;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
+function recordReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);const fields=w.fields||{};const minNotes=w.format==="written"?35:18;const sufficient=["purpose","decision","evidence","work","revision"].every(key=>(fields[key]||"").trim().length>=minNotes);if(!r.knowledgePassed||!w.modelSeen||!r.practicePassed||!sufficient||!w.confirmed){showNotice("Complete the learning sequence and explain your application first.");return;}r.applied=true;r.reflected=false;r.completed=false;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
 function reflectionReady(w){return !!(w.reflectionConfirmed&&(w.reflectionMode!=="written"||["learning","transfer"].every(x=>(w.reflection?.[x]||"").trim().length>=25)));}
 function finishReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);if(!r.applied||!r.practicePassed||!reflectionReady(w)){showNotice("Complete both reflection questions, or explain them in your chosen format, before finishing.");return;}r.reflected=true;r.completed=true;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
 function updateReflectionButton(){const w=getPractice(state.lessonId),button=$('[data-action="finish-reflection"]');if(button)button.disabled=!reflectionReady(w);}
@@ -411,7 +414,7 @@ if(action==="concept"){const w=getPractice(state.lessonId),n=+t.dataset.index;if
 if(action==="knowledge-check"){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),k=KNOWLEDGE[l.id];if(w.topicIndex!==2||w.knowledgeAnswer===null)return;const passed=w.knowledgeAnswer===k.check[2];w.knowledgeFeedback={passed};if(passed){r.knowledgePassed=true;checkpoint(l.id,0);}else persist();render(true,"knowledge-feedback");return}
 if(action==="model-reveal"){const w=getPractice(state.lessonId);w.modelSeen=true;getRecord(state.lessonId).modelSeen=true;checkpoint(state.lessonId,1);render(true,"worked-model");return}
 if(action==="apply-prev"){const w=getPractice(state.lessonId);w.applyStep=Math.max(0,(w.applyStep||0)-1);render(true,"apply-heading");return}
-if(action==="apply-next"){const w=getPractice(state.lessonId);const fields=w.fields||{};if(w.applyStep===1&& !["purpose","decision","evidence"].every(k=>(fields[k]||"").trim().length>=35))return;w.applyStep=Math.min(2,(w.applyStep||0)+1);render(true,"apply-heading");return}
+if(action==="apply-next"){const w=getPractice(state.lessonId);const fields=w.fields||{};if(w.applyStep===1&& !["purpose","decision","evidence"].every(k=>(fields[k]||"").trim().length>=(w.format==="written"?35:18)))return;w.applyStep=Math.min(2,(w.applyStep||0)+1);render(true,"apply-heading");return}
 if(action==="context-choice"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n===0||n===1)w.context=n;render();const selected=$(`[data-action="context-choice"][data-index="${n}"]`);if(selected?.focus)selected.focus({preventScroll:true});return}
 if(action==="format-choice"){const w=getPractice(state.lessonId);if(["written","visual","talk"].includes(t.dataset.format))w.format=t.dataset.format;render();const chosen=$(`[data-action="format-choice"][data-format="${w.format}"]`);if(chosen?.focus)chosen.focus({preventScroll:true});return}
 if(action==="copy-plan"){
@@ -449,7 +452,7 @@ if(t.id==="project-confirm"){const w=getPractice(state.lessonId);w.confirmed=!!t
 if(t.name==="reflection-mode"){const w=getPractice(state.lessonId);if(["written","spoken","visual"].includes(t.value))w.reflectionMode=t.value;render(true,"stage-title");return}
 if(t.id==="reflection-confirm"){const w=getPractice(state.lessonId);w.reflectionConfirmed=!!t.checked;updateReflectionButton();return}
 });
-function updateProjectButton(){const w=getPractice(state.lessonId),f=w.fields||{};const next=$('[data-action="apply-next"]');if(next&&w.applyStep===1)next.disabled=!["purpose","decision","evidence"].every(k=>(f[k]||"").trim().length>=35);const b=$('[data-action="record"]');if(b)b.disabled=!(getRecord(state.lessonId).knowledgePassed&&getRecord(state.lessonId).practicePassed&&w.modelSeen&&w.confirmed&&["purpose","decision","evidence","work","revision"].every(k=>(f[k]||"").trim().length>=35));}
+function updateProjectButton(){const w=getPractice(state.lessonId),f=w.fields||{},minNotes=w.format==="written"?35:18;const next=$('[data-action="apply-next"]');if(next&&w.applyStep===1)next.disabled=!["purpose","decision","evidence"].every(k=>(f[k]||"").trim().length>=minNotes);const b=$('[data-action="record"]');if(b)b.disabled=!(getRecord(state.lessonId).knowledgePassed&&getRecord(state.lessonId).practicePassed&&w.modelSeen&&w.confirmed&&["purpose","decision","evidence","work","revision"].every(k=>(f[k]||"").trim().length>=minNotes));}
 document.addEventListener("input",(e)=>{
 const t=e.target;
 if(t.id==="practice-reason"){getPractice(state.lessonId).reason=t.value.slice(0,1200);return}
