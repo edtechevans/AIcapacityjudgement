@@ -20,7 +20,7 @@ state.diagnostics=state.diagnostics||{};
 state.legacyDone=state.legacyDone||{};
 // Preserve prior activity as exploration, not as a claim of completing a deeper course.
 Object.entries(state.records).forEach(([id,r])=>{if(r&&r.completed&&!r.knowledgePassed){state.legacyDone[id]=true;r.completed=false;r.reflected=false;}});
-state.grade=[6,7,8,9,10].includes(+state.grade)?+state.grade:6;
+state.grade=Object.prototype.hasOwnProperty.call(GRADES,String(state.grade))?+state.grade:+Object.keys(GRADES)[0];
 state.track=["all","capacity","judgement"].includes(state.track)?state.track:"all";
 state.reading=["standard","comfortable"].includes(state.reading)?state.reading:"standard";
 state.page=state.name?"home":"welcome";
@@ -208,7 +208,26 @@ function welcome(){return '<main id="main-content" class="welcome-panel page"><d
 function render(focus){if(document.documentElement?.dataset)document.documentElement.dataset.reading=state.reading;$("#app").innerHTML='<div class="site"><a href="#main-content" class="skip-link">Skip to main content</a>'+nav()+(state.page==="welcome"?welcome():state.page==="home"?home():state.page==="courses"?courses():state.page==="diagnostic"?diagnostic():state.page==="snapshot"?snapshot():state.page==="lesson"?lesson():state.page==="about"?about():profile())+foot()+'<div id="global-announcer" class="sr-only" aria-live="polite">'+esc(notice)+'</div></div>';const pageTitle=state.page==="lesson"?(currentLesson()?.title||"Lesson"):state.page==="courses"?"Grade "+state.grade+" courses":state.page==="snapshot"?"My learning":state.page==="diagnostic"?"Starting snapshot":state.page==="profile"?"My profile":state.page==="about"?"About the approach":state.page==="home"?"Home":"Learning Studio";document.title=pageTitle+" · AI Capacity × Judgement";if(focus){const main=$("#main-title");if(main)main.focus({preventScroll:true})}}
 function routePath(page){if(page==="courses")return "/grade/"+state.grade+(state.track!=="all"?"/"+state.track:"");if(page==="snapshot")return "/grade/"+state.grade+"/snapshot";if(page==="diagnostic")return "/grade/"+state.grade+"/check-in";if(page==="lesson")return "/lesson/"+state.lessonId;return "/"+(page==="welcome"?"welcome":page);}
 function writeRoute(replace){const url="#"+routePath(state.page);if(!window.location||window.location.hash===url)return;if(window.history&&typeof window.history.pushState==="function"){window.history[replace?"replaceState":"pushState"]({},"",url);}else{window.location.hash=url;}}
-function readRoute(){const hash=window.location?.hash||"";if(!hash.startsWith("#/"))return false;const r=hash.slice(1);let m=r.match(/^\/grade\/(6|7|8|9|10)\/(capacity|judgement)$/);if(m){state.grade=+m[1];state.track=m[2];state.page="courses";return true;}m=r.match(/^\/grade\/(6|7|8|9|10)\/(snapshot|check-in)$/);if(m){state.grade=+m[1];state.page=m[2]==="snapshot"?"snapshot":"diagnostic";return true;}m=r.match(/^\/grade\/(6|7|8|9|10)$/);if(m){state.grade=+m[1];state.track="all";state.page="courses";return true;}m=r.match(/^\/lesson\/(6|7|8|9|10)-(A[123]|B[123])$/);if(m){state.lessonId=m[1]+"-"+m[2];state.grade=+m[1];state.page="lesson";getPractice(state.lessonId);if(state.name)checkpoint(state.lessonId,getPractice(state.lessonId).stage);return true;}if(["/home","/about","/profile","/welcome"].includes(r)){state.page=r.slice(1);return true;}return false;}
+function readRoute(){
+ const hash=window.location?.hash||"";
+ if(!hash.startsWith("#/"))return false;
+ const path=hash.slice(1);
+ const allowed=(v)=>Object.prototype.hasOwnProperty.call(GRADES,String(v));
+ let m=path.match(/^\/grade\/(\d+)\/(capacity|judgement)$/);
+ if(m&&allowed(m[1])){state.grade=+m[1];state.track=m[2];state.page="courses";return true;}
+ m=path.match(/^\/grade\/(\d+)\/(snapshot|check-in)$/);
+ if(m&&allowed(m[1])){state.grade=+m[1];state.page=m[2]==="snapshot"?"snapshot":"diagnostic";return true;}
+ m=path.match(/^\/grade\/(\d+)$/);
+ if(m&&allowed(m[1])){state.grade=+m[1];state.track="all";state.page="courses";return true;}
+ m=path.match(/^\/lesson\/(\d+)-([A-Z]\d+)$/);
+ if(m&&allowed(m[1])&&LESSON_BY_ID[m[1]+"-"+m[2]]){
+  state.lessonId=m[1]+"-"+m[2];state.grade=+m[1];state.page="lesson";
+  getPractice(state.lessonId);if(state.name)checkpoint(state.lessonId,getPractice(state.lessonId).stage);
+  return true;
+ }
+ if(["/home","/about","/profile","/welcome"].includes(path)){state.page=path.slice(1);return true;}
+ return false;
+}
 function goto(page,opts={}){if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true);if(window.scrollTo)window.scrollTo({top:0,behavior:"instant"});}
 function gradeTo(g){if(!GRADES[g])return;state.grade=+g;state.track="all";persist();goto("courses");}
 function openLesson(id){if(!LESSON_BY_ID[id])return;state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");}
@@ -280,7 +299,7 @@ function syncHistory(){if(!state.name){state.page="welcome";render(true);return;
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="guest-name"){e.preventDefault();const button=document.querySelector('[data-action="guest"]');if(button&&button.click)button.click();}});
 window.addEventListener("popstate",syncHistory);
 window.addEventListener("hashchange",syncHistory);
-if(state.name){if(!readRoute()||state.page==="welcome")state.page="home";}else{const requested=(window.location?.hash||"").match(/^#\/(?:grade\/|lesson\/)(6|7|8|9|10)/);if(requested)state.grade=+requested[1];state.page="welcome";}
+if(state.name){if(!readRoute()||state.page==="welcome")state.page="home";}else{const requested=(window.location?.hash||"").match(/^#\/(?:grade\/|lesson\/)(\d+)/);if(requested&&GRADES[requested[1]])state.grade=+requested[1];state.page="welcome";}
 if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};
 render();
 })();
