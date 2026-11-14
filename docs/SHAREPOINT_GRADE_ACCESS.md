@@ -30,7 +30,7 @@ The public GitHub Pages preview begins with a single decision: **Choose your gra
 - Authorise **every** request for grade-specific data and any student submission against the authenticated identity and server-verified entitlement. Validate ownership independently for any student record or assignment.
 - Store grade content only in protected, security-trimmed SharePoint libraries/lists or a backend serving resources after an authorisation check. **Do not ship all grades' curricula in a single public JavaScript bundle** if the content needs access restrictions.
 - Return an actual unauthorised/forbidden response for cross-grade API/content requests. Merely hiding grade buttons or redirecting hash URLs is not security.
-- Consider separate protected Grade 6–10 content bundles or authorised per-grade API responses, with a centrally managed shared interface and versioned curriculum schemas.
+- Consider separate protected Grade 6–12 content bundles or authorised per-grade API responses, with a centrally managed shared interface and versioned curriculum schemas.
 - Keep teachers' wider permissions explicit and role-based. Avoid granting student accounts access to other students' progress or educator-only materials.
 
 ### 3. Learner experience once authenticated
@@ -65,3 +65,7 @@ There should be **no student-facing grade picker and no Change grade button** in
 - `tests/e2e/learner.spec.mjs` checks the grade-only browser experience.
 
 **Release standard:** do not describe the current preview as secured by grade. Proper grade entitlement is a future, independently reviewed SharePoint and school identity integration.
+
+## DP extension
+
+The G11/12 public preview deliberately uses the same self-selected grade model as the earlier grades. Future production SharePoint deployment must obtain grade entitlement from approved school identity/SIS sources. A student with a Grade 11 or 12 account should automatically see DP1 or DP2 and only authorised grade resources; changing a client-side grade, hash route or browser storage cannot grant access to another grade. Student capstones and stakeholder feedback must remain in approved, access-controlled storage with explicit teacher permissions, not in the public preview or public GitHub assets.
