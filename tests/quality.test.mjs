@@ -720,14 +720,14 @@ test("public curriculum is accessible without choosing a grade and does not crea
  assert.equal((h.html.match(/class="catalogue-module catalogue-module--/g)||[]).length,6);
  assert.deepEqual(Object.keys(h.storage),[],"Public curriculum viewing must not save student information");
  await h.click({action:"curriculum-grade",curGrade:"12"});
- assert.match(h.html,/Create & Steward/);
+ assert.match(h.html,/Create &amp; Steward/);
  assert.match(h.html,/The Impact Project/);
- assert.match(h.html,/Stewardship & Accountability/);
+ assert.match(h.html,/Stewardship &amp; Accountability/);
  assert.deepEqual(Object.keys(h.storage),[]);
  await h.click({action:"curriculum-strand",curStrand:"B3"});
  assert.match(h.html,/7 stages/);
- assert.match(h.html,/Ethics & Consequences/);
- assert.match(h.html,/meaningful review or correction/i);
+ assert.match(h.html,/Ethics &amp; Consequences/);
+ assert.match(h.html,/transparent explanation, appeal, remedy and restart conditions/i);
  assert.deepEqual(Object.keys(h.storage),[]);
  await h.click({action:"copy-curriculum"});
  assert.equal(h.copiedText,"https://edtechevans.github.io/AIcapacityjudgement/#/curriculum");
