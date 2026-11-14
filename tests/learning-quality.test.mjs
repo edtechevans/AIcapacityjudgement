@@ -105,7 +105,7 @@ test("new investigations are included before the app and do not add external scr
 
 test("all 30 modules have distinct, genuinely unfamiliar transfer tasks and realistic classroom plans",()=>{
  const ids=LESSONS.map(l=>l.id);
- assert.deepEqual(Object.keys(data.UNSEEN_TRANSFER).sort(),ids.slice().sort());
+ assert.equal(Object.keys(data.UNSEEN_TRANSFER).sort().join("|"),Array.from(ids).sort().join("|"));
  assert.equal(Object.keys(data.TEACHER_RUBRIC).length,4);
  for(const l of LESSONS){
   const task=data.UNSEEN_TRANSFER[l.id];
