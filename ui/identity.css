@@ -511,3 +511,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  .topbar .brand .brand-wordmark-short{font-size:.9rem}
  .topbar .avatar{width:36px;height:36px;min-width:36px}
 }
+
+/* Accessible footer wordmark: dark text on a light surface */
+.footer .footer-signature strong{color:var(--brand-ink)}
