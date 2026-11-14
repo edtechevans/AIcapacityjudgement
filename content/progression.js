@@ -4,7 +4,7 @@
  */
 const SCOPE_SEQUENCE={
  6:{
-  stage:"Notice & explain",concept:"Every system has inputs, a process, outputs and limits.",
+  stage:"Notice & explain",concept:"Every AI system has inputs, a process, outputs and limits that affect what can legitimately be inferred.",
   step:"Recognise what AI is doing, and keep hold of your own thinking.",
   challenge:{
    title:"Design a trustworthy garden information card",
@@ -54,13 +54,13 @@ const SCOPE_SEQUENCE={
    task:"Compare two simplified representations of the same cases and two ranking objectives. Design a school information feed for multilingual readers and those using assistive technology; evaluate accuracy, agency, representation and resource use against a non-AI route.",
    evidence:"A representation comparison, two ranking results, user-defined success criteria, an accessible prototype and a documented test-driven revision.",
    feedback:"Have another learner challenge whose voice the ranking hides and test your design with a different language or access need.",
-   transfer:"How would your approach change for a public museum's visitor information?",
+   transfer:"How would your approach change for a public museum's visitor information across multiple languages and access needs?",
    criteria:["Explain how selected features or ranking objectives change outputs.","Compare perspectives and a non-AI alternative using consistent criteria.","Create and test an accessible, user-controlled response."]
   },
   strands:{
    A1:["Compare colour, shape, text and multimodal representations; identify missing features.","A model sees or understands everything a human can see in an image."],
    A2:["Architect a bounded workflow with a source check and a human release decision.","Multiple automated steps remove the need to check accuracy."],
-   A3:["Prototype for a defined user's language, access and information needs.","A polished interface is proof of inclusive use."],
+   A3:["Prototype for a defined user's language, access and information needs.","A polished interface alone is proof that every intended learner can use it independently."],
    B1:["Evaluate how delegation can strengthen or weaken independent problem solving.","The quickest completion always produces the deepest learning."],
    B2:["Investigate how engagement and evidence ranking criteria influence what is visible.","A feed is a neutral reflection of all available information."],
    B3:["Evaluate accessibility, inclusion, data reuse and proportionate resource consumption.","An AI feature has no social or environmental cost if it is convenient."]
