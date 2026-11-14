@@ -6,6 +6,27 @@ The Learning Studio develops **two related but separate competencies**. Students
 
 **Completion of the website's lessons is not evidence of mastery.** A strong assessment uses several kinds of evidence, including a student's reasoning, real work, tested revision, and transfer to a different subject or situation.
 
+## Research-informed investigation upgrade (v20)
+
+Each of the 30 Grade 6–10 modules now includes an original, discipline-transferable **inquiry question, investigation method, evidence expectation and new-context challenge**. These appear at the beginning of the Apply stage, and the evidence expectation is repeated in reflection and included in downloadable work notes. Teachers should provide appropriate sources or off-site materials for genuine investigations; prompts alone do not establish that an investigation has been performed.
+
+Five modules include a no-account, fictional interactive laboratory integrated into guided practice. Students must explore two contrasting conditions before attempting the associated knowledge application. The resulting figures describe **invented teaching cases**. They are not estimates of the performance of real systems or of learners' ability.
+
+Four modules have a more substantial, authentic design or governance dossier. An acceptable product should include problem definition, stakeholder considerations, reasoned AI-use or non-use, an artefact or policy prototype, evaluation evidence, revision and honest limitations. These projects may take multiple lessons; the website's estimated module duration does not substitute for scheduling real creation and feedback time.
+
+See [Curriculum Rebuild v20](CURRICULUM_REBUILD_V20.md) and [Teacher Labs Guide](TEACHER_LABS_GUIDE.md) for lab mechanics and safeguarding guidance.
+
+### Moderation questions before concluding that learning has occurred
+
+- **Mechanism:** Can the learner explain *why* the result changed when one condition changed?
+- **Data and uncertainty:** Did they report test scope and a limitation instead of overgeneralising a percentage?
+- **Human purpose:** Can they defend a legitimate AI-use, limited-use or non-use choice against alternatives?
+- **Authenticity:** Does their work respond to an identifiable user need or meaningful subject question?
+- **Iteration:** Is there an observable revision linked to a test result or stakeholder comment?
+- **Transfer:** Can they apply the idea to an unfamiliar example without being shown the original answer?
+
+Learner writing is deliberately **not auto-scored**. For students who cannot use a live AI service or who prefer to speak, draw or work offline, an equivalent evidence-based response should remain possible.
+
 ## What the student actually learns in every module
 
 The learning sequence is deliberately **explanation-first**:
