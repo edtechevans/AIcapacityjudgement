@@ -387,18 +387,37 @@ function readRoute(){
 function goto(page,opts={}){if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();if(page!=="profile")confirmClear=false;state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});}
 function gradeTo(g){if(!GRADES[g])return;state.grade=+g;state.track="all";persist();goto("courses");}
 function openLesson(id){if(!LESSON_BY_ID[id])return;if(state.page!=="courses")state.track="all";state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");}
-function checkActivity(){const l=currentLesson(),a=ACTIVITIES[l.id],w=getPractice(l.id),r=getRecord(l.id);let passed=false,feedback="";
-if(a.kind==="sort"){
-const selected=a.items.map((x,i)=>w.sort[i]);if(selected.some(x=>x===undefined)){w.feedback={passed:false,message:"Choose a category for every example before checking."};w.checked=false;render();return;}
-const n=selected.filter((x,i)=>x===a.items[i][1]).length;passed=n===a.items.length;feedback=n+" of "+a.items.length+" classifications matched the reasoning. Review each explanation above.";
-}else if(a.kind==="sequence"){
-passed=a.steps.every((x,i)=>w.order[i]===i);feedback=passed?"This is a useful sequence. Real design processes often loop back after feedback.":"Try beginning with the needs or problem, then move toward testing and improvement.";
-}else{
-if(w.selected===null){w.feedback={passed:false,message:"Choose an option first."};render();return;}
-if((w.reason||"").trim().length<25){w.feedback={passed:false,message:"Write a sentence explaining why you made this choice before checking it."};render();return;}
-passed=w.selected===a.correct;feedback=a.options[w.selected][a.kind==="prompt"?2:1];
-}
-w.checked=true;w.feedback={passed,message:feedback};r.attempts=(r.attempts||0)+1;if(passed){r.practicePassed=true;w.retrying=false;}persist();render();const feedbackEl=$("#activity-feedback");if(feedbackEl)feedbackEl.focus({preventScroll:true});
+function checkActivity(){
+ const l=currentLesson(),a=ACTIVITIES[l.id],w=getPractice(l.id),r=getRecord(l.id),guide=LEARNING_SCAFFOLDS[l.id];
+ let passed=false,feedback="",details=[],nextStep="";
+ if(a.kind==="sort"){
+  const selected=a.items.map((item,i)=>w.sort[i]);
+  if(selected.some(x=>x===undefined)){w.feedback={passed:false,message:"Choose a category for every example before checking."};w.checked=false;render();return;}
+  const missed=a.items.map((item,i)=>selected[i]===item[1]?null:{item,index:i}).filter(Boolean);
+  passed=missed.length===0;
+  feedback=passed?"All examples matched the intended classifications. Explain why the categories fit.":(a.items.length-missed.length)+" of "+a.items.length+" classifications match. Focus on the examples below, then try again.";
+  details=missed.map(({item,index})=>"Example "+(index+1)+": "+item[2]);
+ }else if(a.kind==="sequence"){
+  passed=a.steps.every((step,i)=>w.order[i]===i);
+  if(passed){feedback="This is a useful sequence. Real design processes often loop back after feedback.";}
+  else{
+   const first=w.order.findIndex((item,i)=>item!==i);
+   feedback="The sequence needs another look. Consider what must happen before the step currently in position "+(first+1)+".";
+   details=["Currently at that position: "+a.steps[w.order[first]]+". Decide which step it depends on."];
+  }
+ }else{
+  if(w.selected===null){w.feedback={passed:false,message:"Choose an option first."};render();return;}
+  if((w.reason||"").trim().length<25){w.feedback={passed:false,message:"Explain why you chose this option before checking. Your explanation is not automatically graded."};render();return;}
+  passed=w.selected===a.correct;
+  feedback=a.options[w.selected][a.kind==="prompt"?2:1];
+  if(passed)feedback+=" The choice matches this activity's intended response; your written explanation has not been assessed.";
+ }
+ nextStep=passed?guide.stretch:guide.support;
+ w.checked=true;w.feedback={passed,message:feedback,nextStep,details};
+ r.attempts=(r.attempts||0)+1;
+ if(passed){r.practicePassed=true;w.retrying=false;}
+ persist();render();
+ const feedbackEl=$("#activity-feedback");if(feedbackEl)feedbackEl.focus({preventScroll:true});
 }
 function recordReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);const fields=w.fields||{};const minNotes=w.format==="written"?35:18;const sufficient=["purpose","decision","evidence","work","revision"].every(key=>(fields[key]||"").trim().length>=minNotes);if(!r.knowledgePassed||!w.modelSeen||!r.practicePassed||!sufficient||!w.confirmed){showNotice("Complete the learning sequence and explain your application first.");return;}r.applied=true;r.reflected=false;r.completed=false;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
 function reflectionReady(w){return !!(w.reflectionConfirmed&&(w.reflectionMode!=="written"||["learning","transfer"].every(x=>(w.reflection?.[x]||"").trim().length>=25)));}
