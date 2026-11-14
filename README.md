@@ -4,6 +4,16 @@ A student-facing Grades 6–10 (MYP 1–5) formative e-learning website. Two con
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
+## Validation evidence — CI, accessibility and student learning
+
+Three separate release gates are now tracked in [GitHub Issue #4](https://github.com/edtechevans/AIcapacityjudgement/issues/4):
+
+- **Real CI results:** [Browser UX quality workflow](https://github.com/edtechevans/AIcapacityjudgement/actions/workflows/browser-ux.yml) runs Node curriculum tests and Playwright cross-browser checks and posts run-specific results back to the issue. A committed test is not an executed pass.
+- **WCAG 2.2 AA:** The [WCAG-EM 2.0 evaluation record](docs/validation/WCAG_22_AA_EVALUATION.md) lists all applicable assessment areas, representative pages, assistive technologies and required human sign-off. Axe and browser automation are useful gates, **not formal conformance**.
+- **Student outcomes:** The [evaluation protocol](docs/validation/LEARNING_OUTCOMES_STUDY.md), [parallel Grade 6–10 assessment forms](docs/validation/PARALLEL_ASSESSMENT_FORMS.md) and [blank score template](docs/validation/learning_study_scores_template.csv) support a consented pre/post, comparison and delayed-transfer evaluation. **No actual student learning outcomes have been collected.** Individual scores must remain in school-approved storage, never in this repository.
+
+For an approved, de-identified local dataset, use `node scripts/analyse-learning-study.mjs /secure/path/anonymous_scores.csv`. The [analysis script](scripts/analyse-learning-study.mjs) reports only aggregates and suppresses small grade/group subgroups; its [tests](tests/study-analysis.test.mjs) use synthetic records.
+
 ## v22 — Aligned learning, experimental agency and authentic transfer (November 2026)
 
 The Grade 6–10 curriculum now has **30 rewritten scenario-matched worked examples**, **six** interactive investigations (including Grade 6's visual rule-versus-AI demonstration), and more control over training examples, model feature weighting, feed-ranking criteria, error consequences and design priorities. The toy models disclose their simplifications and do not pretend to measure real-world model reliability.
