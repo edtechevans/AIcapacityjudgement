@@ -188,6 +188,7 @@ function learningLabHtml(l,w){
  return '<section class="learning-lab" aria-label="Interactive investigation"><div class="lab-eyebrow">Investigate · Interactive laboratory</div><h3>'+esc(lab.title)+'</h3><p>'+esc(lab.introduction)+'</p>'+
  '<p class="lab-question"><strong>Investigate:</strong> '+esc(lab.question)+'</p>'+choices+
  (result||'<p class="small muted lab-start-hint">Select one condition to see what happens. Try another and compare the evidence.</p>')+
+ '<p class="lab-progress" role="status">'+(seen.length>=2?'Both conditions explored. You can now attempt the guided challenge below.':seen.length+' of 2 conditions explored · Explore two different choices before checking the guided challenge.')+'</p>'+
  '<div class="lab-guidance"><p><strong>What this model cannot show:</strong> '+esc(lab.explanation)+'</p>'+
  '<p><strong>Make sense of it:</strong> '+esc(lab.reflection)+'</p></div>'+
  '<p class="small muted">Your choices in this laboratory are temporary; they are not grades or saved student records.</p></section>';
@@ -215,7 +216,7 @@ if(["prompt","decision","evidence"].includes(a.kind))body+='<div class="option-l
 if(["prompt","decision","evidence"].includes(a.kind))body+='<label for="practice-reason" class="input-label" style="margin-top:19px">Why do you think this is the strongest choice?</label><textarea id="practice-reason" rows="3" maxlength="1200" placeholder="I would choose this because…">'+esc(w.reason||"")+'</textarea><p class="small muted">Explain your reasoning in a sentence or two (at least 25 characters). This is a thinking exercise, not automatically graded writing.</p>';
 if(a.kind==="sequence")body+='<p class="small muted" style="margin-bottom:13px">Move each step using the arrow buttons, then check your sequence. Other real-world processes may be iterative.</p><ol class="sequence-list">'+w.order.map((pos,i)=>'<li class="sequence-item"><span class="sequence-number">'+(i+1)+'</span><span class="sequence-text">'+esc(a.steps[pos])+'</span><div class="move-actions"><button class="move-btn" data-action="move" data-index="'+i+'" data-dir="-1" aria-label="Move '+esc(a.steps[pos])+' up" '+(i===0?"disabled":"")+'>↑</button><button class="move-btn" data-action="move" data-index="'+i+'" data-dir="1" aria-label="Move '+esc(a.steps[pos])+' down" '+(i===w.order.length-1?"disabled":"")+'>↓</button></div></li>').join("")+'</ol>';
 if(w.feedback)body+='<div id="activity-feedback" class="feedback '+(w.feedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.feedback.passed?"Challenge passed. Your reasoning is not automatically graded.":"Useful attempt. Review what needs changing.")+'</strong><p>'+esc(w.feedback.message)+'</p>'+(w.feedback.details?.length?'<ul class="feedback-details">'+w.feedback.details.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':"")+(w.feedback.nextStep?'<p class="feedback-next"><strong>Try this next:</strong> '+esc(w.feedback.nextStep)+'</p>':"")+(a.tip?'<p class="small">'+esc(a.tip)+'</p>':"")+'</div>';
-if(!getRecord(l.id).practicePassed||w.retrying)body+='<button class="btn" data-action="check" style="margin-top:20px">Check my thinking →</button>';else body+='<div class="mastery-note">✓ Challenge passed. You can move on to apply your thinking, or practise again.</div><button class="btn btn-outline btn-small" data-action="retry" style="margin-top:15px">Try challenge again</button>';
+if(!getRecord(l.id).practicePassed||w.retrying)body+='<button class="btn" data-action="check" style="margin-top:20px" '+(LEARNING_LABS[l.id]&&(w.labModesSeen||[]).length<2?'disabled aria-describedby="lab-prerequisite"':"")+'>Check my thinking →</button>'+(LEARNING_LABS[l.id]&&(w.labModesSeen||[]).length<2?'<p class="small muted" id="lab-prerequisite">Compare two laboratory conditions above before checking this answer.</p>':"");else body+='<div class="mastery-note">✓ Challenge passed. You can move on to apply your thinking, or practise again.</div><button class="btn btn-outline btn-small" data-action="retry" style="margin-top:15px">Try challenge again</button>';
 return body;}
 function lesson(){const l=currentLesson();if(!l)return courses();const k=KNOWLEDGE[l.id],w=getPractice(l.id),r=getRecord(l.id),stage=Math.min(4,Number(w.stage)||0);if(!k)return '<main id="main-content" class="lesson-layout"><h1>Lesson not available</h1><button class="btn" data-action="courses">Return to courses</button></main>';
 const guide=LEARNING_SCAFFOLDS[l.id];
@@ -306,7 +307,7 @@ if(stage===4){
   const reflectionReady=w.reflectionConfirmed&&(!written||["learning","transfer"].every(x=>(reflect[x]||"").trim().length>=25));
   body='<div class="eyebrow">Make your learning stick</div><h2 id="stage-title" tabindex="-1">Pause, reflect and transfer.</h2>'+
   '<p>You have applied the skill. Before recording this module as practised, explain what changed in your thinking and where you will use it next. There is no score for your reflection.</p>'+
-  '<div class="reflection-prompt"><strong>1. What did you learn or change?</strong><p>Look back at your work, a misconception you corrected, feedback you received or a decision you reconsidered. What is your evidence?</p></div>'+
+  '<div class="reflection-prompt"><strong>1. What did you learn or change?</strong><p>Look back at your work, a misconception you corrected, feedback you received or a decision you reconsidered. What is your evidence?</p><p class="reflection-evidence-question"><strong>Connect with your investigation:</strong> '+esc(INQUIRY_BRIEFS[l.id]?.evidence||l.evidence)+'</p></div>'+
   '<div class="reflection-prompt"><strong>2. Where could this help next?</strong><p>'+esc(guide.transfer)+'</p></div>'+
   '<fieldset class="reflection-modes"><legend>How would you like to reflect?</legend><div class="mode-list">'+
   [["written","Write it here"],["spoken","Discuss or explain aloud"],["visual","Sketch or show it"]].map(([id,label])=>'<label class="reflection-mode-option '+(w.reflectionMode===id?"selected":"")+'"><input type="radio" name="reflection-mode" value="'+id+'" '+(w.reflectionMode===id?"checked":"")+'><span>'+esc(label)+'</span></label>').join("")+
@@ -347,7 +348,7 @@ function profile(){const d=state.diagnostics[state.grade],n=count(state.grade);r
  '<div class="hero-buttons"><button class="btn" data-action="saveprofile">Save alias</button><button class="btn btn-outline" data-action="courses">Return to courses</button></div></section></main>';}
 function planText(l,w){
  const context=KNOWLEDGE[l.id]?.contexts?.[w.context]||["Chosen challenge",""];
- const f=w.fields||{},headers=[
+ const f=w.fields||{},brief=INQUIRY_BRIEFS[l.id],capstone=CAPSTONE_GUIDES[l.id],headers=[
   ["My goal and audience","purpose"],["My AI-use or non-use decision","decision"],
   ["How I will check evidence and seek feedback","evidence"],
   ["What I actually created or tried","work"],["What I tested or revised","revision"]
@@ -355,6 +356,10 @@ function planText(l,w){
  return ["AI CAPACITY × JUDGEMENT — LEARNING NOTES",
   "Grade "+l.grade+" · "+l.title+" · "+trackLabel(l.track),
   "My chosen challenge:",context[0],context[1],
+  "INVESTIGATION QUESTION:",brief?.question||"",
+  "METHOD TO TRY:",brief?.try||"",
+  "WHAT EVIDENCE TO SHOW:",brief?.evidence||"",
+  ...(capstone?["CAPSTONE EVIDENCE CHECKLIST:",...capstone.evidence.map(item=>"- "+item)]:[]),
   "How I chose to share my work:",{written:"Written explanation",visual:"Sketch or storyboard",talk:"Discussion or presentation"}[w.format]||"Written explanation",
   ...headers.flatMap(([title,key])=>[title+":",f[key]||"(Not yet written)"]),
   "REFLECTION — "+({written:"Written notes",spoken:"Spoken explanation",visual:"Visual explanation"}[w.reflectionMode]||"Written notes"),
@@ -493,6 +498,7 @@ function gradeTo(g){
 function openLesson(id){if(!state.gradeChosen||!LESSON_BY_ID[id]||LESSON_BY_ID[id].grade!==state.grade){showNotice("Choose your grade first. Lessons outside your current grade are not available in this preview.");return;}if(state.page!=="courses")state.track="all";state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");}
 function checkActivity(){
  const l=currentLesson(),a=ACTIVITIES[l.id],w=getPractice(l.id),r=getRecord(l.id),guide=LEARNING_SCAFFOLDS[l.id];
+ if(LEARNING_LABS[l.id]&&(w.labModesSeen||[]).length<2&&!r.practicePassed){showNotice("Explore two laboratory conditions and compare the evidence before checking the guided challenge.");return;}
  let passed=false,feedback="",details=[],nextStep="";
  if(a.kind==="sort"){
   const selected=a.items.map((item,i)=>w.sort[i]);
