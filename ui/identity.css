@@ -601,8 +601,10 @@ html{scroll-behavior:auto}
 .feedback-details{margin:14px 0 10px;padding-left:22px}
 .feedback-details li{margin:7px 0;line-height:1.55}
 @media(max-width:600px){
- .learning-coach{padding:17px 16px;margin:19px 0}
- .learning-coach-choices{grid-template-columns:1fr;gap:7px}
- .learning-coach-choice{min-height:48px;flex-direction:row;align-items:center;justify-content:space-between}
+ .learning-coach{padding:17px 15px;margin:19px 0}
+ .learning-coach-choices{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .learning-coach-choice{min-height:64px;padding:9px 7px;font-size:.78rem;line-height:1.3;flex-direction:column;align-items:flex-start;justify-content:center}
+ .learning-coach-choice.is-active{padding:8px 6px}
+ .learning-coach-suggested{font-size:.67rem}
  .learning-coach-panel{padding:15px}
 }
