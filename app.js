@@ -165,9 +165,16 @@ if(action==="track"){state.track=t.dataset.track;persist();goto("courses");retur
 if(action==="diagnostic"||action==="retake"){beginDiagnostic();return}
 if(action==="diag-prev"){if(diagnosticRun&&diagnosticRun.index>0){diagnosticRun.index--;render(true)}return}
 if(action==="diag-next"){if(!diagnosticRun)return;let idx=diagnosticRun.index;if(diagnosticRun.answers[idx]===null)return;if(idx<5){diagnosticRun.index++;render(true)}else{state.diagnostics[state.grade]={answers:diagnosticRun.answers.slice(),completed:true,updated:new Date().toISOString()};diagnosticRun=null;persist();goto("snapshot")}return}
-if(action==="stage"){const l=currentLesson(),w=getPractice(l.id),step=+t.dataset.stage;const r=getRecord(l.id);if((step===3&&!r.completed)||(step===2&&!r.practicePassed))return;w.stage=step;goto("lesson");return}
-if(action==="prev"){const w=getPractice(state.lessonId);w.stage=Math.max(0,w.stage-1);goto("lesson");return}
-if(action==="next"){const w=getPractice(state.lessonId);if(w.stage===1&&!getRecord(state.lessonId).practicePassed)return;w.stage=Math.min(2,w.stage+1);goto("lesson");return}
+if(action==="concept-next"){const w=getPractice(state.lessonId);w.topicIndex=Math.min(2,(w.topicIndex||0)+1);w.maxTopic=Math.max(w.maxTopic||0,w.topicIndex);render(true);return}
+if(action==="concept"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n>=0&&n<=2&&n<=(w.maxTopic||0))w.topicIndex=n;render(true);return}
+if(action==="knowledge-check"){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),k=KNOWLEDGE[l.id];if(w.topicIndex!==2||w.knowledgeAnswer===null)return;const passed=w.knowledgeAnswer===k.check[2];w.knowledgeFeedback={passed};if(passed)r.knowledgePassed=true;persist();render();return}
+if(action==="model-reveal"){const w=getPractice(state.lessonId);w.modelSeen=true;render(true);return}
+if(action==="context-choice"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n===0||n===1)w.context=n;render();return}
+if(action==="format-choice"){const w=getPractice(state.lessonId);if(["written","visual","talk"].includes(t.dataset.format))w.format=t.dataset.format;render();return}
+if(action==="copy-plan"){const l=currentLesson(),w=getPractice(l.id),c=KNOWLEDGE[l.id].contexts[w.context],f=w.fields;const plan=[l.title,c[0],c[1],"My goal and audience:",f.purpose||"","My AI-use decision:",f.decision||"","My evidence and revision:",f.evidence||""].join("\n\n");if(typeof navigator!=="undefined"&&navigator.clipboard?.writeText){navigator.clipboard.writeText(plan).then(()=>{notice="Your learning plan was copied.";const a=document.querySelector("#global-announcer");if(a)a.textContent=notice}).catch(()=>{notice="Copy was unavailable. You can select your text from the fields.";render();});}else{notice="Copy was unavailable in this preview browser.";render();}return}
+if(action==="stage"){const l=currentLesson(),w=getPractice(l.id),step=+t.dataset.stage,r=getRecord(l.id);if((step===1&&!r.knowledgePassed)||(step===2&&!w.modelSeen)||(step===3&&!r.practicePassed)||(step===4&&!r.applied))return;w.stage=Math.min(4,Math.max(0,step));goto("lesson");return}
+if(action==="prev"){const w=getPractice(state.lessonId);w.stage=Math.max(0,(w.stage||0)-1);goto("lesson");return}
+if(action==="next"){const w=getPractice(state.lessonId),r=getRecord(state.lessonId);if((w.stage===0&&!r.knowledgePassed)||(w.stage===1&&!w.modelSeen)||(w.stage===2&&!r.practicePassed))return;w.stage=Math.min(3,(w.stage||0)+1);goto("lesson");return}
 if(action==="reveal-example"){const w=getPractice(state.lessonId);w.exampleOpen=!w.exampleOpen;render();return}
 if(action==="check"){checkActivity();return}
 if(action==="retry"){const w=getPractice(state.lessonId);w.checked=false;w.feedback=null;w.retrying=true;render();return}
