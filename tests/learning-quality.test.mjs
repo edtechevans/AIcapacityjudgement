@@ -9,10 +9,10 @@ const context=createContext({});
 const paths=[
  "curriculum.js","learning-data.js",
  ...[6,7,8,9,10].map(g=>"content/grade"+g+".js"),
- "content/learning-scaffolds.js","content/investigations.js","content/labs.js"
+ "content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js"
 ];
 for(const path of paths)runInContext(readFileSync(join(root,path),"utf8"),context,{filename:path});
-const data=runInContext("({LESSONS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,LAB_EVALUATIONS,LAB_FEED_POSTS,labClassify,labRankFeed})",context);
+const data=runInContext("({LESSONS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS,LAB_EVALUATIONS,LAB_FEED_POSTS,UNSEEN_TRANSFER,TEACHER_RUBRIC,CLASSROOM_PACING,classroomPlan,labGrade6,labEvaluate,labClassify,labRankFeed})",context);
 const {LESSONS,INQUIRY_BRIEFS,CAPSTONE_GUIDES,LEARNING_LABS}=data;
 
 test("all 30 modules now contain original, actionable and age-appropriate inquiry tasks",()=>{
@@ -33,6 +33,7 @@ test("all 30 modules now contain original, actionable and age-appropriate inquir
 
 test("labs cover data, algorithmic influence, evaluation, companion boundaries and ethical design",()=>{
  const required={
+  "6-A1":"discriminate",
   "7-A1":"classifier",
   "8-B2":"feed",
   "9-A1":"evaluation",
@@ -99,4 +100,81 @@ test("new investigations are included before the app and do not add external scr
  assert.ok(source>=0&&labs>source&&app>labs,"Load investigations, then labs, before the app");
  const combined=paths.filter(x=>x.endsWith(".js")).map(path=>readFileSync(join(root,path),"utf8")).join("\n");
  assert.doesNotMatch(combined,/\b(?:fetch|sendBeacon)\s*\(/,"Investigations remain offline");
+});
+
+
+test("all 30 modules have distinct, genuinely unfamiliar transfer tasks and realistic classroom plans",()=>{
+ const ids=LESSONS.map(l=>l.id);
+ assert.deepEqual(Object.keys(data.UNSEEN_TRANSFER).sort(),ids.slice().sort());
+ assert.equal(Object.keys(data.TEACHER_RUBRIC).length,4);
+ for(const l of LESSONS){
+  const task=data.UNSEEN_TRANSFER[l.id];
+  assert.ok(task.length>75,l.id+" transfer needs a new context and meaningful reasoning");
+  assert.notEqual(task,INQUIRY_BRIEFS[l.id].transfer,l.id+" needs an unfamiliar task rather than repeated practice");
+  const guide=data.classroomPlan(l);
+  assert.match(guide.time,/minutes|sessions/,l.id+" needs realistic time guidance");
+  assert.ok(guide.offline.length>=60,l.id+" must have a useful non-AI equivalent");
+  assert.ok(guide.prepare.length>=40,l.id+" needs teacher preparation");
+  assert.ok(guide.response.length>=40,l.id+" needs an age-relative outcome");
+ }
+ for(const criterion of Object.values(data.TEACHER_RUBRIC)){
+  for(const band of ["developing","applying","transferring"])assert.ok(criterion[band].length>45,band+" is too vague");
+ }
+});
+
+test("every worked example addresses the lesson's central scenario with explicit evidence or a clear decision",()=>{
+ const context=createContext({});
+ for(const path of paths)runInContext(readFileSync(join(root,path),"utf8"),context,{filename:path});
+ const knowledge=runInContext("KNOWLEDGE",context);
+ for(const l of LESSONS){
+  const ex=knowledge[l.id].example;
+  assert.equal(ex.length,2,l.id+" needs contrasting examples");
+  assert.ok(ex[0].length>=30&&ex[1].length>=100,l.id+" examples need instructional substance");
+  assert.notEqual(ex[0],ex[1],l.id+" examples should contrast");
+ }
+ const issues=["8-B2","9-B1","6-A1"];
+ const scenarioLinks={
+  "8-B2":/rank|feed|post/i,
+  "9-B1":/chatbot|caring|secret/i,
+  "6-A1":/confident|understanding|discovery/i
+ };
+ for(const id of issues)assert.match(knowledge[id].example.join(" "),scenarioLinks[id],id+" must model its actual scenario");
+});
+
+test("Grade 6 lab distinguishes fixed rules from evidence of learned patterns without overclaiming",()=>{
+ assert.equal(data.labGrade6("timer",false).output.includes("300 seconds"),true);
+ assert.equal(data.labGrade6("timer",true).output.includes("120 seconds"),true);
+ assert.match(data.labGrade6("unknown",true).interpretation,/not sufficient evidence/);
+});
+
+test("classifier features and training examples genuinely change the deterministic predictions",()=>{
+ const limited=data.labClassify("skewed");
+ assert.equal(limited.correct,2);
+ const expanded=data.labClassify("skewed",{extraExamples:[0,1],lightingWeight:2});
+ assert.equal(expanded.trainingCount,4);
+ assert.equal(expanded.correct,4);
+ const onlyOne=data.labClassify("skewed",{extraExamples:[0],lightingWeight:2});
+ assert.equal(onlyOne.trainingCount,3);
+ assert.ok(onlyOne.correct>=limited.correct&&onlyOne.correct<=4);
+ const noLighting=data.labClassify("skewed",{extraExamples:[],lightingWeight:0});
+ assert.equal(noLighting.rows.length,4);
+ assert.notDeepEqual(noLighting.rows.map(x=>x.predicted),limited.rows.map(x=>x.predicted));
+});
+
+test("changing feed ranking weights and evaluation stakes changes output without data collection",()=>{
+ const attention=data.labRankFeed("attention");
+ const evidenceHeavy=data.labRankFeed("evidence",{evidenceWeight:90});
+ const representationHeavy=data.labRankFeed("evidence",{evidenceWeight:20});
+ assert.notEqual(attention[0].voice,evidenceHeavy[0].voice);
+ assert.notEqual(evidenceHeavy[0].voice,representationHeavy[0].voice);
+ const equal=data.labEvaluate("mixed",false),weighted=data.labEvaluate("mixed",true);
+ assert.equal(equal.passed,weighted.passed);
+ assert.equal(equal.total,8);
+ assert.ok(weighted.weightedRisk>equal.weightedRisk,"High-stakes error weighting should change interpretation");
+});
+
+test("public page loads performance tasks before the learning app",()=>{
+ const html=readFileSync(join(root,"index.html"),"utf8");
+ const part=html.indexOf("content/performance.js"),app=html.indexOf('src="./app.js');
+ assert.ok(part>=0&&app>part,"Rubrics and transfer tasks must be loaded before app.js");
 });
