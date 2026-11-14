@@ -127,7 +127,8 @@ test("brand assets, favicons, app icons and social metadata stay in sync",()=>{
  assert.ok(html.includes('ui/identity.css'));
  assert.ok(html.includes('og:image'));
  assert.ok(app.includes('BRAND_MARK'));
- assert.ok(!app.includes('C<span>×</span>J'));
+ assert.ok(!app.includes('<span class="brand-mark">C<span>×</span>J')); // Old primary wordmark is retired
+ assert.ok(app.includes('brand-wordmark-short')); // Compact abbreviation is intentionally available on small screens
  for(const icon of manifest.icons)assert.ok(read(icon.src.replace(/^\.\//,"")).length>100);
 });
 test("accessible core text colour pairings remain above WCAG AA normal-text contrast",()=>{
