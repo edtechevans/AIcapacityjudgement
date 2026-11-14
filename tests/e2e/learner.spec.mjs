@@ -193,3 +193,43 @@ test("welcome is a single-step grade chooser and entry stays in one grade",async
   await page.locator('[data-action="pick-grade"][data-pick="7"]').click();
   await expect(page).toHaveURL(/#\/grade\/7$/);
 });
+
+
+test("Grade 7 trains and compares two fictional datasets before formative checking",async({page})=>{
+ await startGrade(page,7);
+ await page.goto("/#/lesson/7-A1");
+ await page.locator('[data-action="concept-next"]').click();
+ await page.locator('[data-action="concept-next"]').click();
+ await page.locator('input[name="knowledge-choice"][value="0"]').check();
+ await page.locator('[data-action="knowledge-check"]').click();
+ await page.locator('[data-action="next"]').click();
+ await page.locator('[data-action="model-reveal"]').click();
+ await page.locator('[data-action="next"]').click();
+ await expect(page.locator(".learning-lab")).toContainText("Training data laboratory");
+ await expect(page.locator('[data-action="check"]')).toBeDisabled();
+ await page.locator('[data-action="lab-mode"][data-mode="skewed"]').click();
+ await expect(page.locator("#lab-result")).toContainText("2 of 4 test cases matched");
+ await expect(page.locator('[data-action="check"]')).toBeDisabled();
+ await page.locator('[data-action="lab-mode"][data-mode="balanced"]').click();
+ await expect(page.locator("#lab-result")).toContainText("4 of 4 test cases matched");
+ await expect(page.locator(".lab-comparison")).toContainText("Limited data: 2/4 correct");
+ await expect(page.locator('[data-action="check"]')).toBeEnabled();
+});
+
+test("Grade 8 feed-ranking investigation changes visible voices with the objective",async({page})=>{
+ await startGrade(page,8);
+ await page.goto("/#/lesson/8-B2");
+ await page.locator('[data-action="concept-next"]').click();
+ await page.locator('[data-action="concept-next"]').click();
+ await page.locator('input[name="knowledge-choice"][value="1"]').check();
+ await page.locator('[data-action="knowledge-check"]').click();
+ await page.locator('[data-action="next"]').click();
+ await page.locator('[data-action="model-reveal"]').click();
+ await page.locator('[data-action="next"]').click();
+ await page.locator('[data-action="lab-mode"][data-mode="attention"]').click();
+ await expect(page.locator(".lab-feed-list li").first()).toContainText("Anonymous viral claim");
+ await page.locator('[data-action="lab-mode"][data-mode="evidence"]').click();
+ await expect(page.locator(".lab-feed-list li").first()).toContainText("Multilingual student contributors");
+ await expect(page.locator(".lab-comparison")).toContainText("same five posts appear in a different order");
+ await expect(page.locator('[data-action="check"]')).toBeEnabled();
+});
