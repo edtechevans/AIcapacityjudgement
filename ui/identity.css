@@ -906,15 +906,15 @@ html{scroll-behavior:auto}
 .curriculum-year-heading h3{font-size:clamp(1.35rem,2.3vw,2rem);color:#1A4155;letter-spacing:-.035em;line-height:1.3;margin:6px 0 8px}
 .curriculum-year-heading h3 span{font-weight:570;color:#395E6D}
 .curriculum-year-heading p{font-size:.89rem;color:#59717E;line-height:1.6;margin:0}
-.curriculum-year-big{color:#E2ECEE;font-size:5.2rem;font-weight:800;line-height:1;letter-spacing:-.08em;padding-right:10px}
+.curriculum-year-big{color:#5D7887;font-size:5.2rem;font-weight:800;line-height:1;letter-spacing:-.08em;padding-right:10px}
 .curriculum-concept-strip{display:grid;grid-template-columns:1fr 1fr;gap:18px;background:#F1F7F7;padding:19px;border-radius:10px;margin-bottom:27px}
 .curriculum-concept-strip span{font-size:.69rem;letter-spacing:.09em;font-weight:810;color:#31746F}
 .curriculum-concept-strip p{font-size:.9rem;color:#345865;line-height:1.65;margin:7px 0 0}
 .curriculum-modules-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .curriculum-lane-heading{padding:10px 14px 12px;border-bottom:3px solid #4C9489;margin-bottom:10px}
 .curriculum-lane-heading--judgement{border-color:#C8796A}
-.curriculum-lane-heading span{font-size:.69rem;color:#47817B;font-weight:780;letter-spacing:.1em}
-.curriculum-lane-heading--judgement span{color:#AD675D}
+.curriculum-lane-heading span{font-size:.69rem;color:#2A6866;font-weight:780;letter-spacing:.1em}
+.curriculum-lane-heading--judgement span{color:#8E4B43}
 .curriculum-lane-heading h4{font-size:1.13rem;letter-spacing:-.01em;color:#204A54;margin:5px 0 0}
 .curriculum-lane-heading--judgement h4{color:#783F40}
 .catalogue-module-list{display:grid;gap:10px}
