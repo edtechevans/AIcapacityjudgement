@@ -32,11 +32,12 @@ concurrency:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   cross-device-ux:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -46,10 +47,59 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Install Chromium, Firefox and WebKit
         run: npx playwright install --with-deps chromium firefox webkit
+      - name: Validate curriculum and lesson quality
+        id: unit
+        continue-on-error: true
+        run: npm run test:unit
       - name: Test cross-browser student journeys, mobile layouts and WCAG issues
-        run: npm run test:browser
+        id: browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          npm run test:browser 2>&1 | tee browser-results.log
         env:
           CI: 'true'
+      - name: Report verified run outcome to release gate issue
+        if: ${{ always() && github.event_name != 'pull_request' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: "4"
+          UNIT_OUTCOME: ${{ steps.unit.outcome }}
+          BROWSER_OUTCOME: ${{ steps.browser.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          {
+            echo "### CI result — Browser UX quality"
+            echo ""
+            echo "- **Run:** [Open full logs and artifacts]($RUN_URL)"
+            echo "- **Commit:** \`$COMMIT_SHA\`"
+            echo "- **Unit and curriculum tests:** $UNIT_OUTCOME"
+            echo "- **Playwright browser and automated accessibility:** $BROWSER_OUTCOME"
+            echo ""
+            echo "This is an automated test record, **not a WCAG conformance certificate or a student-learning outcome**."
+            if [[ "$BROWSER_OUTCOME" != "success" && -f browser-results.log ]]; then
+              echo ""
+              echo "<details><summary>Selected browser test failure output</summary>"
+              echo ""
+              echo '~~~text'
+              tail -n 65 browser-results.log | cut -c 1-220
+              echo '~~~'
+              echo ""
+              echo "</details>"
+            fi
+          } > "$RUNNER_TEMP/ci-release-summary.md"
+          gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/ci-release-summary.md"
+      - name: Enforce the full regression gate
+        if: always()
+        env:
+          UNIT_OUTCOME: ${{ steps.unit.outcome }}
+          BROWSER_OUTCOME: ${{ steps.browser.outcome }}
+        run: |
+          if [[ "$UNIT_OUTCOME" != "success" || "$BROWSER_OUTCOME" != "success" ]]; then
+            echo "At least one required test suite did not succeed."
+            exit 1
+          fi
       - name: Upload visual-review screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -59,12 +109,13 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
       - name: Preserve failure screenshots and traces
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: learning-studio-browser-failures
           path: |
             test-results/
             playwright-report/
+            browser-results.log
           if-no-files-found: ignore
           retention-days: 7
