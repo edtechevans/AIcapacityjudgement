@@ -74,7 +74,7 @@ if(w.feedback)body+='<div id="activity-feedback" class="feedback '+(w.feedback.p
 if(!getRecord(l.id).practicePassed||w.retrying)body+='<button class="btn" data-action="check" style="margin-top:20px">Check my thinking →</button>';else body+='<div class="mastery-note">✓ Challenge passed. You can move on to apply your thinking, or practise again.</div><button class="btn btn-outline btn-small" data-action="retry" style="margin-top:15px">Try challenge again</button>';
 return body;}
 function lesson(){const l=currentLesson();if(!l)return courses();const k=KNOWLEDGE[l.id],w=getPractice(l.id),r=getRecord(l.id),stage=Math.min(4,Number(w.stage)||0);if(!k)return '<main id="main-content" class="lesson-layout"><h1>Lesson not available</h1><button class="btn" data-action="courses">Return to courses</button></main>';
-const example=k.example,ct=k.contexts||[],labels=lessonSteps();const activeContext=ct[w.context]||ct[0];let body="";
+const example=k.example,ct=k.contexts||[],labels=lessonSteps();const activeContext=ct[w.context]||ct[0];const nextSuggested=recs(l.grade).map(x=>x.lesson).find(x=>x.id!==l.id&&!state.records[x.id]?.completed)||LESSONS.find(x=>x.grade===l.grade&&x.id!==l.id&&!state.records[x.id]?.completed);let body="";
 if(stage===0){
  const index=Math.min(2,w.topicIndex||0),part=k.core[index];
  body='<div class="lesson-eyebrow"><span class="eyebrow">Build your understanding</span><span class="lesson-subprogress">Idea '+(index+1)+' of 3</span></div>'+
