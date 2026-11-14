@@ -30,4 +30,4 @@ jobs:
         with:
           node-version: "22"
       - name: Validate curriculum, learning flow and accessibility foundations
-        run: node --test tests/quality.test.mjs tests/engineering.test.mjs tests/learning-quality.test.mjs
+        run: npm run test:unit
