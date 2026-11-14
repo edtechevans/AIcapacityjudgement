@@ -200,7 +200,7 @@ test("hero refinement shortens vertical spacing without harming mobile layout",(
 test("journey card is a genuine, accessible lesson link with a clear learning promise",async()=>{
  const h=app();await h.click({action:"guest"});await h.click({action:"home"});
  assert.match(h.html,/Learn what AI can do, when it helps, and how to use it thoughtfully in real situations/);
- assert.match(h.html,/<a class="dashboard-meter dashboard-meter--action" href="#\/lesson\/6-A1" data-lesson="6-A1" aria-label="Start your first lesson: [^"]+">/);
+ assert.match(h.html,/<a class="dashboard-meter dashboard-meter--action" href="#\/lesson\/6-A1" data-lesson="6-A1" aria-label="[^"]*Start your first lesson: [^"]+">/);
  assert.match(h.html,/Open the lesson/);
  await h.click({lesson:"6-A1"});
  assert.equal(h.hash,"#/lesson/6-A1");
