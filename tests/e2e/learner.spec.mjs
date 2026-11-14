@@ -26,7 +26,7 @@ test("welcome, courses, home, learning, about, profile and lessons fit the scree
     await page.goto("/"+route);
     await expect(page.locator("#main-title")).toBeVisible();
     await assertNoOverflow(page,label);
-    await page.screenshot({path:"visual-review/"+info.project.name+"-"+label.toLowerCase().replace(/\\s+/g,"-")+".png",fullPage:true,animations:"disabled"});
+    await page.screenshot({path:"visual-review/"+info.project.name+"-"+label.toLowerCase().replace(/\s+/g,"-")+".png",fullPage:true,animations:"disabled"});
   }
 });
 test("the first learning action and journey card both work",async({page})=>{
