@@ -223,8 +223,8 @@ test("journey card is a genuine, accessible lesson link with a clear learning pr
 });
 test("student pages have coherent headings, navigation and a readable welcome",async()=>{
  const h=app();
- assert.match(h.html,/Choose your grade to begin\./);
- assert.match(h.html,/Choose your grade to explore/);
+ assert.match(h.html,/Find your starting stage\./);
+ assert.match(h.html,/Choose your school grade for a recommended starting stage/);
  assert.doesNotMatch(h.html,/guest-name|Step 2 · Display alias/);
  await h.click({action:"pick-grade",pick:"9"});
  const pages=["home","courses","about","snapshot","profile"];
@@ -288,7 +288,7 @@ test("profile clear requires a deliberate confirmation and can be cancelled",asy
  assert.equal(h.storage["aicj-studio-v2"],before);
  await h.click({action:"logout"});
  await h.click({action:"confirm-clear"});
- assert.match(h.html,/Choose your grade to begin\./);
+ assert.match(h.html,/Find your starting stage\./);
  assert.equal(h.storage["aicj-studio-v2"],undefined);
 });
 test("learning stages show completed progress rather than implying instant completion",async()=>{
@@ -325,26 +325,26 @@ test("My learning always displays real practice even without a check-in",async()
 });
 test("landing requires only one grade click and hides other grade navigation",async()=>{
  const h=app();
- assert.match(h.html,/Choose your grade to begin\./);
+ assert.match(h.html,/Find your starting stage\./);
  for(const grade of [6,7,8,9,10,11,12])assert.match(h.html,new RegExp('data-action="pick-grade" data-pick="'+grade+'"'));
  assert.doesNotMatch(h.html,/guest-name|data-action="guest"/);
  await h.click({action:"pick-grade",pick:"8"});
  assert.equal(h.hash,"#/grade/8");
- assert.match(h.html,/Grade 8:/);
+ assert.match(h.html,/Design &amp; Decide/);
  assert.doesNotMatch(h.html,/grade-chip|data-grade=|Change grade/);
  await h.click({action:"home"});
- assert.match(h.html,/Your learning journey · Grade 8/);
- assert.match(h.html,/All Grade 8 modules/);
+ assert.match(h.html,/Your learning journey · Design &amp; Decide · Recommended Grade 8/);
+ assert.match(h.html,/All modules in this stage/);
  assert.doesNotMatch(h.html,/id="dashboard-grade"|Choose grade/);
  const persisted=JSON.parse(h.storage["aicj-studio-v2"]);
  assert.equal(persisted.gradeChosen,true);
  assert.equal(persisted.grade,8);
- assert.match(app(h.storage).html,/Your learning journey · Grade 8/);
+ assert.match(app(h.storage).html,/Your learning journey · Design &amp; Decide · Recommended Grade 8/);
 });
 test("project identity leads navigation, welcome and metadata",async()=>{
  const h=app();
  assert.match(h.html,/AI CAPACITY × JUDGEMENT/);
- assert.match(h.html,/Choose your grade to begin/);
+ assert.match(h.html,/Find your starting stage/);
  assert.doesNotMatch(h.html,/Learning Studio/i);
  await h.click({action:"pick-grade",pick:"8"});
  await h.click({action:"home"});
@@ -352,28 +352,25 @@ test("project identity leads navigation, welcome and metadata",async()=>{
  assert.doesNotMatch(h.html,/Learning Studio/i);
  for(const path of ["index.html","site.webmanifest","assets/brand/social-preview.svg"])assert.doesNotMatch(read(path),/Learning Studio/i,path);
 });
-test("out-of-grade links cannot change the chosen grade, including browser history",async()=>{
+test("exploration across recommended stages preserves progress",async()=>{
  const h=app();await h.click({action:"pick-grade",pick:"6"});
  await h.click({lesson:"6-A1"});
- const stored=JSON.parse(h.storage["aicj-studio-v2"]);
- assert.ok(stored.records["6-A1"],"Grade 6 lesson is available");
- await h.click({lesson:"9-A1"});
- assert.equal(h.hash,"#/lesson/6-A1","Other-grade lesson button must not open");
- h.back("#/lesson/9-A1");
- assert.equal(h.hash,"#/grade/6","Out-of-grade deep links redirect to active grade");
- assert.match(h.html,/Grade 6:/);
- h.back("#/grade/9");
- assert.equal(h.hash,"#/grade/6","Out-of-grade course links redirect too");
- h.back("#/grade/9/snapshot");
- assert.equal(h.hash,"#/grade/6","Out-of-grade snapshot must not appear");
- assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).grade,6);
+ await h.click({action:"stages"});
+ assert.match(h.html,/Choose where to explore next/);
+ assert.equal((h.html.match(/data-action="open-stage"/g)||[]).length,7);
+ await h.click({action:"open-stage",stageGrade:"9"});
+ assert.equal(h.hash,"#/grade/9");
+ assert.ok(JSON.parse(h.storage["aicj-studio-v2"]).records["6-A1"]);
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).recommendedGrade,6);
+ h.back("#/lesson/7-A1");
+ assert.equal(h.hash,"#/lesson/7-A1");
 });
 test("a deliberate preview-only grade change retains other grade progress without mixing course libraries",async()=>{
  const h=app();await h.click({action:"pick-grade",pick:"6"});
  await h.click({lesson:"6-A1"});await h.click({action:"profile"});
  assert.match(h.html,/Change grade \(preview only\)/);
  await h.click({action:"switch-grade"});
- assert.match(h.html,/Choose your grade to begin\./);
+ assert.match(h.html,/Find your starting stage\./);
  await h.click({action:"pick-grade",pick:"9"});
  assert.equal(h.hash,"#/grade/9");
  assert.doesNotMatch(h.html,/data-lesson="6-A1"/);
@@ -404,7 +401,7 @@ test("shared lesson links survive the welcome screen and grade confirmation",asy
  const changed=app({},"#/lesson/8-A2");
  await changed.click({action:"pick-grade",pick:"7"});
  assert.equal(changed.hash,"#/grade/7","Intentional grade change should override a shared lesson");
- assert.match(changed.html,/Grade 7:/);
+ assert.match(changed.html,/Apply &amp; Verify/);
 });
 test("application notes can be downloaded and unsaved work prompts on page exit",async()=>{
  const h=app();await h.click({action:"guest"});
@@ -721,7 +718,7 @@ test("unseen transfer and age-relative evidence criteria are distinct from autom
 test("public curriculum is accessible without choosing a grade and does not create learner records",async()=>{
  const h=app({},"#/curriculum");
  assert.equal(h.hash,"#/curriculum");
- assert.match(h.html,/Seven years/);
+ assert.match(h.html,/Seven stages/);
  assert.match(h.html,/Two pathways/);
  assert.match(h.html,/Grade 8/);
  assert.match(h.html,/AI Capacity/);
@@ -743,15 +740,13 @@ test("public curriculum is accessible without choosing a grade and does not crea
  await h.click({action:"copy-curriculum"});
  assert.equal(h.copiedText,"https://edtechevans.github.io/AIcapacityjudgement/#/curriculum");
 });
-test("curriculum sharing never bypasses a selected learner's grade permissions",async()=>{
+test("curriculum browsing is read-only until choosing another stage",async()=>{
  const h=app();await h.click({action:"pick-grade",pick:"7"});
  await h.click({action:"curriculum"});
- assert.equal(h.hash,"#/curriculum");
  await h.click({action:"curriculum-grade",curGrade:"11"});
- await h.click({action:"curriculum-open-grade",curGrade:"11"});
- assert.equal(h.hash,"#/curriculum","Viewing the public curriculum cannot switch a learner's selected grade");
+ assert.equal(h.hash,"#/curriculum");
  assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).grade,7);
- await h.click({action:"curriculum-grade",curGrade:"7"});
- await h.click({action:"curriculum-open-grade",curGrade:"7"});
- assert.equal(h.hash,"#/grade/7");
+ await h.click({action:"curriculum-open-grade",curGrade:"11"});
+ assert.equal(h.hash,"#/grade/11");
+ assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).recommendedGrade,7);
 });
