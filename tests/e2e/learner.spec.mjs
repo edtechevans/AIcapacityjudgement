@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 
 async function startGrade(page,grade=6){
   await page.goto("/#/welcome");
-  await expect(page.locator("#main-title")).toContainText("Choose your grade to begin.");
+  await expect(page.locator("#main-title")).toContainText("Find your starting stage.");
   await page.locator('[data-action="pick-grade"][data-pick="'+grade+'"]').click();
   await expect(page.locator(".course-intro")).toBeVisible();
 }
@@ -174,26 +174,26 @@ test("specific mistakes open learner-controlled support, model review and option
 });
 
 
-test("welcome is a single-step grade chooser and entry stays in one grade",async({page})=>{
+test("welcome recommends a grade and supports exploration across stages",async({page})=>{
   await page.goto("/#/welcome");
-  await expect(page.locator("#main-title")).toHaveText("Choose your grade to begin.");
+  await expect(page.locator("#main-title")).toHaveText("Find your starting stage.");
   await expect(page.locator('[data-action="pick-grade"]')).toHaveCount(7);
   await expect(page.locator("#guest-name")).toHaveCount(0);
   await expect(page.locator('[data-action="guest"]')).toHaveCount(0);
   await page.locator('[data-action="pick-grade"][data-pick="8"]').click();
   await expect(page).toHaveURL(/#\/grade\/8$/);
-  await expect(page.locator(".course-intro")).toContainText("Grade 8:");
+  await expect(page.locator(".course-intro")).toContainText("Design & Decide");
   await expect(page.locator(".course-grade-nav")).toHaveCount(0);
   await page.goto("/#/home");
   await expect(page.locator("#dashboard-grade")).toHaveCount(0);
-  await expect(page.locator(".dashboard-grade-locked")).toContainText("Grade 8");
+  await expect(page.locator(".dashboard-grade-locked")).toContainText("Design & Decide");
   await page.goto("/#/lesson/9-A1");
-  await expect(page).toHaveURL(/#\/grade\/8$/);
-  await expect(page.locator(".course-intro")).toContainText("Grade 8:");
+  await expect(page).toHaveURL(/#\/lesson\/9-A1$/);
+  await expect(page.locator(".course-intro")).toContainText("Design & Decide");
   await page.goto("/#/profile");
   await expect(page.locator('[data-action="switch-grade"]')).toBeVisible();
   await page.locator('[data-action="switch-grade"]').click();
-  await expect(page.locator("#main-title")).toHaveText("Choose your grade to begin.");
+  await expect(page.locator("#main-title")).toHaveText("Find your starting stage.");
   await page.locator('[data-action="pick-grade"][data-pick="7"]').click();
   await expect(page).toHaveURL(/#\/grade\/7$/);
 });
