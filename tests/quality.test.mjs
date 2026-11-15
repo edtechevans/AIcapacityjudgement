@@ -223,7 +223,7 @@ test("journey card is a genuine, accessible lesson link with a clear learning pr
 });
 test("student pages have coherent headings, navigation and a readable welcome",async()=>{
  const h=app();
- assert.match(h.html,/Your grade\. Your learning\./);
+ assert.match(h.html,/Choose your grade to begin\./);
  assert.match(h.html,/Choose your grade to explore/);
  assert.doesNotMatch(h.html,/guest-name|Step 2 · Display alias/);
  await h.click({action:"pick-grade",pick:"9"});
@@ -288,7 +288,7 @@ test("profile clear requires a deliberate confirmation and can be cancelled",asy
  assert.equal(h.storage["aicj-studio-v2"],before);
  await h.click({action:"logout"});
  await h.click({action:"confirm-clear"});
- assert.match(h.html,/Your grade\. Your learning\./);
+ assert.match(h.html,/Choose your grade to begin\./);
  assert.equal(h.storage["aicj-studio-v2"],undefined);
 });
 test("learning stages show completed progress rather than implying instant completion",async()=>{
@@ -325,7 +325,7 @@ test("My learning always displays real practice even without a check-in",async()
 });
 test("landing requires only one grade click and hides other grade navigation",async()=>{
  const h=app();
- assert.match(h.html,/Your grade\. Your learning\./);
+ assert.match(h.html,/Choose your grade to begin\./);
  for(const grade of [6,7,8,9,10,11,12])assert.match(h.html,new RegExp('data-action="pick-grade" data-pick="'+grade+'"'));
  assert.doesNotMatch(h.html,/guest-name|data-action="guest"/);
  await h.click({action:"pick-grade",pick:"8"});
@@ -333,13 +333,24 @@ test("landing requires only one grade click and hides other grade navigation",as
  assert.match(h.html,/Grade 8:/);
  assert.doesNotMatch(h.html,/grade-chip|data-grade=|Change grade/);
  await h.click({action:"home"});
- assert.match(h.html,/Your learning studio · Grade 8/);
+ assert.match(h.html,/Your learning journey · Grade 8/);
  assert.match(h.html,/All Grade 8 modules/);
  assert.doesNotMatch(h.html,/id="dashboard-grade"|Choose grade/);
  const persisted=JSON.parse(h.storage["aicj-studio-v2"]);
  assert.equal(persisted.gradeChosen,true);
  assert.equal(persisted.grade,8);
- assert.match(app(h.storage).html,/Your learning studio · Grade 8/);
+ assert.match(app(h.storage).html,/Your learning journey · Grade 8/);
+});
+test("project identity leads navigation, welcome and metadata",async()=>{
+ const h=app();
+ assert.match(h.html,/AI CAPACITY × JUDGEMENT/);
+ assert.match(h.html,/Choose your grade to begin/);
+ assert.doesNotMatch(h.html,/Learning Studio/i);
+ await h.click({action:"pick-grade",pick:"8"});
+ await h.click({action:"home"});
+ for(const label of ["Home","Curriculum","Modules","My Learning","About"])assert.match(h.html,new RegExp(">"+label+"<"));
+ assert.doesNotMatch(h.html,/Learning Studio/i);
+ for(const path of ["index.html","site.webmanifest","assets/brand/social-preview.svg"])assert.doesNotMatch(read(path),/Learning Studio/i,path);
 });
 test("out-of-grade links cannot change the chosen grade, including browser history",async()=>{
  const h=app();await h.click({action:"pick-grade",pick:"6"});
@@ -362,7 +373,7 @@ test("a deliberate preview-only grade change retains other grade progress withou
  await h.click({lesson:"6-A1"});await h.click({action:"profile"});
  assert.match(h.html,/Change grade \(preview only\)/);
  await h.click({action:"switch-grade"});
- assert.match(h.html,/Your grade\. Your learning\./);
+ assert.match(h.html,/Choose your grade to begin\./);
  await h.click({action:"pick-grade",pick:"9"});
  assert.equal(h.hash,"#/grade/9");
  assert.doesNotMatch(h.html,/data-lesson="6-A1"/);

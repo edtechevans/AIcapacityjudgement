@@ -63,6 +63,6 @@ function publicCurriculum({grade=8,strand="A1",escape,gradeChosen=false,assigned
  '<article><span aria-hidden="true">04</span><h3>Create and transfer</h3><p>Produce original work, test it, respond to critique and apply understanding in an unfamiliar setting.</p></article></div>'+
  '<p class="curriculum-integrity-note"><strong>A note about evidence:</strong> Website activity is formative practice, not verified mastery. Complex artefacts and claims of impact require human assessment. This original curriculum is informed by established AI-literacy ideas; it is not an officially endorsed IB course and improved learning outcomes have not yet been established through a student study.</p>'+
  '<div class="curriculum-final-cta"><div><div class="eyebrow">Explore the learning</div><h2>From overview to experience.</h2><p>Choose a grade to try the student journey, or share this overview with your learning community.</p></div>'+
- '<div><button class="btn" type="button" data-action="'+(gradeChosen?'courses':'enter')+'">'+(gradeChosen?'My courses':'Choose your grade')+' →</button>'+
+ '<div><button class="btn" type="button" data-action="'+(gradeChosen?'courses':'enter')+'">'+(gradeChosen?'My modules':'Choose your grade')+' →</button>'+
  '<button class="btn btn-outline" type="button" data-action="copy-curriculum">Copy curriculum link</button></div></div></section></main>';
 }

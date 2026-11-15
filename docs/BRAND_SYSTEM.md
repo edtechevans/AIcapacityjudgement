@@ -10,8 +10,10 @@ The mark is not a robot, sparkles or a generic brain. Two coloured paths approac
 
 **Primary name:** AI Capacity × Judgement  
 **Short form:** AI C×J  
-**Product descriptor:** Learning Studio  
+**Navigation:** Home · Curriculum · Modules · My Learning · About  
 **Short supporting line:** Learn what AI can do. Decide when it should.
+
+The project name is the identity. Avoid giving the learning environment a separate branded name; use functional labels such as **Modules** and **My Learning**.
 
 Do not add an AISG school logo or imply an official school-branded product without a separate school branding approval.
 
@@ -110,7 +112,7 @@ Branding serves the learning experience rather than competing with it:
 2. Run or check the \`Regenerate brand assets\` workflow.
 3. Verify PNG dimensions and inspect the 16 px favicon, Apple icon, sharing preview and dark/light placements.
 4. Update the CSS/HTML cache version when changing brand assets.
-5. Run the Learning Studio quality workflow.
+5. Run the AI Capacity × Judgement quality workflow.
 6. Confirm GitHub Pages deploys and check the real site on desktop, narrow mobile and Safari.
 7. Review whether the latest brand treatment still feels age-appropriate across G6–G10.
 

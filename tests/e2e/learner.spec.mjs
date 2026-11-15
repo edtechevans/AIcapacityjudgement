@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 
 async function startGrade(page,grade=6){
   await page.goto("/#/welcome");
-  await expect(page.locator("#main-title")).toContainText("Your grade. Your learning.");
+  await expect(page.locator("#main-title")).toContainText("Choose your grade to begin.");
   await page.locator('[data-action="pick-grade"][data-pick="'+grade+'"]').click();
   await expect(page.locator(".course-intro")).toBeVisible();
 }
@@ -20,7 +20,7 @@ test("welcome, courses, home, learning, about, profile and lessons fit the scree
   await startGrade(page);
   for(const [route,label] of [
     ["#/home","Home"],["#/grade/6","Courses"],["#/grade/6/snapshot","My learning"],
-    ["#/about","The idea"],["#/profile","Profile"],["#/lesson/6-A1","Lesson"]
+    ["#/about","About"],["#/profile","Profile"],["#/lesson/6-A1","Lesson"]
   ]){
     await page.goto("/"+route);
     await expect(page.locator("#main-title")).toBeVisible();
@@ -176,7 +176,7 @@ test("specific mistakes open learner-controlled support, model review and option
 
 test("welcome is a single-step grade chooser and entry stays in one grade",async({page})=>{
   await page.goto("/#/welcome");
-  await expect(page.locator("#main-title")).toHaveText("Your grade. Your learning.");
+  await expect(page.locator("#main-title")).toHaveText("Choose your grade to begin.");
   await expect(page.locator('[data-action="pick-grade"]')).toHaveCount(7);
   await expect(page.locator("#guest-name")).toHaveCount(0);
   await expect(page.locator('[data-action="guest"]')).toHaveCount(0);
@@ -193,7 +193,7 @@ test("welcome is a single-step grade chooser and entry stays in one grade",async
   await page.goto("/#/profile");
   await expect(page.locator('[data-action="switch-grade"]')).toBeVisible();
   await page.locator('[data-action="switch-grade"]').click();
-  await expect(page.locator("#main-title")).toHaveText("Your grade. Your learning.");
+  await expect(page.locator("#main-title")).toHaveText("Choose your grade to begin.");
   await page.locator('[data-action="pick-grade"][data-pick="7"]').click();
   await expect(page).toHaveURL(/#\/grade\/7$/);
 });

@@ -1,6 +1,6 @@
-# AI Capacity × Judgement — Learning Studio
+# AI Capacity × Judgement
 
-A student-facing Grades 6–12 formative learning studio (MYP and DP-adjacent), with 42 modules, six connected strands and independently reviewable performance challenges. Two connected curricula: **AI Capacity** (understanding, working with, and creating with AI) and **AI Judgement** (agency, truth, trust, ethics and consequences).
+A student-facing Grades 6–12 formative learning experience (MYP and DP-adjacent), with 42 modules, six connected strands and independently reviewable performance challenges. Two connected curricula: **AI Capacity** (understanding, working with, and creating with AI) and **AI Judgement** (agency, truth, trust, ethics and consequences).
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
@@ -118,7 +118,7 @@ See the [cross-page UX audit and validation notes](docs/UX_AUDIT_2026-11-14.md).
 
 ## The Intersection — a refreshed identity (November 2026)
 
-The Learning Studio now has a **complete, original visual identity**. Its symbol represents two distinct pathways—AI Capacity (aqua) and AI Judgement (coral)—meeting at a considered choice. The identity avoids generic AI imagery while remaining recognisable from a 16px favicon to a presentation-size social graphic.
+AI Capacity × Judgement has a **complete, original visual identity**. Its symbol represents two distinct pathways—AI Capacity (aqua) and AI Judgement (coral)—meeting at a considered choice. The identity avoids generic AI imagery while remaining recognisable from a 16px favicon to a presentation-size social graphic.
 
 - **[Live brand showcase](https://edtechevans.github.io/AIcapacityjudgement/brand.html):** logos, palette, app icons, sharing card and download links.
 - **[Brand system guidelines](docs/BRAND_SYSTEM.md):** rationale, colour contrast, typography, logo usage, accessibility rules and maintenance steps.
@@ -140,7 +140,7 @@ The interface has been reviewed and refined as a cohesive, scalable student work
 - **Easier authentic application:** Choose a challenge → Plan → Create and review, while retaining full teaching, practice and application requirements.
 - **Resilient progress:** Minimal learning checkpoints survive reload; JSON backups can be exported and imported between devices. Free-text drafts are **never** included in saved progress or backups.
 - **Future grade expansion:** Navigation validates grade and lesson routes against existing curriculum content rather than fixed grade patterns.
-- **Automated quality checks:** [Learning Studio quality workflow](.github/workflows/quality.yml) exercises the entire 30-module learner journey on future code changes.
+- **Automated quality checks:** [AI Capacity × Judgement quality workflow](.github/workflows/quality.yml) exercises the entire 30-module learner journey on future code changes.
 
 The [Future-Readiness UI/UX Review](docs/FUTURE_READY_UI_REVIEW.md) contains the assessment, release decisions and remaining accessibility/production risks. The website is still a **public prototype**, not an authenticated school learning platform.
 
