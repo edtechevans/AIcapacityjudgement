@@ -1025,3 +1025,16 @@ html{scroll-behavior:auto}
  .curriculum-hero,.curriculum-selected-year,.curriculum-spiral,.curriculum-counts{break-inside:avoid}
  .curriculum-pathway,.curriculum-annual-challenge,.curriculum-final-cta{background:#fff!important;color:#172B3C!important}
 }
+
+/* Named stages; grade recommendations are not ability ranks. */
+.stage-explorer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px;margin:30px 0}
+.stage-explorer-card{text-align:left;display:flex;flex-direction:column;gap:12px;min-height:220px;padding:22px;border:1px solid var(--brand-line);border-top:4px solid var(--brand-capacity);border-radius:15px;background:white;color:var(--brand-ink);cursor:pointer}
+.stage-explorer-card:nth-child(even){border-top-color:var(--brand-judgement)}
+.stage-explorer-card.is-active{box-shadow:0 0 0 2px var(--brand-capacity)}
+.stage-explorer-card:hover{background:#f3faf9}
+.stage-explorer-card strong{font-family:var(--brand-display);font-size:1.28rem}
+.stage-explorer-card>span:nth-of-type(2){font-size:.9rem;line-height:1.5;color:var(--brand-muted);flex:1}
+.stage-explorer-card small,.stage-explorer-meta,.stage-recommendation{font-size:.8rem;font-weight:750;color:var(--brand-capacity)}
+.stage-explorer-note{max-width:800px;color:var(--brand-muted);line-height:1.6}
+.stage-explorer-card:focus-visible{outline:3px solid var(--brand-focus);outline-offset:3px}
+@media(max-width:620px){.stage-explorer-grid{grid-template-columns:1fr}.stage-explorer-card{min-height:170px}}

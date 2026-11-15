@@ -253,3 +253,7 @@ Recommended next school-facing steps:
 ## Attribution
 
 Concept and curriculum: © 2026 Tim Evans. **CC BY-NC-SA 4.0** — https://creativecommons.org/licenses/by-nc-sa/4.0/. Third-party content keeps its own licence.
+
+## AI Learning Progression · recommended stages
+
+Seven named stages use Grades 6–12 as recommended starting points, not ability levels or ceilings. The 42 existing modules remain unchanged. Students in the public preview may explore other stages and retain per-module progress. Completion remains formative practice rather than verified mastery. An authenticated school deployment must enforce permissions on the server.
