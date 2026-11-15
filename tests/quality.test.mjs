@@ -368,7 +368,7 @@ test("exploration across recommended stages preserves progress",async()=>{
 test("a deliberate preview-only grade change retains other grade progress without mixing course libraries",async()=>{
  const h=app();await h.click({action:"pick-grade",pick:"6"});
  await h.click({lesson:"6-A1"});await h.click({action:"profile"});
- assert.match(h.html,/Change grade \(preview only\)/);
+ assert.match(h.html,/Change recommended starting grade/);
  await h.click({action:"switch-grade"});
  assert.match(h.html,/Find your starting stage\./);
  await h.click({action:"pick-grade",pick:"9"});
