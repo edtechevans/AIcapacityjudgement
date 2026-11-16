@@ -50,7 +50,7 @@ Do not hand-edit PNGs. Update the SVG masters and rebuild the exports. The workf
 | Supporting text | \`#606873\` | Secondary typography |
 | Capacity text | \`#244A7A\` | Navy-blue pathway text and actionable accents |
 | Capacity light | \`#E8EDF4\` | Capacity panels and active backgrounds |
-| Capacity bright | \`#ADB8C6\` | Identity mark and decoration **on dark only** |
+| Capacity bright | \`#9EABB9\` | Identity mark and decoration **on dark only** |
 | Judgement text | \`#B32635\` | Red pathway text and actionable accents |
 | Judgement light | \`#F9ECEE\` | Judgement panels and warnings |
 | Judgement bright | \`#B32635\` | Identity mark and decoration **on dark only** |
