@@ -53,7 +53,7 @@ Do not hand-edit PNGs. Update the SVG masters and rebuild the exports. The workf
 | Capacity bright | \`#ADB8C6\` | Identity mark and decoration **on dark only** |
 | Judgement text | \`#B32635\` | Red pathway text and actionable accents |
 | Judgement light | \`#F9ECEE\` | Judgement panels and warnings |
-| Judgement bright | \`#EF6570\` | Identity mark and decoration **on dark only** |
+| Judgement bright | \`#B32635\` | Identity mark and decoration **on dark only** |
 | Warm highlight | \`#F5E2C1\` | Rarely, as a tertiary expressive accent |
 | Keyboard focus | \`#245B9A\` | Focus outlines with offset |
 
