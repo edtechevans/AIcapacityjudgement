@@ -1,12 +1,12 @@
 # Identity System — AI Capacity × Judgement
-**Edition:** 1.0 · 14 November 2026  
+**Edition:** 1.1 · 16 November 2026  
 **Concept:** *The Intersection* — learn what AI makes possible; choose when it belongs.
 
 ## 1. Strategy
 
 AI Capacity and AI Judgement must feel distinct and equally important. The brand never confuses technical fluency with wisdom, or implies that using more AI is always better. Its identity combines optimism with restraint: approachable for Grade 6 learners, credible for Grade 10 learners and educators.
 
-The mark is not a robot, sparkles or a generic brain. Two coloured paths approach one shared point. The **aqua pathway** signifies the ability to understand, experiment and create. The **coral pathway** signifies discernment, agency and responsibility. The small **white centre** represents a considered decision. Neither path dominates.
+The mark is not a robot, sparkles or a generic brain. Two coloured paths approach one shared point. The **navy-blue pathway** signifies the ability to understand, experiment and create. The **red pathway** signifies discernment, agency and responsibility. The small **white centre** represents a considered decision. Neither path dominates.
 
 **Primary name:** AI Capacity × Judgement  
 **Short form:** AI C×J  
@@ -15,7 +15,7 @@ The mark is not a robot, sparkles or a generic brain. Two coloured paths approac
 
 The project name is the identity. Avoid giving the learning environment a separate branded name; use functional labels such as **Modules** and **My Learning**.
 
-Do not add an AISG school logo or imply an official school-branded product without a separate school branding approval.
+The palette is AISG-inspired; this does not imply formal approval to use AISG logos or institutional marks.
 
 ## 2. Brand assets (vector originals)
 
@@ -43,19 +43,19 @@ Do not hand-edit PNGs. Update the SVG masters and rebuild the exports. The workf
 
 | Role | Hex | Use |
 | --- | --- | --- |
-| Ink | \`#142339\` | Primary typography, logo field, dark hero |
-| Cloud | \`#F7F9FC\` | Main page background |
+| Ink | \`#172D4E\` | Primary typography, logo field, dark hero |
+| Cloud | \`#F7F8FA\` | Main page background |
 | Paper | \`#FFFFFF\` | Cards and forms |
-| Line | \`#DAE4EA\` | Low-emphasis boundaries, never as critical text |
-| Supporting text | \`#52657B\` | Secondary typography |
-| Capacity text | \`#176C69\` | Teal pathway text and actionable accents |
-| Capacity light | \`#E1F5F2\` | Capacity panels and active backgrounds |
-| Capacity bright | \`#69E9D8\` | Identity mark and decoration **on dark only** |
-| Judgement text | \`#AB473B\` | Coral pathway text and actionable accents |
-| Judgement light | \`#FFF0EA\` | Judgement panels and warnings |
-| Judgement bright | \`#FF9C80\` | Identity mark and decoration **on dark only** |
+| Line | \`#DCE2E9\` | Low-emphasis boundaries, never as critical text |
+| Supporting text | \`#606873\` | Secondary typography |
+| Capacity text | \`#244A7A\` | Navy-blue pathway text and actionable accents |
+| Capacity light | \`#E8EDF4\` | Capacity panels and active backgrounds |
+| Capacity bright | \`#A8C1E5\` | Identity mark and decoration **on dark only** |
+| Judgement text | \`#B32635\` | Red pathway text and actionable accents |
+| Judgement light | \`#F9ECEE\` | Judgement panels and warnings |
+| Judgement bright | \`#F28C99\` | Identity mark and decoration **on dark only** |
 | Warm highlight | \`#F5E2C1\` | Rarely, as a tertiary expressive accent |
-| Keyboard focus | \`#136B8E\` | Focus outlines with offset |
+| Keyboard focus | \`#245B9A\` | Focus outlines with offset |
 
 ### Verified text contrast
 
@@ -70,7 +70,7 @@ Ratios calculated to WCAG relative luminance:
 
 These are the **defined pairings**, not a guarantee that every computed colour on every UI element meets WCAG. Complete an actual WCAG 2.2 AA audit before school-wide operational deployment.
 
-**Do not use the bright aqua or bright coral for small text on white.** Use the darker text colours. Always combine pathway colour with a textual label: colour must not be the only signal.
+**Do not use the bright blue or bright red for small text on white.** Use the darker text colours. Always combine pathway colour with a textual label: colour must not be the only signal.
 
 ## 5. Typography and UI principles
 
