@@ -64,7 +64,7 @@ const progressBar=(percent,label="Modules practised")=>'<div class="progress-lin
 function trackLabel(track){return track==="capacity"?"AI Capacity":"AI Judgement"}
 const stageTitle=g=>GRADES[g]?.headline||"Learning stage";
 const stageLabel=g=>stageTitle(g)+" · Recommended Grade "+g;
-const BRAND_MARK='<img src="./assets/brand/mark.svg?v=aisg-20261116c" alt="" class="brand-emblem" width="48" height="48" decoding="async">';
+const BRAND_MARK='<img src="./assets/brand/mark.svg?v=aisg-20261116d" alt="" class="brand-emblem" width="48" height="48" decoding="async">';
 function mobileMenu(){
  const item=(action,label)=>'<button type="button" data-action="'+action+'" '+(state.page===action?'aria-current="page"':'')+'>'+label+'</button>';
  return '<details class="mobile-menu"><summary aria-label="Open navigation menu">☰</summary><nav class="mobile-menu-links" aria-label="Mobile navigation">'+
