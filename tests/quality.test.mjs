@@ -154,9 +154,9 @@ test("accessible core text colour pairings remain above WCAG AA normal-text cont
  };
  const contrast=(a,b)=>{const x=L(a),y=L(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
  const pairs=[
-   ["#142339","#FFFFFF"],["#52657B","#F7F9FC"],
-   ["#176C69","#E1F5F2"],["#AB473B","#FFF0EA"],
-   ["#FFFFFF","#AB473B"],["#69E9D8","#142339"]
+   ["#172D4E","#FFFFFF"],["#606873","#F7F8FA"],
+   ["#244A7A","#E8EDF4"],["#B32635","#F9ECEE"],
+   ["#FFFFFF","#B32635"],["#A8C1E5","#172D4E"]
  ];
  for(const [a,b] of pairs)assert.ok(contrast(a,b)>=4.5,"Contrast failure "+a+" on "+b);
 });
