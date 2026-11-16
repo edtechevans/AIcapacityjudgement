@@ -13,7 +13,7 @@ from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=ROOT/"assets"/"brand"
-INK=(20,35,57,255)
+INK=(23,45,78,255)
 
 def export(source:str,filename:str,w:int,h:int,opaque=False)->None:
     data=cairosvg.svg2png(url=str(ASSETS/source),output_width=w,output_height=h)
