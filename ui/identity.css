@@ -1119,3 +1119,190 @@ select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
  }
  .grade-entry-card:hover{transform:none}
 }
+
+
+/* v33 · Student-first UX refresh
+   Home, curriculum, grades, lesson workspace and mobile share one visual language.
+   Cosmetic transitions never obstruct content or navigation. */
+:root{
+ --ux-surface:#FFFFFF;
+ --ux-canvas:#F7F8FA;
+ --ux-ink:#172D4E;
+ --ux-red:#B32635;
+ --ux-grey:#606873;
+ --ux-border:#DCE2E9;
+ --ux-navy-soft:#E8EDF4;
+ --ux-red-soft:#F9ECEE;
+ --ux-radius:16px;
+ --ux-shadow:0 8px 28px rgba(23,45,78,.055);
+ --ux-shadow-hover:0 17px 40px rgba(23,45,78,.115);
+}
+.dashboard-hero .hero-buttons{margin-bottom:5px}
+.dashboard-hero .hero-buttons>.btn:first-child{
+ min-height:48px;
+ border-radius:12px;
+ font-weight:780;
+ box-shadow:0 10px 24px rgba(12,25,48,.18);
+}
+.dashboard-secondary-links{
+ display:flex;
+ align-items:center;
+ flex-wrap:wrap;
+ gap:5px 14px;
+ margin-top:8px;
+}
+.dashboard-secondary-links .btn.btn-text{
+ background:transparent;
+ border:1px solid transparent;
+ padding:8px 3px;
+ min-height:40px;
+ color:#E9EFF7;
+ font-size:.85rem;
+ font-weight:690;
+ text-decoration:underline;
+ text-decoration-color:rgba(233,239,247,.35);
+ text-underline-offset:5px;
+ box-shadow:none;
+}
+.dashboard-secondary-links .btn.btn-text:hover{
+ background:rgba(255,255,255,.09);
+ border-color:rgba(255,255,255,.15);
+ padding-inline:10px;
+ text-decoration-color:currentColor;
+ color:#FFFFFF;
+}
+.workspace-step-label{
+ display:inline-flex;
+ font-size:.68rem;
+ letter-spacing:.13em;
+ font-weight:850;
+ color:var(--ux-red);
+ margin-bottom:6px;
+}
+.dashboard-next-card,.dashboard-snapshot-card,.dashboard-lane,
+.course-featured,.featured-snapshot,.learning-progress-card,
+.info-card,.lesson-panel,.knowledge-panel,.challenge-box,
+.learning-lab,.course-library .lesson-card{
+ border-color:var(--ux-border);
+ box-shadow:var(--ux-shadow);
+}
+.dashboard-next-card{
+ background:linear-gradient(145deg,#FFFFFF 60%,#F1F4F8);
+ border-top:3px solid var(--ux-ink);
+}
+.dashboard-snapshot-card{
+ background:linear-gradient(150deg,#FFFFFF 70%,#F7F8FA);
+}
+.dashboard-lane.capacity-lane{border-top:3px solid var(--ux-ink)}
+.dashboard-lane.judgement-lane{border-top:3px solid var(--ux-red)}
+.dashboard-lane:hover,.lesson-card:hover,.stage-explorer-card:hover,
+.grade-entry-card:hover{box-shadow:var(--ux-shadow-hover)}
+/* Keep a calm, consistent lesson workspace: the current task is the focal point. */
+.lesson-layout{
+ background:radial-gradient(ellipse 50rem 22rem at 50% 0,rgba(23,45,78,.035),transparent 75%);
+}
+.lesson-panel{
+ border-radius:var(--ux-radius);
+ background:var(--ux-surface);
+}
+.lesson-panel #stage-title{letter-spacing:-.025em;scroll-margin-top:108px}
+.lesson-panel .knowledge-panel,.lesson-panel .worked-contrast,
+.lesson-panel .challenge-box,.lesson-panel .learning-lab{
+ border-radius:14px;
+}
+.lesson-panel .step-dot.active{
+ background:var(--ux-navy-soft);
+ border-color:#8A9FB8;
+ box-shadow:inset 0 -3px 0 var(--ux-ink);
+}
+.lesson-panel .step-dot.active .step-number{background:var(--ux-ink)}
+.lesson-panel .step-meter>div{
+ background:linear-gradient(90deg,var(--ux-ink),#496C9A);
+}
+.lesson-card:focus-visible,.stage-explorer-card:focus-visible,
+.grade-entry-card:focus-visible{
+ outline:3px solid #245B9A;
+ outline-offset:3px;
+}
+/* Curriculum and seven-stage explorer: hierarchy without new clutter. */
+.curriculum-hero,.scope-grade-item,.curriculum-pathway{
+ border-color:var(--ux-border);
+}
+.curriculum-pathway{box-shadow:0 7px 20px rgba(23,45,78,.035)}
+.curriculum-pathway--judgement{border-top:3px solid var(--ux-red)}
+.stage-explorer-grid{align-items:stretch}
+.stage-explorer-card{
+ position:relative;
+ overflow:hidden;
+ padding-top:20px;
+ border-radius:var(--ux-radius);
+ transition:box-shadow .18s ease,border-color .18s ease,transform .18s ease;
+}
+.stage-explorer-card:hover{transform:translateY(-2px)}
+.stage-explorer-card .stage-index{
+ position:absolute;
+ top:17px;
+ right:18px;
+ font-size:.7rem;
+ font-weight:800;
+ color:#8390A0;
+ letter-spacing:.09em;
+}
+.stage-explorer-card.is-active{
+ border-color:#869AB5;
+ background:linear-gradient(150deg,#F7F9FC,#FFFFFF);
+ box-shadow:inset 0 0 0 1px #869AB5,0 10px 27px rgba(23,45,78,.06);
+}
+.stage-explorer-card .stage-mini-progress{
+ display:block;
+ position:relative;
+ height:5px;
+ width:100%;
+ flex:none;
+ overflow:hidden;
+ border-radius:100px;
+ background:#E7EBF1;
+ margin-top:2px;
+}
+.stage-explorer-card .stage-mini-progress>span{
+ display:block;
+ width:0;
+ height:100%;
+ border-radius:inherit;
+ background:var(--ux-ink);
+}
+.stage-explorer-card:nth-child(even) .stage-mini-progress>span{background:var(--ux-red)}
+/* The intersection motif: a low-opacity path detail, never behind lesson text. */
+.dashboard-hero:before{opacity:.025;pointer-events:none}
+.grade-entry:before,.stages-page:before{pointer-events:none}
+.topbar .top-actions{gap:clamp(2px,.5vw,9px)}
+.topbar .navlink{white-space:nowrap}
+.topbar .navlink.active{color:var(--ux-ink);background:var(--ux-navy-soft)}
+/* Mobile is a deliberate single-column experience, not scaled desktop. */
+@media(max-width:850px){
+ .dashboard-secondary-links{gap:2px 10px}
+ .dashboard-hero .hero-buttons>.btn:first-child{width:100%;max-width:350px}
+ .stage-explorer-card{min-height:180px}
+ .lesson-panel{box-shadow:0 5px 18px rgba(23,45,78,.045)}
+}
+@media(max-width:620px){
+ .dashboard-secondary-links{
+  flex-direction:column;
+  align-items:flex-start;
+  margin-top:9px;
+  gap:0;
+ }
+ .dashboard-secondary-links .btn.btn-text{width:auto;min-height:42px}
+ .dashboard-next-card,.dashboard-snapshot-card{box-shadow:0 5px 18px rgba(23,45,78,.045)}
+ .stage-explorer-grid{grid-template-columns:1fr}
+ .stage-explorer-card{min-height:168px;padding:18px}
+ .stage-explorer-card .stage-index{top:14px;right:16px}
+ .lesson-panel{border-radius:13px}
+ .lesson-panel .step-track{scroll-snap-type:x proximity}
+ .lesson-panel .step-dot{scroll-snap-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+ .stage-explorer-card{transition:none!important}
+ .stage-explorer-card:hover{transform:none}
+ .dashboard-secondary-links .btn.btn-text{transition:none!important}
+}
