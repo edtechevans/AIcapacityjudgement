@@ -1306,3 +1306,30 @@ select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
  .stage-explorer-card:hover{transform:none}
  .dashboard-secondary-links .btn.btn-text{transition:none!important}
 }
+
+/* v33 finishing details: one dominant learning action, clear responsive feedback. */
+.dashboard-next-card .btn{
+ background:var(--ux-surface);
+ color:var(--ux-ink);
+ border:1px solid #A6B5C7;
+ box-shadow:none;
+}
+.dashboard-next-card .btn:hover{
+ background:var(--ux-navy-soft);
+ border-color:var(--ux-ink);
+ box-shadow:0 5px 12px rgba(23,45,78,.065);
+}
+.dashboard-next-card .btn:focus-visible{outline:3px solid #245B9A;outline-offset:3px}
+.stage-explorer-card .stage-mini-progress{margin-top:auto}
+.course-filter.selected{
+ box-shadow:inset 0 -2px 0 var(--ux-red);
+}
+.lesson-panel .step-dot:hover:not(.active){
+ border-color:#8296B0;
+ background:#F0F3F7;
+}
+@media(max-width:620px){
+ .dashboard-hero .hero-buttons>.btn:first-child{max-width:none}
+ .lesson-panel .step-controls{gap:9px}
+ .lesson-panel .step-controls .btn{min-height:44px}
+}
