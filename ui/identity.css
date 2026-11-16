@@ -141,7 +141,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  z-index:-1;
  right:3%;top:-6%;
  width:350px;height:350px;
- background:url("../assets/brand/mark-transparent.svg?v=aisg-deepred-20261116e") center/contain no-repeat;
+ background:url("../assets/brand/mark-transparent.svg?v=aisg-grey-20261116f") center/contain no-repeat;
  opacity:.075;
  border:0;
  border-radius:0;
@@ -172,7 +172,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .dashboard-lane:before{
  content:"";
  position:absolute;z-index:-1;right:10px;top:15px;
- width:112px;height:112px;background:url("../assets/brand/mark-transparent.svg?v=aisg-deepred-20261116e") center/contain no-repeat;
+ width:112px;height:112px;background:url("../assets/brand/mark-transparent.svg?v=aisg-grey-20261116f") center/contain no-repeat;
  opacity:.12;pointer-events:none
 }
 .dashboard-lane h3{font-family:var(--brand-display);font-size:1.75rem;font-weight:650}
