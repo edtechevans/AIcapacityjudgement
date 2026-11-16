@@ -1038,3 +1038,84 @@ html{scroll-behavior:auto}
 .stage-explorer-note{max-width:800px;color:var(--brand-muted);line-height:1.6}
 .stage-explorer-card:focus-visible{outline:3px solid var(--brand-focus);outline-offset:3px}
 @media(max-width:620px){.stage-explorer-grid{grid-template-columns:1fr}.stage-explorer-card{min-height:170px}}
+
+
+/* v32 · AISG future-facing refinement — visual styling only.
+   Preserve all existing layout, typography, content and interactions. */
+:root{
+ --brand-polish-navy:#172D4E;
+ --brand-polish-red:#B32635;
+ --brand-polish-grey:#606873;
+ --brand-polish-stroke:#9EABB9;
+ --brand-polish-surface:#F7F8FA;
+ --brand-polish-edge:#DCE2E9;
+ --brand-polish-shadow:0 14px 38px rgba(23,45,78,.075);
+}
+html,body{background-color:var(--brand-polish-surface)}
+.site{
+ background:
+  radial-gradient(ellipse 52rem 34rem at 98% 9%,rgba(23,45,78,.048),transparent 75%),
+  radial-gradient(ellipse 42rem 28rem at 2% 61%,rgba(179,38,53,.025),transparent 78%),
+  var(--brand-polish-surface);
+}
+.topbar{
+ background:rgba(255,255,255,.97);
+ border-bottom:1px solid var(--brand-polish-edge);
+ box-shadow:0 7px 24px rgba(23,45,78,.045);
+}
+.topbar .navlink.active{
+ background:#E8EDF4;
+ color:var(--brand-polish-navy);
+ box-shadow:inset 0 -2px 0 var(--brand-polish-red);
+}
+.topbar .navlink:hover{background:#EEF2F7}
+.btn{box-shadow:0 5px 14px rgba(23,45,78,.085)}
+.btn:hover{box-shadow:0 9px 21px rgba(23,45,78,.13)}
+.btn-coral{background:var(--brand-polish-red);border-color:var(--brand-polish-red)}
+.btn-coral:hover{background:#92202C;border-color:#92202C}
+.btn-outline,.btn-text{box-shadow:none}
+.grade-entry-card,.lesson-card,.learning-progress-card,.stage-explorer-card,
+.scope-grade-item,.curriculum-pathway{
+ border-color:var(--brand-polish-edge);
+ box-shadow:0 7px 24px rgba(23,45,78,.035);
+}
+.grade-entry-card:hover,.lesson-card:hover,.stage-explorer-card:hover{
+ box-shadow:0 16px 38px rgba(23,45,78,.115);
+}
+.grade-entry-card:nth-child(odd),.stage-explorer-card:nth-child(odd){border-top-color:var(--brand-polish-navy)}
+.grade-entry-card:nth-child(even),.stage-explorer-card:nth-child(even){border-top-color:var(--brand-polish-red)}
+.grade-entry-card:nth-child(odd):hover,.stage-explorer-card:nth-child(odd):hover{border-color:#7C91AA}
+.grade-entry-card:nth-child(even):hover,.stage-explorer-card:nth-child(even):hover{border-color:#B32635}
+.curriculum-pathway{
+ background:linear-gradient(125deg,#E8EDF4,#F5F7FA);
+ border-color:#D4DDE9;
+}
+.curriculum-pathway--judgement{
+ background:linear-gradient(125deg,#F9ECEE,#FFF8F9);
+ border-color:#EACDD1;
+}
+.learning-progress-capacity{background:linear-gradient(130deg,#EDF1F7,#FFF)}
+.learning-progress-judgement{background:linear-gradient(130deg,#F9ECEE,#FFF)}
+.grade-mission{background:linear-gradient(133deg,#ECF1F7,#F8FAFC);border-color:#CFD8E4}
+.scope-grade-number{background:var(--brand-polish-navy)}
+.lesson-panel .step-meter>div{background:linear-gradient(90deg,#172D4E,#416791)}
+.dashboard-hero{
+ background-color:var(--brand-polish-navy);
+ box-shadow:0 16px 44px rgba(23,45,78,.12);
+}
+.dashboard-hero:after{background:radial-gradient(ellipse,rgba(179,38,53,.18),transparent 72%)}
+.dashboard-lane .lane-judgement .progress-fill{background:var(--brand-polish-red)}
+.dashboard-lane .lane-capacity .progress-fill{background:var(--brand-polish-navy)}
+.progress-fill{background:var(--brand-polish-navy)}
+.footer{background:#EDF1F6;border-top-color:var(--brand-polish-edge)}
+/* Make keyboard focus unmistakable, regardless of pathway or background. */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
+select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
+ outline:3px solid #245B9A;outline-offset:3px;
+}
+@media(prefers-reduced-motion:reduce){
+ .grade-entry-card,.lesson-card,.stage-explorer-card,.btn{
+  transition:none!important;
+ }
+ .grade-entry-card:hover{transform:none}
+}
