@@ -66,7 +66,7 @@ function v21Progression(l){
 }
 function v21Kind(l){
  const si=V21_STRANDS.indexOf(l.strand),rotation=["single","multi","sort","sequence"];
- return rotation[(l.grade+si*2)%rotation.length];
+ return rotation[(l.grade+si)%rotation.length];
 }
 function v21Apply(l){
  const g=V21_GRADE_DEMAND[l.grade]||V21_GRADE_DEMAND[10],p=v21Progression(l),kind=v21Kind(l);
