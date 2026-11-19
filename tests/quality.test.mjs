@@ -96,4 +96,12 @@ test("A3 and B3 cannot complete until cumulative synthesis is passed",async()=>{
 });
 test("public curriculum and educator learning remain available before grade selection",async()=>{const h=app();await h.click({action:"educators"});assert.equal(h.hash,"#/educators");assert.match(h.html,/Educator learning/);await h.click({action:"curriculum"});assert.equal(h.hash,"#/curriculum")});
 test("progress backup stores checkpoints rather than response content",()=>{const appJs=read("app.js");assert.ok(appJs.includes('format:"AI-CJ-local-progress"'));assert.ok(!appJs.includes("LEARNING NOTES"));assert.ok(!appJs.includes("downloadPlan"))});
-test("V2.1 assets load before the application",()=>{const html=read("index.html"),v=html.indexOf("content/v21-interactions.js"),edu=html.indexOf("content/educators.js"),appPos=html.indexOf('src="./app.js');assert.ok(v>=0&&edu>v&&appPos>edu);assert.match(html,/v21-20261119/)});
+test("V2.2 uses one consolidated interface system and loads learning assets in order",()=>{
+ const html=read("index.html"),v=html.indexOf("content/v21-interactions.js"),edu=html.indexOf("content/educators.js"),appPos=html.indexOf('src="./app.js');
+ assert.ok(v>=0&&edu>v&&appPos>edu);
+ assert.match(html,/ui\/v22-system\.css/);assert.match(html,/v22-20261119/);
+ assert.ok(!html.includes("ui/future.css"));assert.ok(!html.includes("ui/identity.css"));assert.ok(!html.includes("ui/educators.css"));
+ const css=read("ui/v22-system.css"),appJs=read("app.js");
+ for(const token of ["intersection-visual","pathway-map","learning-rail","v21-feedback-grid","prefers-reduced-motion"])assert.ok(css.includes(token),"Missing V2.2 design component "+token);
+ for(const fn of ["intersectionVisual","pathwayMap"])assert.ok(appJs.includes("function "+fn),"Missing V2.2 UI helper "+fn);
+});
