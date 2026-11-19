@@ -17,6 +17,31 @@ The project name is the identity. Avoid giving the learning environment a separa
 
 The palette is AISG-inspired; this does not imply formal approval to use AISG logos or institutional marks.
 
+
+## V2.2 interface direction — Calm Intelligence
+
+The interface now uses **The Intersection** as a recurring product grammar rather than only a logo concept. Capacity enters from one side, Judgement from the other, and synthesis/decision moments converge at the ×. This should be visible in pathway progress, lesson stages, synthesis moments and selected hero surfaces without becoming decorative noise.
+
+The future-facing quality comes from **space, hierarchy, controlled depth, purposeful motion and interaction**, not from neon colour, generic AI imagery, particle effects or excessive glass. The site remains primarily light, editorial and highly legible. Apply/Transfer may use a focused dark decision surface, while reading and teaching surfaces stay calm and solid.
+
+### Geometry and depth
+- 6px — micro labels and small indicators
+- 10px — controls and response options
+- 16px — normal learning surfaces
+- 24px — feature and hero surfaces
+- Canvas depth — no shadow
+- Surface depth — restrained shadow for meaningful objects
+- Floating depth — reserved for sticky/navigation or high-priority decision surfaces
+
+### Motion
+Use motion only to communicate state change: progress, pathway convergence, selection, completion or movement between learning stages. Default transitions should remain approximately 160–240ms. All non-essential motion must collapse under `prefers-reduced-motion`.
+
+### Signature learning instruments
+Recurring interaction names such as **Spot the weak evidence**, **Where did the thinking disappear?**, **Which step should the human keep?**, **Who carries the risk?** and **What changed when AI entered the workflow?** should feel like recognisable tools, not themed games. Their visual treatment must remain consistent across grades while content difficulty grows.
+
+### Active CSS architecture
+The deployed theme is consolidated in `ui/v22-system.css`. The earlier `ui/future.css`, `ui/identity.css` and `ui/educators.css` remain historical source layers but are no longer loaded independently by the site. Avoid adding another theme stylesheet; extend the consolidated system or refactor the base structural stylesheet instead.
+
 ## 2. Brand assets (vector originals)
 
 | Purpose | Repository asset | Guidance |
