@@ -1,124 +1,110 @@
-/* AI Capacity × Judgement — Educator Learning V2.1
- * Read → understand → interact → transfer. No written responses, uploads or submissions.
+/* AI Capacity × Judgement — educator pathway V4.
+ * 4h total: 4 Capacity + 4 Judgement modules, each 30 min.
+ * Five instructional stages, six selected-response tasks per module; no writing.
+ * Public preview progress is local to this browser, not a competence credential.
  */
 (function(){
 "use strict";
-const COURSES=[
- {id:"literacy",title:"AI Literacy & Professional Judgement",subtitle:"Understand the technology. Question its outputs. Make responsible decisions.",minutes:75,modules:[
-  {title:"What AI Actually Does",focus:"Distinguish plausible generation from verified knowledge."},
-  {title:"Prompts, Context & Verification",focus:"Use purposeful prompts while keeping verification visible."},
-  {title:"Bias, Representation & Fairness",focus:"Recognise omissions, stereotypes and unequal effects."},
-  {title:"Privacy, Consent & Safeguarding",focus:"Apply data minimisation, approval and professional boundaries."},
-  {title:"Capacity × Judgement in Practice",focus:"Decide whether AI should be used, not simply whether it can be used."},
-  {title:"Professional Decision Challenge",focus:"Combine purpose, evidence, privacy, fairness and accountability."}
- ]},
- {id:"pedagogy",title:"AI Pedagogy, Assessment & Learning Design",subtitle:"Protect the thinking. Redesign meaningful learning. Make judgement visible.",minutes:80,modules:[
-  {title:"Learning Before Tools",focus:"Start with the learning intention, not the AI capability."},
-  {title:"Scaffolding Without Substitution",focus:"Reduce barriers without removing the thinking learners need to develop."},
-  {title:"Assessment in an AI World",focus:"Gather credible evidence of process, understanding and transfer."},
-  {title:"Feedback, Agency & Metacognition",focus:"Use AI-supported feedback without replacing student judgement."},
-  {title:"Equity, Access & Responsible Classroom Norms",focus:"Design expectations that remain fair across uneven access and needs."},
-  {title:"Redesign Studio: A Defensible Lesson",focus:"Bring purpose, agency, evidence, equity and safeguards together."}
- ]}
-];
-const READINGS=[
- ["Generative AI produces outputs from learned patterns. A response can be fluent, detailed and convincing without being verified.","Models can invent references, miss context or reproduce errors. Important claims need independent checking before they become teaching material.","The educator remains accountable for what enters the learning environment. Capacity is using the tool; judgement is deciding what deserves trust."],
- ["A useful prompt makes the purpose, audience, constraints and desired form clear. Better context often improves relevance.","Prompt quality does not turn a model into an authority. Verification remains necessary, especially when facts, citations or consequential advice are involved.","Do not improve a prompt by adding identifiable or sensitive student information to an unapproved service."],
- ["AI outputs can reproduce patterns of bias, omission and stereotyping found in data, design choices and the context of use.","Fairness is not achieved by simply asking for 'neutral' output. Educators should inspect who is represented, who is missing and who may be affected differently.","Representation can be improved by using varied trustworthy sources, questioning assumptions and making limitations visible to learners."],
- ["Student data does not become safe to share because an AI tool is convenient. School approval, confidentiality, safeguarding and privacy obligations still apply.","Use the minimum data necessary for the task. Avoid identifiable or sensitive information in unapproved services and prefer de-identified examples when appropriate.","A useful output never cancels professional responsibility for consent, access, retention or the consequences of disclosure."],
- ["Capacity asks what AI can help us do. Judgement asks whether that use serves the learning goal, protects people and produces evidence we can trust.","Efficiency can be valuable, but speed can also remove a meaningful moment of thinking, feedback or professional attention.","The strongest decisions make the trade-off visible: purpose, benefit, risk, evidence and who remains accountable."],
- ["A responsible AI decision begins with the educational purpose, not a tool's novelty, popularity or marketing claim.","Evaluate evidence, privacy, fairness, age suitability, transparency, school policy and human oversight before adoption.","A defensible outcome may be to use AI with safeguards, choose a different approach, run a limited approved trial, or deliberately not use AI."],
- ["Start with what learners should understand, practise or be able to transfer. Only then decide what role technology should play.","If AI performs the exact cognitive work the task was designed to develop, the activity may produce a polished product while reducing learning.","Useful AI support can challenge, scaffold, compare or provide feedback while leaving the learner responsible for the important decisions."],
- ["A scaffold reduces barriers while preserving the intellectual goal. Substitution completes the target thinking for the learner.","Question stems, examples, vocabulary support and feedback can increase access. Automatically generating the finished response can remove agency and practice.","The test is not whether AI was used, but whether the learner still performs and demonstrates the intended thinking."],
- ["A finished product is only one source of evidence. In an AI-rich environment, assessment should also make process, reasoning and transfer visible.","Drafts, checkpoints, explanation, critique, comparison and short independent performances can provide stronger evidence of understanding.","AI-detection scores should not be treated as conclusive proof of authorship or misconduct. Assessment validity requires better evidence, not stronger suspicion."],
- ["Feedback only improves learning when the learner interprets it, makes a decision and acts. More feedback is not automatically better feedback.","AI can generate suggestions quickly, but learners should evaluate which suggestions are accurate, useful and aligned with the goal.","A strong routine is: inspect the feedback, accept or reject with a reason, revise, then check whether the change actually improved the work."],
- ["AI access is uneven. Students may differ in subscriptions, connectivity, language, accessibility needs, confidence and prior experience.","Clear norms should define permitted uses, attribution, privacy and what students must still demonstrate independently.","Fair learning design provides approved accessible routes and does not reward access to a premium tool as though it were deeper understanding."],
- ["A defensible lesson identifies the target thinking, decides where AI can support without replacing it, and gathers evidence that the learner can still perform the goal.","Good redesign makes expectations transparent: permitted use, independent checkpoints, verification, accessibility and what counts as evidence.","The objective is not to police every output. It is to design learning where meaningful understanding remains visible even when powerful tools are available."]
-];
-const INTERACTIONS=[
- {kind:"single",prompt:"An AI assistant gives a polished explanation of a new research finding. What is the strongest next move?",options:[["Use it because the explanation is detailed",0,"Detail can increase confidence without increasing truth."],["Check important claims against primary or authoritative sources and separate evidence from inference",1,"This preserves the usefulness of the explanation while testing whether it deserves trust."],["Reject every AI explanation without reading it",0,"Critical use is different from automatic rejection."]]},
- {kind:"multi",prompt:"Which actions improve a prompt without weakening professional judgement?",options:[["State the learning goal and intended audience",1,"Purpose and audience can improve relevance."],["Add identifiable student records for more personalised output",0,"Personalisation does not justify exposing sensitive information."],["Ask the model to flag uncertainty or assumptions",1,"Making uncertainty visible can improve checking."],["Verify consequential claims after receiving the response",1,"A better prompt does not remove the need to verify."]]},
- {kind:"classify",prompt:"Classify each response to biased AI-generated career examples.",categories:["Strengthens fairness","Needs a rethink"],items:[["Compare the examples with diverse trustworthy sources",0,"Independent examples can reveal omissions and stereotypes."],["Assume the system is neutral because it is automated",1,"Automation does not guarantee neutrality."],["Ask whose experiences or identities are missing",0,"Representation requires noticing omission as well as explicit bias."],["Keep the examples unchanged because rewriting them would be subjective",1,"Leaving a biased pattern unexamined is also a choice."]]},
- {kind:"order",prompt:"Put the privacy decision process in the most defensible order.",steps:["Clarify the educational purpose","Check whether the tool is school-approved for the intended data","Minimise or de-identify the information shared","Review access, output and retention before acting on the result"]},
- {kind:"multi",prompt:"AI can draft feedback for thirty students. Which safeguards protect professional judgement?",options:[["Use only approved tools and appropriate data",1,"Approval and data boundaries come before convenience."],["Treat the draft as final because it saves time",0,"The educator remains accountable for accuracy, tone and fit."],["Check the feedback against actual learner evidence",1,"Feedback should reflect the learner, not a generic pattern."],["Review fairness, tone and next steps before sharing",1,"Human review is part of responsible use."]]},
- {kind:"order",prompt:"A colleague recommends a free AI marking tool. Put the evaluation process in order.",steps:["Clarify the assessment purpose and what evidence the tool would use","Check privacy, approval, validity and known limitations","Run a low-risk approved evaluation using non-sensitive or synthetic material","Compare results with human judgement and decide whether use is defensible"]},
- {kind:"classify",signature:"Where did the thinking disappear?",takeaway:"Start with the cognitive work students must perform, then decide where AI can challenge or support without taking over that work.",prompt:"You are redesigning an argument task. Classify each design move by whether it protects the target thinking.",categories:["Protects argument construction","Outsources the target thinking"],items:[["Students generate and defend a claim before using AI to produce counterarguments",0,"The student still constructs and owns the argument while AI adds productive challenge."],["AI generates the thesis, evidence and reasoning; students improve the wording",1,"Polishing language does not demonstrate that students can construct the argument."],["Students compare two arguments against teacher-provided criteria before revising their own",0,"Comparison supports judgement while preserving authorship."],["Students submit the strongest AI-generated argument they can prompt",1,"Prompt success becomes the task instead of argument construction."]]},
- {kind:"multi",signature:"Scaffold or substitute?",takeaway:"A scaffold changes access to the task; substitution removes the intellectual work the learner is meant to practise.",prompt:"A multilingual learner is preparing a science explanation. Which supports scaffold the learning without replacing it?",options:[["Offer sentence frames for cause-and-effect language",1,"Language support can reduce a barrier while the learner still builds the explanation."],["Ask AI to produce the complete explanation for submission",0,"The target scientific reasoning has been outsourced."],["Show two contrasting examples and ask the learner to identify what makes one clearer",1,"Worked comparison supports understanding without deciding everything for the learner."],["Let the learner choose between a vocabulary bank, audio support or translated key terms",1,"Choice can improve access while preserving the same learning goal."],["Have AI select the evidence, conclusion and final wording",0,"The tool has taken over the core decisions."]]},
- {kind:"order",signature:"Make learning evidence visible",takeaway:"Assessment validity improves when evidence is planned around the learning outcome, not added after concerns about AI arise.",prompt:"You are redesigning a take-home analytical essay. Put the assessment redesign in the most defensible order.",steps:["Define the thinking and understanding the assessment is meant to reveal","Identify where AI could obscure or support that evidence","Add process, explanation or independent-transfer checkpoints aligned to the outcome","Publish clear AI-use expectations and review the combined evidence rather than one polished product"]},
- {kind:"classify",signature:"Who is making the feedback decision?",takeaway:"Feedback remains learning when students interpret, choose and act; it becomes substitution when the system makes the consequential judgement for them.",prompt:"Classify these AI-feedback routines.",categories:["Preserves learner judgement","Replaces learner judgement"],items:[["Students compare AI suggestions with the rubric and choose which one to act on",0,"The learner interprets the feedback and makes the revision decision."],["The system automatically rewrites every weak section before the student sees it",1,"The learner loses the opportunity to diagnose and revise."],["Students reject one suggestion and explain which success criterion it would weaken",0,"Rejecting feedback thoughtfully is evidence of judgement."],["AI selects the final version and assigns the grade without teacher review",1,"Both revision and consequential judgement have been automated."]]},
- {kind:"multi",signature:"Equity is part of validity",takeaway:"A fair design measures the intended learning rather than differences in tool access, language, accessibility or subscription level.",prompt:"A home assessment allows AI support, but only some students have access to a premium tool. Which design decisions protect equity and validity?",options:[["Provide an approved school-accessible option and an equivalent non-AI route",1,"Students should be able to demonstrate the same outcome without purchasing advantage."],["Grade polished output more highly even when polish may come from premium features",0,"Tool access would be confounded with learning."],["Make permitted uses, attribution and independent evidence requirements explicit",1,"Transparent expectations reduce hidden advantages."],["Check whether language, accessibility and device requirements create additional barriers",1,"Access includes usability and participation, not only account availability."],["Require the premium tool because it produces the best examples",0,"That turns unequal access into an assessment requirement."]]},
- {kind:"order",signature:"Redesign studio · protect the learning",takeaway:"A defensible AI-enabled lesson begins with the learning, makes AI boundaries explicit, and collects evidence that students can still perform the intended thinking.",prompt:"A project can now be completed almost entirely by AI. Put the redesign process in the strongest order.",steps:["Name the knowledge, thinking and decisions students must demonstrate themselves","Decide where AI may scaffold, challenge or extend without replacing those targets","Build independent checkpoints, verification and accessible alternative routes into the sequence","Test the task for loopholes and unequal access, then publish clear expectations before students begin"]}
-];
-const KEY="aicj-educator-progress-v3";
+const DATA=window.EDUCATOR_V4;
+if(!DATA){window.renderEducators=()=>'<main id="main-content"><h1 id="main-title">Educator learning</h1><p>Educator course data is unavailable. Please reload the page.</p></main>';return;}
+const COURSES=DATA.courses,STAGES=DATA.stages,LABELS=DATA.stageLabels;
+const KEY="aicj-educator-progress-v4";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let progress={};try{progress=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(_){progress={}}
+let progress={};try{const p=JSON.parse(localStorage.getItem(KEY)||"{}");progress=p&&typeof p==="object"&&!Array.isArray(p)?p:{}}catch(_){progress={}}
 let selected=null;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(progress))}catch(_){}}
-function record(id){return progress[id]||(progress[id]={completed:false,attempts:0,single:null,multi:{},classify:{},order:[],feedback:null});}
-function moduleIndex(cid,i){return (cid==="literacy"?0:6)+i}
-function completed(c){return c.modules.filter((_,i)=>record(c.id+"-"+i).completed).length}
-function moduleCard(c,m,i){const id=c.id+"-"+i,r=record(id);return '<button type="button" class="educator-module-card" data-educator-open="'+esc(id)+'"><span class="educator-number">'+String(i+1).padStart(2,"0")+'</span><span class="educator-module-copy"><strong>'+esc(m.title)+'</strong><small>'+esc(m.focus)+'</small></span><span class="educator-status">'+(r.completed?"✓ Completed":r.attempts?"Continue":"Start →")+'</span></button>'}
-function courseCard(c){const n=completed(c);return '<section class="educator-course-card"><div class="eyebrow">Educator course · Approximately '+c.minutes+' minutes</div><h2>'+esc(c.title)+'</h2><p>'+esc(c.subtitle)+'</p><div class="educator-course-progress"><span>'+n+' of 6 modules complete</span><div class="educator-meter"><span style="width:'+(n/6*100)+'%"></span></div></div><div class="educator-module-list">'+c.modules.map((m,i)=>moduleCard(c,m,i)).join("")+'</div></section>'}
-function interactionReady(x,r){
- if(x.kind==="single")return r.single!==null;
- if(x.kind==="multi")return Object.values(r.multi||{}).some(Boolean);
- if(x.kind==="classify")return x.items.every((_,i)=>r.classify?.[i]!==undefined);
- if(x.kind==="order")return r.order?.length===x.steps.length;
+function moduleData(id){for(const course of COURSES)for(let i=0;i<course.modules.length;i++)if(course.modules[i].id===id)return {course,module:course.modules[i],index:i};return null}
+function record(id){if(!progress[id]||typeof progress[id]!=="object")progress[id]={stage:0,tasks:{}};if(!progress[id].tasks||typeof progress[id].tasks!=="object")progress[id].tasks={};return progress[id];}
+function stageTasks(m,stage){if(stage==="practise")return m.tasks.practice.map((task,i)=>({key:"p"+i,task}));return [{key:stage,task:m.tasks[stage]}];}
+function taskRecord(r,key,task){let v=r.tasks[key];if(!v||typeof v!=="object")v=r.tasks[key]={single:null,multi:{},classify:{},order:[],passed:false,attempts:0,feedback:null};if(!v.multi||typeof v.multi!=="object")v.multi={};if(!v.classify||typeof v.classify!=="object")v.classify={};if(!Array.isArray(v.order))v.order=[];if(task.kind==="order"&&v.order.length!==task.steps.length)v.order=task.steps.map((_,i)=>i).reverse();return v}
+function stageDone(m,r,stage){return stageTasks(m,stage).every(({key,task})=>taskRecord(r,key,task).passed===true)}
+function moduleDone(m,r){return STAGES.every(stage=>stageDone(m,r,stage))}
+function canVisit(m,r,i){return STAGES.slice(0,i).every(stage=>stageDone(m,r,stage))}
+function completed(c){return c.modules.filter(m=>moduleDone(m,record(m.id))).length}
+function moduleCard(c,m,i){const r=record(m.id),done=moduleDone(m,r),count=STAGES.filter(stage=>stageDone(m,r,stage)).length;return '<button type="button" class="educator-module-card" data-educator-open="'+esc(m.id)+'"><span class="educator-number">'+String(i+1).padStart(2,"0")+'</span><span class="educator-module-copy"><strong>'+esc(m.title)+'</strong><small>'+esc(m.focus)+'</small><small class="educator-module-time">30 minutes · '+count+'/5 stages complete</small></span><span class="educator-status">'+(done?"✓ Completed":count?"Continue →":"Start →")+'</span></button>'}
+function courseCard(c){const n=completed(c);return '<section class="educator-course-card '+(c.id==="judgement"?"educator-judgement":"educator-capacity")+'"><div class="eyebrow">'+(c.id==="capacity"?"Pathway 01":"Pathway 02")+' · 2 hours</div><h2>'+esc(c.title)+'</h2><p>'+esc(c.subtitle)+'</p><div class="educator-course-progress"><span>'+n+' of 4 modules complete</span><div class="educator-meter" role="progressbar" aria-label="'+esc(c.title)+' completion" aria-valuemin="0" aria-valuemax="4" aria-valuenow="'+n+'"><span style="width:'+(n/4*100)+'%"></span></div></div><div class="educator-module-list">'+c.modules.map((m,i)=>moduleCard(c,m,i)).join("")+'</div></section>'}
+function overview(){const total=COURSES.reduce((n,c)=>n+completed(c),0);return '<main id="main-content" class="page max section educator-page"><div class="eyebrow">Professional learning · Capacity × Judgement</div><h1 id="main-title" tabindex="-1">Educator learning</h1><p class="educator-lead">Four hours. Eight focused modules. Two equally important questions: <strong>What can AI help us do?</strong> And <strong>when does doing so improve learning?</strong></p><div class="educator-pathway-summary"><span>8 modules</span><span>30 minutes each</span><span>4 hours total</span><span>No written responses</span></div><p class="educator-philosophy">Grounded in AISG’s <strong>Engagement for All</strong> and Transformative Learning Framework, the pathway uses authentic decisions, inclusive design and evidence-informed practice. The framework is a lens for learning—not a checklist.</p><div class="educator-course-grid">'+COURSES.map(courseCard).join("")+'</div><section class="educator-finish"><h2>Your pathway</h2><p>Each module moves through Learn → Model → Practise → Apply → Transfer. Knowledge checks use choice, classification and accessible sequencing, with feedback and opportunities to retry.</p><strong>'+total+' / 8 modules completed</strong><p class="small muted">Completion records successful formative checkpoints, not validated professional competence. This public preview stores progress only in this browser, with no staff reporting or authenticated access. Earlier pilot completions are not transferred because the course content has changed.</p></section></main>'}
+function taskReady(task,v){
+ if(task.kind==="single")return Number.isInteger(v.single)&&v.single>=0&&v.single<task.options.length;
+ if(task.kind==="multi")return task.options.some((_,i)=>v.multi[i]===true);
+ if(task.kind==="classify")return task.items.every((_,i)=>Number.isInteger(v.classify[i]));
+ if(task.kind==="order")return v.order.length===task.steps.length;
  return false;
 }
-function interactionPassed(x,r){
- if(x.kind==="single")return x.options[r.single]?.[1]===1;
- if(x.kind==="multi")return x.options.every((o,i)=>!!r.multi?.[i]===!!o[1]);
- if(x.kind==="classify")return x.items.every((o,i)=>r.classify?.[i]===o[1]);
- if(x.kind==="order")return x.steps.every((_,i)=>r.order?.[i]===i);
+function taskPassed(task,v){
+ if(task.kind==="single")return task.options[v.single]?.[1]===1;
+ if(task.kind==="multi")return task.options.every((o,i)=>(v.multi[i]===true)===(o[1]===1));
+ if(task.kind==="classify")return task.items.every((o,i)=>v.classify[i]===o[1]);
+ if(task.kind==="order")return task.steps.every((_,i)=>v.order[i]===i);
  return false;
 }
-function interactionHtml(x,r){
- if(x.kind==="order"&&!(r.order||[]).length)r.order=x.steps.length===4?[2,0,3,1]:x.steps.map((_,i)=>i).reverse();
+function taskFeedback(task,v){
+ const details=[];
+ if(task.kind==="single"&&v.single!==null)details.push(task.options[v.single]?.[2]||"Consider the target learning and evidence.");
+ if(task.kind==="multi")task.options.forEach((o,i)=>{if((v.multi[i]===true)!==(o[1]===1))details.push(o[2]);});
+ if(task.kind==="classify")task.items.forEach((o,i)=>{if(v.classify[i]!==o[1])details.push("Item "+(i+1)+": "+o[2]);});
+ if(task.kind==="order"&&!taskPassed(task,v))details.push("Consider which decisions and safeguards must come before action, and how evidence will be reviewed afterwards.");
+ return details;
+}
+function taskHtml(task,key,r,index){
+ const v=taskRecord(r,key,task),id="edu-"+key;
  let body="";
- if(x.kind==="single")body='<div class="educator-choices">'+x.options.map((o,i)=>'<button type="button" class="educator-choice '+(r.single===i?"selected":"")+'" aria-pressed="'+(r.single===i)+'" data-edu-single="'+i+'">'+String.fromCharCode(65+i)+'. '+esc(o[0])+'</button>').join("")+'</div>';
- if(x.kind==="multi")body='<div class="v2-multi-list">'+x.options.map((o,i)=>'<label class="v2-multi-option"><input type="checkbox" data-edu-multi="'+i+'" '+(r.multi?.[i]?"checked":"")+'><span>'+esc(o[0])+'</span></label>').join("")+'</div><p class="small muted">Select every response you believe is defensible, then check your understanding.</p>';
- if(x.kind==="classify")body='<div class="sort-list">'+x.items.map((o,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p id="edu-classify-label-'+i+'">'+esc(o[0])+'</p><select aria-labelledby="edu-classify-label-'+i+'" data-edu-classify="'+i+'"><option value="">Choose…</option>'+x.categories.map((c,n)=>'<option value="'+n+'" '+(r.classify?.[i]===n?"selected":"")+'>'+esc(c)+'</option>').join("")+'</select></div></div>').join("")+'</div>';
- if(x.kind==="order")body='<p class="small muted">Use the arrow buttons to reorder the steps. No dragging is required.</p><ol class="sequence-list">'+r.order.map((pos,i)=>'<li class="sequence-item"><span class="sequence-number">'+(i+1)+'</span><span class="sequence-text">'+esc(x.steps[pos])+'</span><div class="move-actions"><button class="move-btn" data-edu-move="'+i+'" data-dir="-1" '+(i===0?"disabled":"")+' aria-label="Move '+esc(x.steps[pos])+' up">↑</button><button class="move-btn" data-edu-move="'+i+'" data-dir="1" '+(i===r.order.length-1?"disabled":"")+' aria-label="Move '+esc(x.steps[pos])+' down">↓</button></div></li>').join("")+'</ol>';
- const fb=r.feedback?'<div class="educator-feedback '+(r.feedback.passed?"feedback-good":"feedback-retry")+'" role="status"><strong>'+(r.feedback.passed?"Understanding checked":"Review and try again")+'</strong><p>'+esc(r.feedback.message)+'</p>'+(r.feedback.details?.length?'<ul>'+r.feedback.details.map(d=>'<li>'+esc(d)+'</li>').join("")+'</ul>':"")+'</div>':"";
- return body+fb+'<button type="button" class="btn" data-edu-check="1" '+(!interactionReady(x,r)?"disabled":"")+'>Check my understanding →</button>';
+ if(task.kind==="single")body='<div class="educator-choices" role="group" aria-label="Choose the strongest response">'+task.options.map((o,i)=>'<button type="button" class="educator-choice '+(v.single===i?"selected":"")+'" aria-pressed="'+(v.single===i)+'" data-edu-single="'+i+'" data-edu-task="'+key+'">'+String.fromCharCode(65+i)+'. '+esc(o[0])+'</button>').join("")+'</div>';
+ if(task.kind==="multi")body='<div class="v2-multi-list educator-multi-list">'+task.options.map((o,i)=>'<label class="v2-multi-option"><input type="checkbox" data-edu-multi="'+i+'" data-edu-task="'+key+'" '+(v.multi[i]?"checked":"")+'><span>'+esc(o[0])+'</span></label>').join("")+'</div><p class="small muted">Select all the defensible responses.</p>';
+ if(task.kind==="classify")body='<div class="sort-list">'+task.items.map((o,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p id="'+id+'-label-'+i+'">'+esc(o[0])+'</p><select aria-labelledby="'+id+'-label-'+i+'" data-edu-classify="'+i+'" data-edu-task="'+key+'"><option value="">Choose a category…</option>'+task.categories.map((c,n)=>'<option value="'+n+'" '+(v.classify[i]===n?"selected":"")+'>'+esc(c)+'</option>').join("")+'</select></div></div>').join("")+'</div>';
+ if(task.kind==="order")body='<p class="small muted">Use the arrow buttons to place the steps in order. Dragging is not needed.</p><ol class="sequence-list">'+v.order.map((pos,i)=>'<li class="sequence-item"><span class="sequence-number">'+(i+1)+'</span><span class="sequence-text">'+esc(task.steps[pos])+'</span><div class="move-actions"><button type="button" class="move-btn" data-edu-move="'+i+'" data-dir="-1" data-edu-task="'+key+'" '+(i===0?"disabled":"")+' aria-label="Move '+esc(task.steps[pos])+' up">↑</button><button type="button" class="move-btn" data-edu-move="'+i+'" data-dir="1" data-edu-task="'+key+'" '+(i===v.order.length-1?"disabled":"")+' aria-label="Move '+esc(task.steps[pos])+' down">↓</button></div></li>').join("")+'</ol>';
+ const fb=v.feedback?'<div class="educator-feedback '+(v.feedback.passed?"feedback-good":"feedback-retry")+'" role="status" aria-live="polite"><strong>'+(v.feedback.passed?"Understanding checked":"Review and try again")+'</strong><p>'+esc(v.feedback.passed?(task.takeaway||"Your decision reflects the learning principle."):(v.feedback.details?.[0]||"Reconsider the evidence and trade-offs."))+'</p>'+(v.feedback.passed?"":v.feedback.details?.length>1?'<ul>'+v.feedback.details.slice(1).map(d=>'<li>'+esc(d)+'</li>').join("")+'</ul>':"")+'</div>':"";
+ return '<section class="educator-check" aria-labelledby="'+id+'-title"><div class="eyebrow">Decision '+index+'</div><h3 id="'+id+'-title">'+esc(task.prompt)+'</h3>'+body+fb+'<button type="button" class="btn btn-small educator-check-button" data-edu-check="'+key+'" '+(!taskReady(task,v)?"disabled":"")+'>'+(v.passed?"Check again":"Check decision")+' →</button></section>';
+}
+function contentHtml(m,r,stage){
+ if(stage==="learn")return '<p class="educator-stage-intro">Build the conceptual foundation. Identify what AI makes possible—and the judgement needed before acting on it.</p><div class="educator-ideas">'+m.ideas.map((idea,i)=>'<article class="educator-idea"><span class="educator-idea-num">0'+(i+1)+'</span><h3>'+esc(idea[0])+'</h3><p>'+esc(idea[1])+'</p></article>').join("")+'</div>'+taskHtml(m.tasks.learn,"learn",r,1);
+ if(stage==="model")return '<p class="educator-stage-intro">Compare two approaches before making your own decision. Look for what remains with the learner and what deserves evidence.</p><div class="educator-case"><strong>Professional situation</strong><p>'+esc(m.model.scenario)+'</p></div><div class="educator-example-grid"><div class="educator-example weaker"><strong>Weaker approach</strong><p>'+esc(m.model.weak)+'</p></div><div class="educator-example stronger"><strong>Stronger approach</strong><p>'+esc(m.model.strong)+'</p></div></div><p class="educator-rationale"><strong>Why it matters:</strong> '+esc(m.model.why)+'</p>'+taskHtml(m.tasks.model,"model",r,1);
+ if(stage==="practise")return '<p class="educator-stage-intro">Two complementary challenges. Examine the trade-offs, then test the principle using a different decision format.</p>'+m.tasks.practice.map((t,i)=>taskHtml(t,"p"+i,r,i+1)).join("");
+ if(stage==="apply")return '<p class="educator-stage-intro">Use the principle to make a defensible decision in a realistic educational setting, including safeguards and likely consequences.</p>'+taskHtml(m.tasks.apply,"apply",r,1);
+ return '<p class="educator-stage-intro">Transfer the principle to an unfamiliar subject or school context. A strong decision still protects purpose, evidence and learner agency.</p>'+taskHtml(m.tasks.transfer,"transfer",r,1);
 }
 function moduleView(){
- const [cid,raw]=selected.split("-"),i=+raw,c=COURSES.find(x=>x.id===cid),m=c?.modules[i],idx=moduleIndex(cid,i),reading=READINGS[idx],x=INTERACTIONS[idx],r=record(selected);
- if(!m||!x)return overview();
- return '<main id="main-content" class="page max section educator-page"><button type="button" class="back" data-educator-back="1">← All educator courses</button><div class="eyebrow">'+esc(c.title)+' · Module '+(i+1)+' of 6</div><h1 id="main-title" tabindex="-1">'+esc(m.title)+'</h1>'+
- '<div class="educator-intro"><strong>Learning focus</strong><p>'+esc(m.focus)+'</p></div>'+
- '<section class="educator-task educator-reading"><div class="eyebrow">01 · Read & understand</div><h2>The key idea</h2>'+reading.map(x=>'<p>'+esc(x)+'</p>').join("")+'</section>'+
- '<section class="educator-task"><div class="eyebrow">02 · '+esc(x.signature||"Check & apply")+'</div><h2>'+esc(x.prompt)+'</h2>'+interactionHtml(x,r)+'</section>'+
- (r.completed?'<section class="educator-finish"><strong>✓ Module completed</strong><p>You can revisit the reading and challenge at any time.</p>'+(i<5?'<button type="button" class="btn btn-small" data-educator-open="'+cid+"-"+(i+1)+'">Next module →</button>':'<button type="button" class="btn btn-small" data-educator-back="1">View both courses →</button>')+'</section>':"")+
+ const match=moduleData(selected);if(!match)return overview();
+ const {module:m,course:c,index}=match,r=record(m.id);let stageIndex=Number.isInteger(r.stage)?r.stage:0;stageIndex=Math.max(0,Math.min(STAGES.length-1,stageIndex));if(!canVisit(m,r,stageIndex))stageIndex=STAGES.findIndex(s=>!stageDone(m,r,s));if(stageIndex<0)stageIndex=4;r.stage=stageIndex;
+ const stage=STAGES[stageIndex],done=stageDone(m,r,stage),finished=moduleDone(m,r),next=STAGES[stageIndex+1],nextModule=c.modules[index+1];
+ const nav=STAGES.map((s,i)=>{const completed=stageDone(m,r,s),enabled=canVisit(m,r,i);return '<button type="button" class="educator-stage-pill '+(i===stageIndex?"current":"")+' '+(completed?"done":"")+'" data-edu-stage="'+i+'" '+(enabled?"":"disabled")+' aria-current="'+(i===stageIndex?"step":"false")+'"><span>'+String(i+1).padStart(2,"0")+'</span>'+LABELS[i]+(completed?' <span aria-label="completed">✓</span>':"")+'</button>'}).join("");
+ return '<main id="main-content" class="page max section educator-page"><button type="button" class="back" data-educator-back="1">← All educator modules</button><div class="eyebrow">'+esc(c.title)+' · Module '+(index+1)+' of 4 · 30 minutes</div><h1 id="main-title" tabindex="-1">'+esc(m.title)+'</h1><p class="educator-question">'+esc(m.question)+'</p><div class="educator-intro"><strong>Learning focus</strong><p>'+esc(m.focus)+'</p></div><nav class="educator-stages" aria-label="Module learning stages">'+nav+'</nav><section class="educator-task educator-stage-body"><div class="eyebrow">'+String(stageIndex+1).padStart(2,"0")+' · '+LABELS[stageIndex]+'</div><h2>'+({learn:"Understand the idea",model:"Compare the choices",practise:"Practise professional decisions",apply:"Apply to a real teaching challenge",transfer:"Use it in a new context"}[stage])+'</h2>'+contentHtml(m,r,stage)+'</section>'+
+ (done&&next?'<div class="educator-stage-next"><p>Stage complete. Continue when ready.</p><button type="button" class="btn" data-edu-next="1">Continue to '+LABELS[stageIndex+1]+' →</button></div>':"")+
+ (finished?'<section class="educator-finish" role="status"><strong>✓ Module completed</strong><p>You completed all five formative stages. This records practice and decisions, not certified mastery.</p>'+(nextModule?'<button type="button" class="btn btn-small" data-educator-open="'+esc(nextModule.id)+'">Next module →</button>':'<button type="button" class="btn btn-small" data-educator-back="1">View both pathways →</button>')+'</section>':"")+
+ (stage==="transfer"&&!finished?'<p class="small muted">A module is complete after its Learn, Model, Practise, Apply and Transfer checks have all been successfully completed.</p>':"")+
  '</main>';
 }
-function overview(){const total=COURSES.reduce((n,c)=>n+completed(c),0);return '<main id="main-content" class="page max section educator-page"><div class="eyebrow">Professional learning · Capacity × Judgement V2</div><h1 id="main-title" tabindex="-1">Educator learning</h1><p class="educator-lead">Two connected courses built around concise explanations, authentic professional situations and varied knowledge checks. No written responses, uploads or submissions are required.</p><p class="privacy-note">This public preview does not provide educator-only security. A school-managed SharePoint deployment must enforce educator access to protected content.</p><div class="educator-course-grid">'+COURSES.map(courseCard).join("")+'</div><section class="educator-finish"><h2>Your professional learning pathway</h2><p>Complete twelve modules using single-choice, multi-select, classification and sequencing interactions.</p><strong>'+total+' / 12 modules completed</strong><p class="small muted">Completion records successful knowledge checks, not a validated assessment of professional competence.</p></section></main>'}
-function refresh(){if(typeof window.refreshEducators==="function")window.refreshEducators()}
-function check(){
- if(!selected)return;const [cid,raw]=selected.split("-"),idx=moduleIndex(cid,+raw),x=INTERACTIONS[idx],r=record(selected);if(!interactionReady(x,r))return;
- const passed=interactionPassed(x,r),details=[];
- if(x.kind==="single")details.push(x.options[r.single][2]);
- if(x.kind==="multi")x.options.forEach((o,i)=>{if(!!r.multi?.[i]!==!!o[1])details.push(o[2])});
- if(x.kind==="classify")x.items.forEach((o,i)=>{if(r.classify?.[i]!==o[1])details.push("Item "+(i+1)+": "+o[2])});
- if(x.kind==="order"&&!passed)details.push("Think about what must be decided before information is shared or a high-stakes result is acted upon.");
- r.attempts=(r.attempts||0)+1;r.feedback={passed,message:passed?(x.takeaway||"Your choices align with the module principle."):(details[0]||"Some choices need another look."),details:passed?[]:details};
- if(passed)r.completed=true;save();refresh();
+function rerender(selector){if(typeof window.refreshEducators==="function")window.refreshEducators();if(selector){const target=document.querySelector(selector);if(target&&typeof target.focus==="function")try{target.focus({preventScroll:true})}catch(_){target.focus()}}}
+function attempt(key){
+ if(!selected)return;const match=moduleData(selected);if(!match)return;
+ const {module:m}=match,r=record(selected),stage=STAGES[r.stage]||"learn";
+ const entry=stageTasks(m,stage).find(x=>x.key===key);if(!entry)return;
+ const v=taskRecord(r,key,entry.task);if(!taskReady(entry.task,v))return;
+ const passed=taskPassed(entry.task,v),details=passed?[]:taskFeedback(entry.task,v);
+ v.attempts=(v.attempts||0)+1;v.passed=passed;v.feedback={passed,details};save();rerender('[data-edu-check="'+key+'"]');
 }
+function resetAnswer(key){const r=record(selected);if(r.tasks[key]){r.tasks[key].passed=false;r.tasks[key].feedback=null}}
 window.renderEducators=function(){return selected?moduleView():overview()};
 window.educatorOpenOverview=function(){selected=null};
 document.addEventListener("click",function(e){
- const t=e.target.closest("[data-educator-open],[data-educator-back],[data-edu-single],[data-edu-check],[data-edu-move]");if(!t)return;e.preventDefault();
- if(t.dataset.educatorBack!==undefined)selected=null;
- else if(t.dataset.educatorOpen)selected=t.dataset.educatorOpen;
- else if(t.dataset.eduSingle!==undefined){const r=record(selected);r.single=+t.dataset.eduSingle;r.feedback=null;}
- else if(t.dataset.eduCheck!==undefined){check();return}
- else if(t.dataset.eduMove!==undefined){const r=record(selected),i=+t.dataset.eduMove,j=i+(+t.dataset.dir);if(j>=0&&j<r.order.length){const q=r.order[i];r.order[i]=r.order[j];r.order[j]=q;r.feedback=null;}}
- save();refresh();
+ const t=e.target.closest("[data-educator-open],[data-educator-back],[data-edu-stage],[data-edu-next],[data-edu-single],[data-edu-check],[data-edu-move]");if(!t)return;
+ e.preventDefault();
+ if(t.dataset.educatorBack!==undefined){selected=null;save();rerender('[data-educator-open]');return;}
+ if(t.dataset.educatorOpen){selected=t.dataset.educatorOpen;save();rerender("#main-title");return;}
+ if(!selected)return;const match=moduleData(selected);if(!match)return;
+ const {module:m}=match,r=record(selected);
+ if(t.dataset.eduStage!==undefined){const n=Number(t.dataset.eduStage);if(Number.isInteger(n)&&n>=0&&n<5&&canVisit(m,r,n)){r.stage=n;save();rerender("#main-title")}return;}
+ if(t.dataset.eduNext!==undefined){const next=r.stage+1;if(next<5&&stageDone(m,r,STAGES[r.stage])){r.stage=next;save();rerender("#main-title")}return;}
+ if(t.dataset.eduCheck!==undefined){attempt(t.dataset.eduCheck);return;}
+ const key=t.dataset.eduTask;if(!key)return;const stage=STAGES[r.stage],entry=stageTasks(m,stage).find(x=>x.key===key);if(!entry)return;const v=taskRecord(r,key,entry.task);
+ if(t.dataset.eduSingle!==undefined){v.single=+t.dataset.eduSingle;resetAnswer(key);save();rerender('[data-edu-single="'+t.dataset.eduSingle+'"][data-edu-task="'+key+'"]');return;}
+ if(t.dataset.eduMove!==undefined){const i=+t.dataset.eduMove,j=i+(+t.dataset.dir);if(j>=0&&j<v.order.length){const q=v.order[i];v.order[i]=v.order[j];v.order[j]=q;resetAnswer(key);save();rerender('[data-edu-move="'+Math.max(0,Math.min(v.order.length-1,j))+'"][data-dir="'+t.dataset.dir+'"][data-edu-task="'+key+'"]')}return;}
 });
 document.addEventListener("change",function(e){
- const t=e.target;if(!selected)return;const r=record(selected);
- if(t.dataset?.eduMulti!==undefined){r.multi[+t.dataset.eduMulti]=!!t.checked;r.feedback=null;save();refresh();return}
- if(t.dataset?.eduClassify!==undefined){r.classify[+t.dataset.eduClassify]=t.value===""?undefined:+t.value;r.feedback=null;save();refresh();return}
+ const t=e.target;if(!selected)return;
+ const key=t.dataset?.eduTask;if(!key)return;const match=moduleData(selected);if(!match)return;const r=record(selected);
+ const entry=stageTasks(match.module,STAGES[r.stage]).find(x=>x.key===key);if(!entry)return;const v=taskRecord(r,key,entry.task);
+ if(t.dataset.eduMulti!==undefined){v.multi[+t.dataset.eduMulti]=!!t.checked;resetAnswer(key);save();rerender('[data-edu-multi="'+t.dataset.eduMulti+'"][data-edu-task="'+key+'"]');return;}
+ if(t.dataset.eduClassify!==undefined){if(t.value==="")delete v.classify[+t.dataset.eduClassify];else v.classify[+t.dataset.eduClassify]=+t.value;resetAnswer(key);save();rerender('[data-edu-classify="'+t.dataset.eduClassify+'"][data-edu-task="'+key+'"]');return;}
 });
 })();
