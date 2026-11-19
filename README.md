@@ -1,11 +1,21 @@
 # AI Capacity × Judgement
 
-A student-facing Grades 6–12 formative learning experience (MYP and DP-adjacent), with 42 modules, six connected strands and independently reviewable performance challenges. Two connected curricula: **AI Capacity** (understanding, working with, and creating with AI) and **AI Judgement** (agency, truth, trust, ethics and consequences).
+A Grades 6–12 and educator formative learning experience, with 42 student modules, two six-module educator courses and six connected strands. Two connected curricula: **AI Capacity** (understanding, working with, and creating with AI) and **AI Judgement** (agency, truth, trust, ethics and consequences).
 
 **Live website:** https://edtechevans.github.io/AIcapacityjudgement/
 
 **Public curriculum showcase:** https://edtechevans.github.io/AIcapacityjudgement/#/curriculum — a dedicated page for educators, school leaders, caregivers and collaborators that can be viewed **without selecting a grade or logging in**. It contains the seven-year progression, six-strand explorer, all 42 module titles and learning objectives, grade-specific performance tasks and assessment expectations. Browsing the overview does not change a learner's grade or record progress.
 
+
+## V2.0 — Read, understand, interact, transfer
+
+V2.0 is a complete interaction rebuild. **No student or educator course requires a written response, textarea, upload, speech response or drag interaction.** The student journey is now **Learn → Model → Practise → Apply → Transfer**. Existing laboratories and scenario-rich curriculum content are retained, while application and transfer are completed through structured decisions rather than free-text forms.
+
+Student learning now combines single-choice decisions, multi-select safeguards, classification, sorting, prompt comparison, evidence checks and keyboard-operable sequencing. The 12 educator modules use four interaction families—single choice, multi-select, classification and ordering—across **AI Literacy & Professional Judgement** and **AI Pedagogy, Assessment & Learning Design**.
+
+V2.0 is governed by six product criteria: **learning impact, intellectual engagement, instructional quality, accessibility, trustworthiness and evidence**. Completion means a learner passed the site's formative checkpoints; it is **not a validated claim of mastery or professional competence**. See [V2 Product Standard](docs/V2_PRODUCT_STANDARD.md).
+
+Older version notes below document the project's development history. Where they describe free-text Apply/Reflect workflows or exported lesson notes, those behaviours have been superseded by V2.0.
 
 ## Public curriculum and progression page (v27)
 
