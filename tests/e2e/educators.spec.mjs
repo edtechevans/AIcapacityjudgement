@@ -51,6 +51,20 @@ test("educator ordering is keyboard operable without dragging",async({page})=>{
  await expect(page.locator(".sequence-list")).toBeVisible();
 });
 
+
+test("educator pedagogy course uses authentic redesign decisions without writing",async({page})=>{
+ await openEducators(page);
+ await page.locator('[data-educator-open="pedagogy-0"]').click();
+ await expect(page.locator(".educator-task")).toContainText("Where did the thinking disappear?");
+ for(const [i,value] of [0,1,0,1].entries())await page.locator('[data-edu-classify="'+i+'"]').selectOption(String(value));
+ await page.locator('[data-edu-check]').click();
+ await expect(page.locator(".educator-feedback")).toContainText("Understanding checked");
+ await page.locator('[data-educator-back]').click();
+ await page.locator('[data-educator-open="pedagogy-5"]').click();
+ await expect(page.locator(".educator-task")).toContainText("Redesign studio");
+ await expect(page.locator('[data-edu-move]')).toHaveCount(8);
+ await expect(page.locator("textarea")).toHaveCount(0);
+});
 test("educator core route has no automated WCAG A/AA violations",async({page})=>{
  await openEducators(page);
  const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]).analyze();
