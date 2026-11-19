@@ -7,6 +7,15 @@ A Grades 6–12 and educator formative learning experience, with 42 student modu
 **Public curriculum showcase:** https://edtechevans.github.io/AIcapacityjudgement/#/curriculum — a dedicated page for educators, school leaders, caregivers and collaborators that can be viewed **without selecting a grade or logging in**. It contains the seven-year progression, six-strand explorer, all 42 module titles and learning objectives, grade-specific performance tasks and assessment expectations. Browsing the overview does not change a learner's grade or record progress.
 
 
+## V2.1 — Module-specific challenge and transfer
+
+V2.1 deepens the learning rather than adding more modules. Every one of the **42 student modules now has its own Apply challenge and its own unfamiliar Transfer context**, generated from that module's scenario, progression move, misconception, principle and grade-level demand. Interaction type deliberately varies across each grade rather than repeating one question format by strand.
+
+The progression demand now rises explicitly from **notice and compare (Grade 6)** through **test and verify, analyse and design, evaluate and challenge, transfer and defend, investigate and architect, to stress-test and steward (Grade 12)**. A3 includes a three-strand Capacity synthesis; B3 becomes the full **Capacity × Judgement integration challenge** for the grade. Feedback follows a consistent coaching pattern: **What you noticed → What matters → Try this elsewhere**.
+
+The educator pedagogy course has also been strengthened around authentic design decisions: protecting target thinking, scaffolding versus substitution, assessment validity, feedback agency, equitable access and a cumulative lesson-redesign studio. Teaching text is visually chunked into key idea and why-it-matters sections to reduce reading load while preserving conceptual depth.
+
+
 ## V2.0 — Read, understand, interact, transfer
 
 V2.0 is a complete interaction rebuild. **No student or educator course requires a written response, textarea, upload, speech response or drag interaction.** The student journey is now **Learn → Model → Practise → Apply → Transfer**. Existing laboratories and scenario-rich curriculum content are retained, while application and transfer are completed through structured decisions rather than free-text forms.
