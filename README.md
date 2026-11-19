@@ -7,15 +7,6 @@ A Grades 6–12 and educator formative learning experience, with 42 student modu
 **Public curriculum showcase:** https://edtechevans.github.io/AIcapacityjudgement/#/curriculum — a dedicated page for educators, school leaders, caregivers and collaborators that can be viewed **without selecting a grade or logging in**. It contains the seven-year progression, six-strand explorer, all 42 module titles and learning objectives, grade-specific performance tasks and assessment expectations. Browsing the overview does not change a learner's grade or record progress.
 
 
-## V2.2 — The Intersection · Calm Intelligence
-
-V2.2 redesigns the interface sitewide around the project's core idea: **AI Capacity and AI Judgement converge at a considered decision**. The visual direction is intentionally restrained rather than generically “AI”: AISG-inspired navy, red and graphite remain the palette, while depth, geometry, motion and spatial hierarchy create the future-facing character.
-
-The active interface is now consolidated into a single maintained theme file, `ui/v22-system.css`, replacing the previous stacked future/identity/educator theme layers. The base structural stylesheet remains separate. V2.2 standardises radii, shadows, depth and motion; reduces card-heavy surfaces; introduces the Intersection graphic across welcome, home and About; adds a dual-pathway progress map; upgrades the five-stage lesson navigation into a **Learning Rail**; gives Apply/Transfer/Synthesis signature interactions a distinct visual treatment; and turns V2.1 feedback into a recognisable **What you noticed → What matters → Try this elsewhere** coaching component.
-
-Apply and Transfer use a focused decision surface rather than changing the entire site to a dark theme. Motion is limited to meaningful state changes and is disabled under `prefers-reduced-motion`. Keyboard, contrast, mobile reflow and no-writing requirements remain release gates.
-
-
 ## V2.1 — Module-specific challenge and transfer
 
 V2.1 deepens the learning rather than adding more modules. Every one of the **42 student modules now has its own Apply challenge and its own unfamiliar Transfer context**, generated from that module's scenario, progression move, misconception, principle and grade-level demand. Interaction type deliberately varies across each grade rather than repeating one question format by strand.
