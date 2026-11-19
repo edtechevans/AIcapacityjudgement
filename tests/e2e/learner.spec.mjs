@@ -70,7 +70,7 @@ test("mobile navigation and reading comfort are available",async({page},info)=>{
   await expect(page.locator("html")).toHaveAttribute("data-reading","comfortable");
   await assertNoOverflow(page,"Comfortable reading on mobile");
 });
-test("complete a V2 lesson without writing and resume the completed stage",async({page})=>{
+test("complete a V2.1 lesson without writing and resume the completed stage",async({page})=>{
   await startGrade(page);
   await page.goto("/#/lesson/6-A1");
   await page.locator('[data-action="concept-next"]').click();
@@ -87,12 +87,12 @@ test("complete a V2 lesson without writing and resume the completed stage",async
   await expect(page.locator("#activity-feedback")).toContainText(/passed/i);
   await page.locator('[data-action="next"]').click();
   await expect(page.locator("textarea")).toHaveCount(0);
-  for(const i of [0,2,3])await page.locator('[data-apply-multi="'+i+'"]').check();
+  for(const [i,value] of [0,1,0,1].entries())await page.locator('[data-apply-sort="'+i+'"]').selectOption(String(value));
   await page.locator('[data-action="check-application"]').click();
   await expect(page.locator("#application-feedback")).toContainText(/passed/i);
   await page.locator('[data-action="go-transfer"]').click();
   await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5 · Transfer");
-  await page.locator('input[name="transfer-choice"][value="1"]').check();
+  await page.locator('input[name="transfer-choice"][value="0"]').check();
   await page.locator('[data-action="check-transfer"]').click();
   await expect(page.locator(".lesson-progress-heading")).toContainText("Journey steps 5 of 5");
   await expect(page.locator(".completed-evidence")).toContainText("New-context decision passed");
