@@ -1,9 +1,9 @@
 {
   "name": "ai-capacity-judgement",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
-  "description": "Student-first AI Capacity x Judgement curriculum and learning experience",
+  "description": "AI Capacity x Judgement V2 — interactive Grades 6–12 and educator learning without written-response requirements",
   "scripts": {
     "test:unit": "node --test tests/quality.test.mjs tests/engineering.test.mjs tests/learning-quality.test.mjs tests/senior-learning.test.mjs tests/scope-sequence.test.mjs tests/study-analysis.test.mjs",
     "test:browser": "playwright test",
