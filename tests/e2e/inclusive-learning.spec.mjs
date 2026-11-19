@@ -38,7 +38,7 @@ for(const entry of lessons){
   const second=page.locator('[data-action="lab-mode"][data-mode="'+entry.choices[1]+'"]');
   await second.click();
   await expect(check).toBeEnabled();
-  await expect(page.locator(".lab-observation-field textarea")).toBeVisible();
+  await expect(page.locator(".lab-observation-field")).toContainText("Compare the evidence");
   await expect(page.locator(".lab-offline summary")).toBeVisible();
   const axe=await new AxeBuilder({page}).include(".learning-lab")
    .withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]).analyze();
