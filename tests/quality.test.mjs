@@ -74,10 +74,14 @@ test("V2.1 keeps ordering keyboard-operable and supports four structured interac
  for(const kind of ["single","multi","sort","sequence"])assert.ok(v.includes('"'+kind+'"'));
  assert.ok(appJs.includes('data-action="apply-move"'));assert.ok(!appJs.includes("draggable=true"));
 });
-test("educator pedagogy includes authentic assessment redesign and four interaction types",()=>{
- const e=read("content/educators.js");
- for(const kind of ["single","multi","classify","order"])assert.ok(e.includes('kind:"'+kind+'"'));
- for(const phrase of ["Where did the thinking disappear?","Scaffold or substitute?","Make learning evidence visible","Equity is part of validity","Redesign studio"])assert.ok(e.includes(phrase));
+test("four-hour educator pathway preserves deep learning and interactive decision formats",()=>{
+ const e=read("content/educators.js"),d=read("content/educator-v4-data.js");
+ for(const kind of ["single","multi","classify","order"])assert.ok(d.includes('kind:"'+kind+'"'));
+ for(const phrase of ["Understand the Capacity","Personalisation for All","Creativity and Authenticity","Collaborative Capacity","Agency and Intellectual Ownership","Evidence Before Intervention","Assessment, Feedback and Trust","From Judgement to Taking Action"])assert.ok(d.includes(phrase),phrase);
+ for(const phrase of ["Engagement for All","Tier 1","student","evidence"])assert.ok(d.includes(phrase),phrase);
+ assert.ok(e.includes("STAGES"),"Educator runtime should support five stages");
+ assert.ok(e.includes("moduleDone"),"Educator completion must reflect stage checks");
+ assert.ok(!d.match(/<textarea/gi),"Educator content must never require a text field");
 });
 test("all 42 student modules complete end-to-end with selected responses only",async()=>{
  for(const l of DATA.LESSONS){const h=app();await h.click({action:"pick-grade",pick:String(l.grade)});await finish(h,l)}
