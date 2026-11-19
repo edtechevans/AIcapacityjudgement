@@ -108,15 +108,15 @@ function v21Synthesis(l){
  const g=V21_GRADE_DEMAND[l.grade]||V21_GRADE_DEMAND[10],capacity=l.strand==="A3";
  return {
   signature:"Capacity × Judgement Challenge",
-  prompt:(capacity?"You have now worked across Understanding AI, Working with AI and Creating with AI.":"You have now worked across Purpose & Agency, Truth & Trust and Ethics & Consequences.")+" Which response best combines the three strands at Grade "+l.grade+"?",
+  prompt:(capacity?"You have now worked across Understanding AI, Working with AI and Creating with AI.":"You have now completed all six Capacity × Judgement strands for this grade. This is the full integration challenge.")+" Which response best combines the learning at Grade "+l.grade+"?",
   options:capacity?[
    ["Understand the system and its limits, choose a purposeful workflow, then create and test something while keeping human decisions visible.",1,"Capacity is strongest when understanding, workflow and creation reinforce one another."],
    ["Use whichever tool produces the most impressive output, then explain the process afterwards.",0,"This starts with output rather than understanding, purpose and testing."],
    ["Learn technical facts about AI but avoid applying them to real design decisions.",0,"Capacity includes using understanding to make and test meaningful things."]
   ]:[
-   ["Start with purpose, verify what deserves trust, then consider who is affected, what safeguards are needed and who remains accountable.",1,"Judgement combines agency, evidence and consequences rather than treating them as separate checklists."],
-   ["If the information is accurate, questions about agency, fairness or redress no longer matter.",0,"Truth is essential but not sufficient for responsible use."],
-   ["If the purpose is worthwhile, use the system first and add safeguards after problems appear.",0,"Consequences and safeguards belong in the decision before deployment."]
+   ["Understand what the system can and cannot do, choose a purposeful workflow, verify what deserves trust, then consider who is affected, what safeguards are needed and who remains accountable.",1,"This integrates Capacity with Judgement: capability, workflow and creation remain connected to purpose, evidence and consequences."],
+   ["If the system works technically and the information is accurate, questions about learning, agency, fairness or redress no longer matter.",0,"Technical capacity and factual accuracy are important, but neither is sufficient for responsible use."],
+   ["Use the most capable tool first, then decide on purpose, evidence and safeguards after seeing the output.",0,"Capacity should not lead judgement; purpose and safeguards belong in the decision from the beginning."]
   ],
   feedback:{noticed:"You connected learning across three strands instead of treating each module as isolated.",matters:"Capacity and judgement become more useful when ideas combine across situations.",elsewhere:"Use the same synthesis when a future task crosses technical, learning and ethical boundaries."}
  };
