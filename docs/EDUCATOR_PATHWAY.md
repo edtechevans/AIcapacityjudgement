@@ -1,16 +1,28 @@
-# Educator learning pathway — deployment note (19 November 2026)
+# Educator learning pathway — V4 live release (20 November 2026)
 
-## Courses
-- AI Literacy & Professional Judgement (six interactive modules; ~60 minutes)
-- AI Pedagogy, Assessment & Learning Design (six interactive modules; ~65 minutes)
+## Live pathway
+**Website:** https://edtechevans.github.io/AIcapacityjudgement/#/educators
 
-The new **Educators** navigation tab is available at `#/educators`, including without a student grade selection. Each module presents three short concept explanations, a professional scenario, a multiple-choice knowledge check, and immediate explanatory feedback. A module completes when the educator selects the most defensible response; there are no written reflections, text fields, uploads or submissions. Progress is held only in browser localStorage under `aicj-educator-progress-v2`; previously completed checkpoints can be carried forward without migrating any prior written reflections.
+**Duration:** 4 hours total, eight 30-minute modules. Both pathways carry equal weight:
+- **AI Capacity** — C1 Understand the Capacity; C2 Personalisation for All; C3 Creativity and Authenticity; C4 Collaborative Capacity.
+- **AI Judgement** — J1 Agency and Intellectual Ownership; J2 Evidence Before Intervention (MTSS, Inclusion and Belonging); J3 Assessment, Feedback and Trust; J4 From Judgement to Taking Action.
+
+This replaces the two earlier six-module educator pilots. The 42 student modules and their routes remain unchanged.
+
+## Learning architecture
+Each educator module presents five sequential stages — **Learn → Model → Practise → Apply → Transfer** — with three substantive teaching ideas, a weaker/stronger professional worked model, two structured practice tasks, an application task and a new-context transfer challenge. Six individual interactive decisions per module mean **48 checkpoints** in total.
+
+Interactions include single-choice, select-more-than-one, classification and keyboard-operable ordering, with immediate explanatory feedback and retry. **No learner typing, writing, uploads, speech or drag-only action is required.** The 30-minute duration is an indicative active-learning allowance, not a forced timer.
+
+Curriculum language and decisions draw on AISG's Transformative Learning Framework (Engagement for All; Being/Connecting/Doing; Personalisation, Agency, Authenticity, Creativity, Collaboration and Taking Action) and the official 38 learning engagement indicators. The TLF is used as a **lens rather than a checklist**. UDL and MTSS concepts appear where relevant, including universal quality instruction, responsive evidence and accountable tiered support decisions. Case scenarios are fictional and contain no private student information.
+
+## Progress and assessment
+The restructured course uses a new browser-local progress key (aicj-educator-progress-v4) to avoid crediting the old pilot's simpler checkpoints as completion of newly substantial modules. Progress is held only in the current browser; clearing browser data may delete it. No authenticated progress synchronisation, staff reporting or server-side storage is implemented.
+
+A completed module means all six formative decisions across its five stages passed. It is **not a validated certificate of educator competence or psychometric evaluation of judgement**. Alternative defensible responses can be discussed professionally even when a task identifies the strongest response for its scenario.
 
 ## Security / SharePoint boundary
-This GitHub repository and GitHub Pages deployment are public. **No materials within this repository are confidential or access-controlled.** The Educators label is a navigation convention, not authentication or educator authorisation. SharePoint OU-group controls will only protect content if the entire educator resource is actually delivered from a protected SharePoint library or authenticated endpoint. Linking or embedding this public site behind a SharePoint page does not make its assets private. Do not store sensitive examples, identifiable student records, or staff assessments in this public source. Before requiring educator-only access, move educator-specific content out of public hosting and enforce Entra-group access on every protected resource request.
+The site and repository remain public. The Educators navigation label does not enforce authentication or access permissions. Do not put identifiable student information or private staff records into scenarios or connected AI tools. Protected educator-only access and completion reporting require a separately implemented, school-approved SharePoint/Entra solution with authenticated per-resource controls.
 
-## Progress boundary
-Local browser storage is not cross-device, authenticated, or administrator-readable, and clearing browser storage will erase progress. This pilot does **not** implement automatic synchronisation with SharePoint or staff completion reporting. Use an approved server-side store with authenticated user IDs, access controls and retention policies before reporting completion to leadership.
-
-## Scope
-Student lessons, routes and grade selection are retained. Educator learning is a separate content pathway that does not change the 42 student modules. The scenario answer key communicates a defensible recommendation; it is not a psychometric measurement of educator judgement. Staff can discuss alternative defensible approaches with a facilitator.
+## Validation
+Quality regression checks and cross-browser Playwright tests are in the GitHub Actions workflows. Completion of CI does not establish validated learning outcomes or formal accessibility conformance; manual assistive-technology testing and educator pilots remain necessary. See tests/e2e/educators.spec.mjs, tests/quality.test.mjs and docs/EDUCATOR_REBUILD_TLF_MTSS_V3.md for design decisions and test coverage.
