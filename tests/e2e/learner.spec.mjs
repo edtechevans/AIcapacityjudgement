@@ -70,7 +70,7 @@ test("mobile navigation and reading comfort are available",async({page},info)=>{
   await expect(page.locator("html")).toHaveAttribute("data-reading","comfortable");
   await assertNoOverflow(page,"Comfortable reading on mobile");
 });
-test("complete an authentic lesson, download work and resume the final stage",async({page})=>{
+test("complete a V2 lesson without writing and resume the completed stage",async({page})=>{
   await startGrade(page);
   await page.goto("/#/lesson/6-A1");
   await page.locator('[data-action="concept-next"]').click();
@@ -81,51 +81,26 @@ test("complete an authentic lesson, download work and resume the final stage",as
   await page.locator('[data-action="model-reveal"]').click();
   await page.locator('[data-action="next"]').click();
   await page.locator('[data-action="lab-mode"][data-mode="timer"]').click();
-   await page.locator('[data-action="lab-mode"][data-mode="classifier"]').click();
-   for(const [i,value] of [0,1,0,1].entries()){
-    await page.locator("#sort-"+i).selectOption(String(value));
-  }
+  await page.locator('[data-action="lab-mode"][data-mode="classifier"]').click();
+  for(const [i,value] of [0,1,0,1].entries())await page.locator("#sort-"+i).selectOption(String(value));
   await page.locator('[data-action="check"]').click();
   await expect(page.locator("#activity-feedback")).toContainText(/passed/i);
   await page.locator('[data-action="next"]').click();
-  await page.locator('[data-action="apply-next"]').click();
-  const first={
-    purpose:"I want to help another student understand the difference between AI and an ordinary program.",
-    decision:"I will use examples and choose an AI tool only if it helps me explain or explore something.",
-    evidence:"I will compare the descriptions with two reliable sources and ask a student for feedback."
-  };
-  for(const [field,value] of Object.entries(first))await page.locator("#plan-"+field).fill(value);
-  await page.locator('[data-action="apply-next"]').click();
-  await page.locator("#plan-work").fill("I prepared two descriptions and a simple diagram, then asked another student which was clearer.");
-  await page.locator("#plan-revision").fill("Their feedback showed confusion about predictions, so I added a concrete model example.");
-  await page.locator("#project-confirm").check();
-  const pending=page.waitForEvent("download");
-  await page.locator('[data-action="download-notes"]').click();
-  const download=await pending;
-  expect(download.suggestedFilename()).toBe("AI-CJ-6-A1-learning-notes.txt");
-  await page.locator('[data-action="record"]').click();
-  await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5");
-  await expect(page.locator('[data-action="finish-reflection"]')).toBeDisabled();
-  await expect(page.locator(".lesson-progress-heading")).toContainText("Journey steps 4 of 5");
-  await page.locator("#reflection-learning").fill("I used to trust confident explanations. Comparing evidence and testing examples made me look for what is supported.");
-  await page.locator("#reflection-transfer").fill("Next time in science, I will check an AI explanation against a reliable source before sharing it.");
-  await page.locator("#reflection-confirm").check();
-  await expect(page.locator('[data-action="finish-reflection"]')).toBeEnabled();
-  await page.locator('[data-action="finish-reflection"]').click();
+  await expect(page.locator("textarea")).toHaveCount(0);
+  for(const i of [0,2,3])await page.locator('[data-apply-multi="'+i+'"]').check();
+  await page.locator('[data-action="check-application"]').click();
+  await expect(page.locator("#application-feedback")).toContainText(/passed/i);
+  await page.locator('[data-action="go-transfer"]').click();
+  await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5 · Transfer");
+  await page.locator('input[name="transfer-choice"][value="1"]').check();
+  await page.locator('[data-action="check-transfer"]').click();
   await expect(page.locator(".lesson-progress-heading")).toContainText("Journey steps 5 of 5");
-  await expect(page.locator(".reflection-save")).toBeVisible();
-  const finalNotes=page.waitForEvent("download");
-  await page.locator(".reflection-save [data-action='download-notes']").click();
-  await finalNotes;
-  const stageVisible=await page.evaluate(()=>{
-    const track=document.querySelector(".step-track"),active=track?.querySelector(".step-dot.active");
-    if(!track||!active)return false;
-    const container=track.getBoundingClientRect(),item=active.getBoundingClientRect();
-    return item.left>=container.left-3&&item.right<=container.right+3;
-  });
-  expect(stageVisible,"Active lesson stage must remain visible inside the mobile stage navigation").toBe(true);
+  await expect(page.locator(".completed-evidence")).toContainText("New-context decision passed");
+  await expect(page.locator("textarea")).toHaveCount(0);
+  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("aicj-studio-v2")).records["6-A1"]);
+  expect(saved.completed).toBe(true);
   await page.reload();
-  await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5");
+  await expect(page.locator(".lesson-panel")).toContainText("Stage 5 of 5 · Transfer");
 });
 test("automated WCAG 2.2 A and AA violations are caught on core student pages",async({page})=>{
   await startGrade(page);
@@ -276,7 +251,7 @@ test("Grade 7 classroom lab supports user-changed data with no saved free text",
  await expect(page.locator("#lab-result")).toContainText("3 training examples");
  await page.locator('[data-action="lab-adjust"][data-setting="mapleBright"][data-value="1"]').click();
  await expect(page.locator("#lab-result")).toContainText("4 training examples");
- await page.locator(".lab-observation-field textarea").fill("Adding examples changed predictions, but the sample is too small to establish real-world accuracy.");
+ await expect(page.locator(".lab-observation-field")).toContainText("Compare the evidence");
  expect(await page.evaluate(()=>JSON.stringify(localStorage))).not.toContain("Adding examples changed predictions");
  await expect(page.locator('[data-action="check"]')).toBeDisabled();
  await page.locator('[data-action="lab-mode"][data-mode="balanced"]').click();
