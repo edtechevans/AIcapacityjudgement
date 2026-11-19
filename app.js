@@ -1,4 +1,4 @@
-/* AI Capacity x Judgement — V2 interactive learning experience.
+/* AI Capacity x Judgement — V2.1 interactive learning experience.
  * Static-first formative learning. No student accounts or server-side gradebook.
  * No lesson requires written responses. Progress records selected-response checkpoints only.
  */
@@ -45,7 +45,7 @@ function hasLearningCheckpoint(record){return !!(record&&(record.knowledgePassed
 function resumeLesson(grade){return LESSONS.filter(l=>{const record=state.records[l.id];return l.grade===+grade&&record&&!record.completed&&hasLearningCheckpoint(record);}).sort((a,b)=>(state.records[b.id].lastOpenedAt||0)-(state.records[a.id].lastOpenedAt||0))[0]||null;}
 function checkpoint(id,stage){const record=getRecord(id);record.lastStage=Math.max(record.lastStage||0,stage);record.lastOpenedAt=Date.now();persist();}
 function gradeLane(grade,track){const n=pathInfo(grade,track);const pct=Math.round(n.done/n.total*100);return '<div class="lane lane-'+track+'"><div class="lane-top"><span>'+trackLabel(track)+'</span><strong>'+n.done+' / '+n.total+'</strong></div>'+progressBar(pct,trackLabel(track)+' modules practised')+'</div>';}
-function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed||r.applied?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,coachMode:"independent",labMode:null,labModesSeen:[],labTuning:{},seniorMilestones:{},knowledgeMisses:0,context:0,applyChoice:null,applyMulti:{},applySort:{},applyOrder:[],applyFeedback:null,transferChoice:null,transferFeedback:null};}return practice[id]}
+function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed||r.applied?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,coachMode:"independent",labMode:null,labModesSeen:[],labTuning:{},seniorMilestones:{},knowledgeMisses:0,context:0,applyChoice:null,applyMulti:{},applySort:{},applyOrder:[],applyFeedback:null,transferChoice:null,transferFeedback:null,synthesisChoice:null,synthesisFeedback:null};}return practice[id]}
 function pathInfo(grade,track){const a=LESSONS.filter(l=>l.grade===+grade && l.track===track);return {done:a.filter(l=>state.records[l.id]?.completed).length,total:a.length}}
 function score(grade){const d=state.diagnostics[grade];if(!d||!d.completed)return null;const correct={};d.answers.forEach((answer,i)=>{correct[DIAGNOSTICS[grade][i][0]]=answer===DIAGNOSTICS[grade][i][3]});const cap=["A1","A2","A3"].filter(s=>correct[s]).length;const jud=["B1","B2","B3"].filter(s=>correct[s]).length;return {correct,capacity:cap,judgement:jud};}
 function recs(grade){const s=score(grade);return ["capacity","judgement"].map(track=>{
@@ -326,24 +326,12 @@ function evidenceGuideHtml(l){
  const p=classroomPlan(l);
  return '<details class="performance-evidence"><summary>What meaningful evidence could look like</summary><div class="performance-evidence-inner"><p><strong>Age-appropriate outcome:</strong> '+esc(p.response)+'</p><p><strong>Required evidence:</strong> '+esc(INQUIRY_BRIEFS[l.id].evidence)+'</p><div class="rubric-table-wrap" role="region" aria-label="Scrollable teacher-review rubric" tabindex="0"><table class="rubric-table"><caption>Teacher-reviewed learning evidence — not automatically scored</caption><thead><tr><th scope="col">Dimension</th><th scope="col">Developing</th><th scope="col">Applying</th><th scope="col">Transferring</th></tr></thead><tbody>'+Object.values(TEACHER_RUBRIC).map(c=>'<tr><th scope="row">'+esc(c.name)+'</th><td>'+esc(c.developing)+'</td><td>'+esc(c.applying)+'</td><td>'+esc(c.transferring)+'</td></tr>').join("")+'</tbody></table></div><p class="small muted">This is a descriptive teacher-review guide. The site cannot assess written reasoning or verify a real-world artefact.</p></div></details>';
 }
-const APPLY_SPECS={
- A1:{kind:"multi",prompt:"Which moves would make this investigation more trustworthy?",options:[["Test more than one case",1,"A broader test makes it harder to mistake one success for reliable performance."],["Use the first impressive result",0,"One successful result is weak evidence."],["Look for failure cases and limitations",1,"Failures reveal boundaries that average performance can hide."],["Compare the result with an independent source or baseline",1,"Independent evidence helps test whether the system deserves trust."]]},
- A2:{kind:"sequence",prompt:"Build a responsible workflow for working with AI.",steps:["Clarify the purpose and success criteria","Give the tool useful, safe context","Compare or test the response","Verify important claims and revise"],tip:"Good prompting is part of a cycle: purpose, interaction, checking and revision."},
- A3:{kind:"sort",prompt:"Classify each move by whether it strengthens learner ownership.",categories:["Strengthens ownership","Risks replacing the learning"],items:[["Generate possibilities, then choose and develop one yourself",0,"AI can widen possibilities while the learner still makes the important decisions."],["Submit an AI-produced final product you cannot explain",1,"A finished output is not evidence of your understanding."],["Compare alternatives against your own criteria",0,"Criteria keep the learner in control of quality and purpose."],["Let the tool make every creative decision",1,"Automation can remove the decisions the learning is meant to develop."]]},
- B1:{kind:"single",prompt:"Which decision best protects the learning goal?",options:[["Use AI whenever it makes the task faster",0,"Efficiency is useful only when it does not remove the target thinking."],["Decide what thinking the learner must do, then choose where AI can support without replacing it",1,"Start with the learning purpose, then decide whether and where AI belongs."],["Avoid AI in every learning task",0,"A blanket ban ignores situations where AI can provide useful support without replacing learning."]]},
- B2:{kind:"multi",prompt:"Which actions strengthen trust in an AI-assisted claim?",options:[["Trace important claims to trustworthy independent evidence",1,"Independent evidence is stronger than confidence or fluency."],["Treat precise wording as proof",0,"Specific detail can still be wrong or fabricated."],["Check whether cited sources actually exist and support the claim",1,"Source verification matters before reuse."],["Look for missing context, uncertainty or competing evidence",1,"Trustworthy judgement includes what the response leaves out."]]},
- B3:{kind:"sort",prompt:"Classify these choices by whether they demonstrate responsible use.",categories:["Responsible safeguard","Needs a rethink"],items:[["Remove unnecessary personal information before using an approved tool",0,"Data minimisation reduces avoidable exposure."],["Upload sensitive records because the output may be useful",1,"Potential usefulness does not override privacy or safeguarding responsibilities."],["Consider who could be affected by an automated decision",0,"Consequences and fairness belong in the decision."],["Assume a popular tool is automatically school-approved",1,"Popularity is not evidence of approval, privacy or suitability."]]}
-};
-const TRANSFER_SPECS={
- A1:{prompt:"In a new subject, a tool performs well on familiar examples but poorly on unusual ones. What is the strongest conclusion?",options:[["The unusual cases can be ignored because average performance is good",0],["The system may have learned patterns that do not transfer; investigate the edge cases before relying on it",1],["The tool must be completely useless",0]],feedback:"Transfer means recognising that performance depends on data, context and the cases used to test it."},
- A2:{prompt:"You get a useful-looking response after improving your prompt. What should happen next?",options:[["Use it immediately because the prompt was detailed",0],["Check it against the goal and verify important claims before deciding what to use",1],["Keep adding more words to the prompt until the response is longer",0]],feedback:"Prompt quality can improve relevance, but verification and judgement still matter."},
- A3:{prompt:"AI gives you several strong design ideas. Which next move best demonstrates authorship?",options:[["Choose, combine or challenge ideas using your own criteria, then develop something you can explain",1],["Select the most polished idea and submit it unchanged",0],["Ask the tool to make every remaining decision",0]],feedback:"Capacity grows when AI expands possibilities while the learner keeps meaningful creative control."},
- B1:{prompt:"A new AI feature can complete a learning task very quickly. What question should come first?",options:[["How much time will it save?",0],["What thinking is this task meant to develop, and would the feature support or remove it?",1],["Will everyone think the output looks professional?",0]],feedback:"Judgement begins with purpose. Faster is not automatically better for learning."},
- B2:{prompt:"Two sources disagree with a confident AI answer. What is the most defensible response?",options:[["Trust the AI because it sounds certain",0],["Investigate the disagreement using reliable evidence and revise the claim if needed",1],["Pick whichever source supports your original view",0]],feedback:"Truth and trust require evidence, not confidence or confirmation."},
- B3:{prompt:"An AI tool could help with a high-stakes decision. What should happen before use?",options:[["Check purpose, privacy, fairness, approval, human oversight and possible consequences",1],["Use it first and discuss safeguards only if a problem occurs",0],["Assume responsibility belongs to the software provider",0]],feedback:"Responsible use requires anticipating consequences and keeping human accountability visible."}
-};
-function applicationSpec(l){return APPLY_SPECS[l.strand]||APPLY_SPECS.B1}
-function transferSpec(l){return TRANSFER_SPECS[l.strand]||TRANSFER_SPECS.B1}
+function applicationSpec(l){return V21_APPLY[l.id]}
+function transferSpec(l){return V21_TRANSFER[l.id]}
+function synthesisSpec(l){return V21_SYNTHESIS[l.id]||null}
+function feedbackTriplet(title,noticed,matters,elsewhere,passed){
+ return '<div class="v21-feedback-grid"><div><span>What you noticed</span><p>'+esc(noticed)+'</p></div><div><span>What matters</span><p>'+esc(matters)+'</p></div><div><span>Try this elsewhere</span><p>'+esc(elsewhere)+'</p></div></div>';
+}
 function applicationReady(l,w){
  const a=applicationSpec(l);
  if(a.kind==="single")return w.applyChoice!==null;
@@ -371,8 +359,8 @@ function applicationInteractionHtml(l,w){
  if(a.kind==="multi")controls='<div class="v2-multi-list">'+a.options.map((x,i)=>'<label class="v2-multi-option"><input type="checkbox" data-apply-multi="'+i+'" '+(w.applyMulti?.[i]===true?"checked":"")+'><span>'+esc(x[0])+'</span></label>').join("")+'</div><p class="small muted">Select every action you would take, then check your thinking.</p>';
  if(a.kind==="sort")controls='<div class="sort-list">'+a.items.map((x,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p id="apply-sort-label-'+i+'">'+esc(x[0])+'</p><select aria-labelledby="apply-sort-label-'+i+'" data-apply-sort="'+i+'"><option value="">Choose…</option>'+a.categories.map((c,n)=>'<option value="'+n+'" '+(w.applySort?.[i]===n?"selected":"")+'>'+esc(c)+'</option>').join("")+'</select></div></div>').join("")+'</div>';
  if(a.kind==="sequence")controls='<p class="small muted">Use the arrow buttons to put the steps in the most defensible order. No dragging is required.</p><ol class="sequence-list">'+w.applyOrder.map((pos,i)=>'<li class="sequence-item"><span class="sequence-number">'+(i+1)+'</span><span class="sequence-text">'+esc(a.steps[pos])+'</span><div class="move-actions"><button class="move-btn" data-action="apply-move" data-index="'+i+'" data-dir="-1" aria-label="Move '+esc(a.steps[pos])+' up" '+(i===0?"disabled":"")+'>↑</button><button class="move-btn" data-action="apply-move" data-index="'+i+'" data-dir="1" aria-label="Move '+esc(a.steps[pos])+' down" '+(i===w.applyOrder.length-1?"disabled":"")+'>↓</button></div></li>').join("")+'</ol>';
- const feedback=w.applyFeedback?'<div id="application-feedback" class="feedback '+(w.applyFeedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.applyFeedback.passed?"Application check passed.":"Use the feedback and try again.")+'</strong><p>'+esc(w.applyFeedback.message)+'</p>'+(w.applyFeedback.details?.length?'<ul class="feedback-details">'+w.applyFeedback.details.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':"")+'</div>':"";
- return '<section class="v2-application"><div class="eyebrow">Apply · New context</div><h3>'+esc(a.prompt)+'</h3>'+controls+feedback+(w.applyFeedback?.passed?'<button class="btn" data-action="go-transfer">Continue to transfer →</button>':'<button class="btn" data-action="check-application" '+(!applicationReady(l,w)?"disabled":"")+'>Check my decision →</button>')+'</section>';
+ const feedback=w.applyFeedback?'<div id="application-feedback" class="feedback '+(w.applyFeedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.applyFeedback.passed?"Application check passed.":"Use the feedback and try again.")+'</strong>'+feedbackTriplet(a.signature,w.applyFeedback.noticed,w.applyFeedback.matters,w.applyFeedback.elsewhere,w.applyFeedback.passed)+(w.applyFeedback.details?.length?'<ul class="feedback-details">'+w.applyFeedback.details.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':"")+'</div>':"";
+ return '<section class="v2-application"><div class="eyebrow">Signature challenge · '+esc(a.signature)+'</div><h3>'+esc(a.prompt)+'</h3>'+controls+feedback+(w.applyFeedback?.passed?'<button class="btn" data-action="go-transfer">Continue to transfer →</button>':'<button class="btn" data-action="check-application" '+(!applicationReady(l,w)?"disabled":"")+'>Check my decision →</button>')+'</section>';
 }
 function checkApplication(){
  const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),a=applicationSpec(l);
@@ -380,23 +368,40 @@ function checkApplication(){
  const passed=applicationPassed(l,w),details=[];
  if(a.kind==="multi")a.options.forEach((x,i)=>{if(!!w.applyMulti[i]!==!!x[1])details.push(x[2]);});
  if(a.kind==="sort")a.items.forEach((x,i)=>{if(w.applySort[i]!==x[1])details.push("Example "+(i+1)+": "+x[2]);});
- let message=passed?(a.tip||"Your choices protect the learning goal while keeping evidence and responsibility visible."):"Some choices need another look. Focus on purpose, evidence, learner agency and consequences.";
- if(a.kind==="single"&&w.applyChoice!==null)message=a.options[w.applyChoice][2];
- w.applyFeedback={passed,message,details};
+ const selectedMessage=a.kind==="single"&&w.applyChoice!==null?a.options[w.applyChoice][2]:(passed?(a.tip||a.principle):(details[0]||a.misconception));
+ w.applyFeedback={
+  passed,
+  noticed:passed?"You used the module-specific progression move instead of relying on surface quality.":selectedMessage,
+  matters:a.principle,
+  elsewhere:"In a different context, look for where the same misconception could appear and decide what evidence would change your mind.",
+  details:passed?[]:details
+ };
  if(passed){r.applied=true;checkpoint(l.id,3);}
  persist();render(true,"application-feedback");
 }
 function transferChallengeHtml(l,w){
- const t=transferSpec(l);
- return '<section class="unseen-transfer" aria-label="Unseen transfer challenge"><div class="eyebrow">Transfer · A different situation</div><h3>Can you carry the idea somewhere new?</h3><p>'+esc(t.prompt)+'</p><div class="option-list">'+t.options.map((x,i)=>'<label class="option '+(w.transferChoice===i?"chosen":"")+'"><input type="radio" name="transfer-choice" value="'+i+'" '+(w.transferChoice===i?"checked":"")+'><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(x[0])+'</span></label>').join("")+'</div>'+(w.transferFeedback?'<div id="transfer-feedback" class="feedback '+(w.transferFeedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.transferFeedback.passed?"You transferred the idea.":"Reconsider the principle.")+'</strong><p>'+esc(t.feedback)+'</p></div>':"")+'<button class="btn" data-action="check-transfer" '+(w.transferChoice===null?"disabled":"")+'>Check transfer →</button></section>';
+ const t=transferSpec(l),syn=synthesisSpec(l);
+ const transferFeedback=w.transferFeedback?'<div id="transfer-feedback" class="feedback '+(w.transferFeedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.transferFeedback.passed?"You transferred the idea.":"Reconsider the principle.")+'</strong>'+feedbackTriplet(t.signature,t.feedback.noticed,t.feedback.matters,t.feedback.elsewhere,w.transferFeedback.passed)+'</div>':"";
+ const transfer='<section class="unseen-transfer" aria-label="Unseen transfer challenge"><div class="eyebrow">'+esc(t.signature)+' · A different situation</div><h3>'+esc(t.context)+'</h3><p>'+esc(t.prompt)+'</p><div class="option-list">'+t.options.map((x,i)=>'<label class="option '+(w.transferChoice===i?"chosen":"")+'"><input type="radio" name="transfer-choice" value="'+i+'" '+(w.transferChoice===i?"checked":"")+'><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(x[0])+'</span></label>').join("")+'</div>'+transferFeedback+'<button class="btn" data-action="check-transfer" '+(w.transferChoice===null?"disabled":"")+'>Check transfer →</button></section>';
+ if(!syn||!w.transferFeedback?.passed)return transfer;
+ const synthFeedback=w.synthesisFeedback?'<div id="synthesis-feedback" class="feedback '+(w.synthesisFeedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.synthesisFeedback.passed?"Three strands connected.":"Look across the whole pathway.")+'</strong>'+feedbackTriplet(syn.signature,syn.feedback.noticed,syn.feedback.matters,syn.feedback.elsewhere,w.synthesisFeedback.passed)+'</div>':"";
+ return transfer+'<section class="v21-synthesis"><div class="eyebrow">'+esc(syn.signature)+'</div><h3>'+esc(syn.prompt)+'</h3><div class="option-list">'+syn.options.map((x,i)=>'<label class="option '+(w.synthesisChoice===i?"chosen":"")+'"><input type="radio" name="synthesis-choice" value="'+i+'" '+(w.synthesisChoice===i?"checked":"")+'><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(x[0])+'</span></label>').join("")+'</div>'+synthFeedback+'<button class="btn" data-action="check-synthesis" '+(w.synthesisChoice===null?"disabled":"")+'>Check synthesis →</button></section>';
 }
 function checkTransfer(){
- const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),t=transferSpec(l);
+ const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),t=transferSpec(l),syn=synthesisSpec(l);
  if(w.transferChoice===null)return;
  const passed=t.options[w.transferChoice]?.[1]===1;
  w.transferFeedback={passed};
- if(passed){r.reflected=true;r.completed=true;checkpoint(l.id,4);persist();}
+ if(passed&&!syn){r.reflected=true;r.completed=true;checkpoint(l.id,4);persist();}
  render(true,"transfer-feedback");
+}
+function checkSynthesis(){
+ const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),syn=synthesisSpec(l);
+ if(!syn||w.synthesisChoice===null)return;
+ const passed=syn.options[w.synthesisChoice]?.[1]===1;
+ w.synthesisFeedback={passed};
+ if(passed&&w.transferFeedback?.passed){r.reflected=true;r.completed=true;checkpoint(l.id,4);persist();}
+ render(true,"synthesis-feedback");
 }
 function activityHtml(l,w){const a=ACTIVITIES[l.id];if(!a)return '<p>Activity unavailable.</p>';let body='<div class="eyebrow">Interactive challenge · '+esc(a.kind==="sort"?"Classify":a.kind==="sequence"?"Build a workflow":a.kind==="prompt"?"Compare prompts":a.kind==="evidence"?"Check the evidence":"Make a decision")+'</div><h2>'+esc(a.title)+'</h2><p>'+esc(activityDescription(a))+'</p>';
 if(a.kind==="sort")body+='<div class="sort-list">'+a.items.map((item,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p>'+esc(item[0])+'</p><label class="small" for="sort-'+i+'">Your classification</label><select id="sort-'+i+'" data-sort="'+i+'"><option value="">Choose a category…</option>'+a.categories.map((x,n)=>'<option value="'+n+'" '+(w.sort[i]===n?"selected":"")+'>'+esc(x)+'</option>').join("")+'</select>'+(w.checked?'<div class="item-feedback '+(w.sort[i]===item[1]?"right":"try-again")+'">'+(w.sort[i]===item[1]?"✓ ":"↗ ")+esc(item[2])+'</div>':"")+'</div></div>').join("")+'</div>';
@@ -406,6 +411,11 @@ if(a.kind==="sequence")body+='<p class="small muted" style="margin-bottom:13px">
 if(w.feedback)body+='<div id="activity-feedback" class="feedback '+(w.feedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.feedback.passed?"Challenge passed.":"Useful attempt. Review what needs changing.")+'</strong><p>'+esc(w.feedback.message)+'</p>'+(w.feedback.details?.length?'<ul class="feedback-details">'+w.feedback.details.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':"")+(w.feedback.nextStep?'<p class="feedback-next"><strong>Try this next:</strong> '+esc(w.feedback.nextStep)+'</p>':"")+(a.tip?'<p class="small">'+esc(a.tip)+'</p>':"")+'</div>';
 if(!getRecord(l.id).practicePassed||w.retrying)body+='<button class="btn" data-action="check" style="margin-top:20px" '+(LEARNING_LABS[l.id]&&(w.labModesSeen||[]).length<2?'disabled aria-describedby="lab-prerequisite"':"")+'>Check my thinking →</button>'+(LEARNING_LABS[l.id]&&(w.labModesSeen||[]).length<2?'<p class="small muted" id="lab-prerequisite">Compare two laboratory conditions above before checking this answer.</p>':"");else body+='<div class="mastery-note">✓ Challenge passed. You can move on to apply your thinking, or practise again.</div><button class="btn btn-outline btn-small" data-action="retry" style="margin-top:15px">Try challenge again</button>';
 return body;}
+function teachingChunks(text){
+ const clean=String(text||"").trim(),parts=clean.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[clean];
+ const claim=(parts.shift()||clean).trim(),rest=parts.join(" ").trim();
+ return '<div class="knowledge-chunk"><span class="knowledge-chunk-label">Key idea</span><p class="knowledge-claim">'+esc(claim)+'</p>'+(rest?'<div class="knowledge-detail"><span class="knowledge-chunk-label">Why it matters</span><p>'+esc(rest)+'</p></div>':"")+'</div>';
+}
 function lesson(){const l=currentLesson();if(!l)return courses();const k=KNOWLEDGE[l.id],w=getPractice(l.id),r=getRecord(l.id),stage=Math.min(4,Number(w.stage)||0);if(!k)return '<main id="main-content" class="lesson-layout"><h1>Lesson not available</h1><button class="btn" data-action="courses">Return to courses</button></main>';
 const guide=LEARNING_SCAFFOLDS[l.id];
 const previous=LESSON_BY_ID[(l.grade-1)+"-"+l.strand],previousPractised=!!(previous&&state.records[previous.id]?.completed);
@@ -415,7 +425,7 @@ if(stage===0){
  body='<div class="lesson-eyebrow"><span class="eyebrow">Build your understanding</span><span class="lesson-subprogress">Idea '+(index+1)+' of 3</span></div>'+
  '<h2 id="stage-title" tabindex="-1">'+esc(["Start with the idea","Explore what it means","Use what you know"][index])+'</h2>'+
  '<p class="lesson-essence">'+esc(k.essential||l.principle)+'</p>'+
- '<div class="knowledge-panel"><div class="knowledge-number">0'+(index+1)+'</div><p>'+esc(part)+'</p></div>'+
+ '<div class="knowledge-panel"><div class="knowledge-number">0'+(index+1)+'</div>'+teachingChunks(part)+'</div>'+
  (index===0&&previousPractised?'<details class="learning-support prior-learning"><summary>Connect with what you learned before</summary><p>In your earlier module, you explored: <strong>'+esc(previous.principle)+'</strong></p><p>Without looking it up, what do you remember—and how could it help with today’s challenge?</p></details>':"")+
  (index===0&&guide?'<section class="lesson-success-criteria" aria-label="Learning intentions"><div class="eyebrow">What success looks like</div><h3>By the end, I can…</h3><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">These are things to practise and demonstrate, not grades.</p></section>':"")+
  (index===0?progressionBridgeHtml(l):"")+
@@ -673,6 +683,7 @@ if(action==="knowledge-check"){const l=currentLesson(),w=getPractice(l.id),r=get
 if(action==="model-reveal"){const w=getPractice(state.lessonId);w.modelSeen=true;getRecord(state.lessonId).modelSeen=true;checkpoint(state.lessonId,1);render(true,"worked-model");return}
 if(action==="check-application"){checkApplication();return}
 if(action==="check-transfer"){checkTransfer();return}
+if(action==="check-synthesis"){checkSynthesis();return}
 if(action==="go-transfer"){const w=getPractice(state.lessonId),r=getRecord(state.lessonId);if(!r.applied)return;w.stage=4;checkpoint(state.lessonId,4);goto("lesson",{focusStage:true});return}
 if(action==="apply-move"){const w=getPractice(state.lessonId),i=+t.dataset.index,j=i+(+t.dataset.dir);if(j<0||j>=w.applyOrder.length)return;const temp=w.applyOrder[i];w.applyOrder[i]=w.applyOrder[j];w.applyOrder[j]=temp;w.applyFeedback=null;render();return}
 if(action==="context-choice"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n>=0){w.context=n;w.applyFeedback=null;render();const selected=$(`[data-action="context-choice"][data-index="${n}"]`);if(selected?.focus)selected.focus({preventScroll:true});}return}
@@ -720,6 +731,7 @@ if(t.name==="knowledge-choice"){const w=getPractice(state.lessonId);w.knowledgeA
 if(t.name==="activity-choice"){const w=getPractice(state.lessonId);w.selected=+t.value;w.checked=false;w.feedback=null;render();const selected=$('input[name="activity-choice"]:checked');if(selected?.focus)selected.focus();return}
 if(t.name==="apply-choice"){const w=getPractice(state.lessonId);w.applyChoice=+t.value;w.applyFeedback=null;render();const selected=$('input[name="apply-choice"]:checked');if(selected?.focus)selected.focus();return}
 if(t.name==="transfer-choice"){const w=getPractice(state.lessonId);w.transferChoice=+t.value;w.transferFeedback=null;render();const selected=$('input[name="transfer-choice"]:checked');if(selected?.focus)selected.focus();return}
+if(t.name==="synthesis-choice"){const w=getPractice(state.lessonId);w.synthesisChoice=+t.value;w.synthesisFeedback=null;render();const selected=$('input[name="synthesis-choice"]:checked');if(selected?.focus)selected.focus();return}
 if(t.dataset?.applyMulti!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.applyMulti;w.applyMulti[i]=!!t.checked;w.applyFeedback=null;render();const box=$(`[data-apply-multi="${i}"]`);if(box?.focus)box.focus({preventScroll:true});return}
 if(t.dataset?.applySort!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.applySort;w.applySort[i]=t.value===""?undefined:+t.value;w.applyFeedback=null;render();const box=$(`[data-apply-sort="${i}"]`);if(box?.focus)box.focus({preventScroll:true});return}
 if(t.id==="import-progress"){const file=t.files?.[0];if(file)importProgress(file);return}
