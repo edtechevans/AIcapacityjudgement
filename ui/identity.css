@@ -1348,3 +1348,18 @@ select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
 .unseen-transfer>.btn,.v2-application>.btn{margin-top:1rem}
 .completed-evidence>div span{line-height:1.35}
 @media(max-width:700px){.v2-application{padding:1rem}.v2-multi-option{padding:.85rem}}
+
+/* V2.1 learning-product refinements */
+.knowledge-chunk{min-width:0;display:grid;gap:.75rem}
+.knowledge-chunk-label{display:block;font-size:.72rem;line-height:1.2;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-judgement);margin-bottom:.28rem}
+.knowledge-claim{font-size:1.08rem;font-weight:700;line-height:1.55;color:var(--brand-ink);margin:0}
+.knowledge-detail{border-top:1px solid var(--brand-line);padding-top:.75rem}
+.knowledge-detail p{margin:0;color:#435064;line-height:1.7}
+.v21-feedback-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin-top:.9rem}
+.v21-feedback-grid>div{background:rgba(255,255,255,.72);border:1px solid rgba(23,45,78,.1);border-radius:10px;padding:.85rem}
+.v21-feedback-grid span{display:block;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-judgement);margin-bottom:.3rem}
+.v21-feedback-grid p{margin:0;line-height:1.5}
+.v21-synthesis{margin-top:1.4rem;padding:1.4rem;border:1px solid #cfd7e4;border-radius:16px;background:linear-gradient(135deg,#f7f9fc,#fff7f8)}
+.v21-synthesis h3{margin:.45rem 0 1rem;color:var(--brand-ink);line-height:1.35}
+.v21-synthesis>.btn{margin-top:1rem}
+@media(max-width:760px){.v21-feedback-grid{grid-template-columns:1fr}.knowledge-claim{font-size:1rem}.v21-synthesis{padding:1rem}}
