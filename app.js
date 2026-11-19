@@ -130,7 +130,7 @@ function seniorPortfolioHtml(l,w){
  const guide=CAPSTONE_GUIDES[l.id],checks=w.seniorMilestones||{},total=guide.phases.length,marked=guide.phases.filter((x,i)=>checks[i]).length;
  return '<section class="senior-portfolio" aria-label="Independent evidence portfolio">'+
  '<div class="eyebrow">Project portfolio · Milestone evidence</div><h3>Build a defensible record</h3>'+
- '<p>Mark a phase when you have work a teacher or stakeholder can review. These private planning reminders are <strong>not assessed mastery</strong>. They can be exported with your notes.</p>'+
+ '<p>Mark a phase when you have work a teacher or stakeholder can review. These private planning reminders are <strong>not assessed mastery</strong>. They are local planning reminders only and are not submitted by this site.</p>'+
  '<p class="senior-portfolio-progress" role="status">'+marked+' of '+total+' planning milestones marked · human review still required</p>'+
  '<div class="senior-portfolio-checklist">'+guide.phases.map((phase,i)=>'<label class="senior-portfolio-check"><input type="checkbox" data-senior-milestone="'+i+'" '+(checks[i]?"checked":"")+'><span><strong>Phase '+(i+1)+'</strong>'+esc(phase)+'</span></label>').join("")+'</div>'+
  '<p class="small muted">Keep real work and stakeholder feedback in approved school storage, not this public preview.</p></section>';
@@ -481,50 +481,12 @@ function profile(){const d=state.diagnostics[state.grade],n=count(state.grade);r
  (window.AUTH_CONFIG?.deployment==="sharepoint"?'<p class="small muted">In a school deployment, grade access must be assigned and enforced by the school sign-in and content service.</p>':'<button type="button" class="btn btn-outline btn-small" data-action="switch-grade">Change recommended starting grade →</button>')+
  '</div>'+
  '<div class="profile-section"><h2>Reading comfort</h2><p>Choose a larger reading size for the teaching sections. Your preference stays on this device.</p><button class="btn btn-outline btn-small" data-action="reading">'+(state.reading==="comfortable"?"Use standard text size":"Use more spacious text")+' →</button></div>'+
- '<div class="profile-section"><h2>Keep a copy of your progress</h2><p>You can download a small JSON backup containing your module checkpoints and check-in selections, then import it on another device. It does not include your alias or written work. Keep the backup private.</p><div class="backup-actions"><button class="btn btn-outline" data-action="export-progress">Download my progress</button><div class="import-control"><input type="file" class="import-input" id="import-progress" accept=".json,application/json" aria-label="Choose a learning progress backup to import"><label class="import-label" for="import-progress">Choose a backup to import</label></div></div><p class="small muted">Importing replaces the saved progress for your current grade only. A backup is not a secure student account or verified assessment record.</p></div>'+
+ '<div class="profile-section"><h2>Keep a copy of your progress</h2><p>You can download a small JSON backup containing your module checkpoints and check-in selections, then import it on another device. It does not include your alias or any lesson content. Keep the backup private.</p><div class="backup-actions"><button class="btn btn-outline" data-action="export-progress">Download my progress</button><div class="import-control"><input type="file" class="import-input" id="import-progress" accept=".json,application/json" aria-label="Choose a learning progress backup to import"><label class="import-label" for="import-progress">Choose a backup to import</label></div></div><p class="small muted">Importing replaces the saved progress for your current grade only. A backup is not a secure student account or verified assessment record.</p></div>'+
  '<div class="profile-section"><h2>Privacy on shared devices</h2><p>Finished on a shared computer? You can clear the display alias, saved learning progress and check-in choices from this browser.</p>'+(confirmClear?
 '<div id="clear-warning" class="profile-clear-confirm" role="group" aria-label="Confirm clearing local progress" tabindex="-1"><strong>Clear all progress on this device?</strong><p>This cannot be undone unless you already downloaded a backup. Your learning progress and starting snapshot choices on this browser will be erased.</p><div class="profile-confirm-actions"><button class="btn btn-outline" data-action="cancel-clear">Keep my progress</button><button class="btn btn-danger" data-action="confirm-clear">Yes, clear this device</button></div></div>':
 '<button class="btn btn-small btn-outline" data-action="logout">Review clearing my local profile</button>')+'</div>'+
  (notice?'<div class="profile-feedback" role="status">'+esc(notice)+'</div>':"")+
  '<div class="hero-buttons"><button class="btn" data-action="saveprofile">Save alias</button><button class="btn btn-outline" data-action="courses">Return to courses</button></div></section></main>';}
-function planText(l,w){
- const context=KNOWLEDGE[l.id]?.contexts?.[w.context]||["Chosen challenge",""];
- const f=w.fields||{},brief=INQUIRY_BRIEFS[l.id],capstone=CAPSTONE_GUIDES[l.id],headers=[
-  ["My goal and audience","purpose"],["My AI-use or non-use decision","decision"],
-  ["How I will check evidence and seek feedback","evidence"],
-  ["What I actually created or tried","work"],["What I tested or revised","revision"]
- ];
- return ["AI CAPACITY × JUDGEMENT — LEARNING NOTES",
-  "Grade "+l.grade+" · "+l.title+" · "+trackLabel(l.track),
-  "My chosen challenge:",context[0],context[1],
-  "INVESTIGATION QUESTION:",brief?.question||"",
-  "METHOD TO TRY:",brief?.try||"",
-  "WHAT EVIDENCE TO SHOW:",brief?.evidence||"",
-  "UNSEEN TRANSFER TASK:",UNSEEN_TRANSFER[l.id]||"",
-  "TEACHER REVIEW EXPECTATION:",GRADE_RESPONSE_EXPECTATIONS[l.grade],
-  ...(capstone?["MY PORTFOLIO MILESTONES:",...capstone.phases.map((phase,i)=>(w.seniorMilestones?.[i]?"[marked] ":"[pending] ")+phase)]:[]),
-  ...(capstone?["CAPSTONE EVIDENCE CHECKLIST:",...capstone.evidence.map(item=>"- "+item)]:[]),
-  "How I chose to share my work:",{written:"Written explanation",visual:"Sketch or storyboard",talk:"Discussion or presentation"}[w.format]||"Written explanation",
-  ...headers.flatMap(([title,key])=>[title+":",f[key]||"(Not yet written)"]),
-  "REFLECTION — "+({written:"Written notes",spoken:"Spoken explanation",visual:"Visual explanation"}[w.reflectionMode]||"Written notes"),
-  "What changed in my thinking:",w.reflection?.learning||(w.reflectionMode==="written"?"(Not yet written)":"(Completed outside this site)"),
-  "Where I will apply this next:",w.reflection?.transfer||(w.reflectionMode==="written"?"(Not yet written)":"(Completed outside this site)"),
-  "NEXT STEP\nShare your work and seek feedback through a school-approved process. Your notes have not been uploaded to this website."
- ].join("\n\n");
-}
-function downloadPlan(){
- const l=currentLesson();if(!l)return;
- const w=getPractice(l.id);
- try{
-  const blob=new Blob([planText(l,w)],{type:"text/plain;charset=utf-8"});
-  const url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="AI-CJ-"+l.id+"-learning-notes.txt";
-  document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-  w.notesDirty=false;
-  showNotice("Notes downloaded. Keep the file private and save it somewhere you can find it.");
- }catch(_){showNotice("Downloading was unavailable. Try copying your notes instead.");}
-}
 function exportProgress(){
  try{
   const scopedRecords=Object.fromEntries(Object.entries(state.records).filter(([id])=>LESSON_BY_ID[id]?.grade===state.grade));
