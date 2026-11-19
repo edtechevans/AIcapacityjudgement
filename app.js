@@ -451,12 +451,9 @@ if(stage===2){
   body='<div class="eyebrow">Guided practice</div><h2 id="stage-title" tabindex="-1">Try the idea yourself.</h2><p class="small muted">Use what you have learned to make a decision. Mistakes are part of the learning: feedback will help you improve.</p>'+coachingOptions(l,w,r)+learningLabHtml(l,w)+activityHtml(l,w);
  }
  if(stage===3){
- const activeContext=ct[w.context]||ct[0];
- body='<div class="eyebrow">Apply what you know</div><h2 id="stage-title" tabindex="-1">Make a decision in a new situation.</h2>'+
- '<p>Apply the idea without writing an answer. Choose a context, then complete a structured challenge that asks you to use the principle rather than repeat it.</p>'+
+ body='<div class="eyebrow">Apply what you know</div><h2 id="stage-title" tabindex="-1">Use the idea in this module’s real decision.</h2>'+
+ '<p>No written response is needed. The challenge below is specific to <strong>'+esc(l.title)+'</strong> and asks you to use the principle rather than repeat it.</p>'+
  '<div class="application-success"><strong>What good thinking will show</strong><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">These criteria describe the thinking behind the challenge. Completion is not a teacher-assessed grade.</p></div>'+
- '<h3 class="apply-heading">Choose a context</h3><div class="context-grid">'+ct.map(([title],i)=>'<button class="context-card '+(w.context===i?"selected":"")+'" data-action="context-choice" data-index="'+i+'" aria-pressed="'+(w.context===i)+'"><span class="context-num">'+(i+1)+'</span><strong>'+esc(title)+'</strong><span>Use this setting for the challenge below.</span></button>').join("")+'</div>'+
- '<div class="context-brief"><strong>Your context</strong><p>'+esc(activeContext[0])+'. Keep this setting in mind as you make the decisions below.</p></div>'+
  applicationInteractionHtml(l,w);
 }
 if(stage===4){
