@@ -1333,3 +1333,18 @@ select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
  .lesson-panel .step-controls{gap:9px}
  .lesson-panel .step-controls .btn{min-height:44px}
 }
+
+
+/* V2 structured learning interactions */
+.v2-application{margin-top:1.5rem;padding:1.35rem;border:1px solid #d8dee8;border-radius:16px;background:linear-gradient(180deg,#fff,#fafbfc)}
+.v2-application>h3{margin:.45rem 0 1rem;color:#172d4e;line-height:1.35}
+.v2-multi-list{display:grid;gap:.7rem;margin:1rem 0}
+.v2-multi-option{display:flex;align-items:flex-start;gap:.75rem;padding:1rem;border:1px solid #d8dee8;border-radius:12px;background:#fff;line-height:1.45;cursor:pointer}
+.v2-multi-option:has(input:checked){border-color:#8b2537;background:#fff7f8;box-shadow:0 0 0 1px rgba(139,37,55,.08)}
+.v2-multi-option input{width:1.15rem;height:1.15rem;margin-top:.13rem;accent-color:#8b2537;flex:none}
+.v2-multi-option:focus-within{outline:3px solid rgba(23,45,78,.35);outline-offset:2px}
+.v2-application .feedback{margin:1rem 0}
+.unseen-transfer .option-list{margin:1rem 0}
+.unseen-transfer>.btn,.v2-application>.btn{margin-top:1rem}
+.completed-evidence>div span{line-height:1.35}
+@media(max-width:700px){.v2-application{padding:1rem}.v2-multi-option{padding:.85rem}}
