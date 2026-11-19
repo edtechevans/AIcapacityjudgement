@@ -347,7 +347,7 @@ function transferSpec(l){return TRANSFER_SPECS[l.strand]||TRANSFER_SPECS.B1}
 function applicationReady(l,w){
  const a=applicationSpec(l);
  if(a.kind==="single")return w.applyChoice!==null;
- if(a.kind==="multi")return a.options.every((_,i)=>Object.prototype.hasOwnProperty.call(w.applyMulti||{},i));
+ if(a.kind==="multi")return Object.values(w.applyMulti||{}).some(Boolean);
  if(a.kind==="sort")return a.items.every((_,i)=>w.applySort?.[i]!==undefined);
  if(a.kind==="sequence")return (w.applyOrder||[]).length===a.steps.length;
  return false;
@@ -372,7 +372,7 @@ function applicationInteractionHtml(l,w){
  if(a.kind==="sort")controls='<div class="sort-list">'+a.items.map((x,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p>'+esc(x[0])+'</p><select data-apply-sort="'+i+'"><option value="">Choose…</option>'+a.categories.map((c,n)=>'<option value="'+n+'" '+(w.applySort?.[i]===n?"selected":"")+'>'+esc(c)+'</option>').join("")+'</select></div></div>').join("")+'</div>';
  if(a.kind==="sequence")controls='<p class="small muted">Use the arrow buttons to put the steps in the most defensible order. No dragging is required.</p><ol class="sequence-list">'+w.applyOrder.map((pos,i)=>'<li class="sequence-item"><span class="sequence-number">'+(i+1)+'</span><span class="sequence-text">'+esc(a.steps[pos])+'</span><div class="move-actions"><button class="move-btn" data-action="apply-move" data-index="'+i+'" data-dir="-1" aria-label="Move '+esc(a.steps[pos])+' up" '+(i===0?"disabled":"")+'>↑</button><button class="move-btn" data-action="apply-move" data-index="'+i+'" data-dir="1" aria-label="Move '+esc(a.steps[pos])+' down" '+(i===w.applyOrder.length-1?"disabled":"")+'>↓</button></div></li>').join("")+'</ol>';
  const feedback=w.applyFeedback?'<div id="application-feedback" class="feedback '+(w.applyFeedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.applyFeedback.passed?"Application check passed.":"Use the feedback and try again.")+'</strong><p>'+esc(w.applyFeedback.message)+'</p>'+(w.applyFeedback.details?.length?'<ul class="feedback-details">'+w.applyFeedback.details.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':"")+'</div>':"";
- return '<section class="v2-application"><div class="eyebrow">Apply · New context</div><h3>'+esc(a.prompt)+'</h3>'+controls+feedback+'<button class="btn" data-action="check-application" '+(!applicationReady(l,w)?"disabled":"")+'>Check my decision →</button></section>';
+ return '<section class="v2-application"><div class="eyebrow">Apply · New context</div><h3>'+esc(a.prompt)+'</h3>'+controls+feedback+(w.applyFeedback?.passed?'<button class="btn" data-action="go-transfer">Continue to transfer →</button>':'<button class="btn" data-action="check-application" '+(!applicationReady(l,w)?"disabled":"")+'>Check my decision →</button>')+'</section>';
 }
 function checkApplication(){
  const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),a=applicationSpec(l);
@@ -712,6 +712,7 @@ if(action==="knowledge-check"){const l=currentLesson(),w=getPractice(l.id),r=get
 if(action==="model-reveal"){const w=getPractice(state.lessonId);w.modelSeen=true;getRecord(state.lessonId).modelSeen=true;checkpoint(state.lessonId,1);render(true,"worked-model");return}
 if(action==="check-application"){checkApplication();return}
 if(action==="check-transfer"){checkTransfer();return}
+if(action==="go-transfer"){const w=getPractice(state.lessonId),r=getRecord(state.lessonId);if(!r.applied)return;w.stage=4;checkpoint(state.lessonId,4);goto("lesson",{focusStage:true});return}
 if(action==="apply-move"){const w=getPractice(state.lessonId),i=+t.dataset.index,j=i+(+t.dataset.dir);if(j<0||j>=w.applyOrder.length)return;const temp=w.applyOrder[i];w.applyOrder[i]=w.applyOrder[j];w.applyOrder[j]=temp;w.applyFeedback=null;render();return}
 if(action==="context-choice"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n>=0){w.context=n;w.applyFeedback=null;render();const selected=$(\`[data-action="context-choice"][data-index="\${n}"]\`);if(selected?.focus)selected.focus({preventScroll:true});}return}
 if(action==="stage"){const l=currentLesson(),w=getPractice(l.id),step=+t.dataset.stage,r=getRecord(l.id);if((step===1&&!r.knowledgePassed)||(step===2&&!w.modelSeen)||(step===3&&!r.practicePassed)||(step===4&&!r.applied))return;w.stage=Math.min(4,Math.max(0,step));checkpoint(l.id,w.stage);goto("lesson",{focusStage:true});return}
