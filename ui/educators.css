@@ -11,3 +11,10 @@
 .educator-number{font-size:.8rem;color:#8b2537;font-weight:800;align-self:flex-start;padding-top:.15rem}.educator-module-copy{flex:1;min-width:0;display:grid;gap:.3rem}.educator-module-copy small{color:#5b6573;font-weight:400;line-height:1.45}.educator-status{font-size:.75rem;white-space:nowrap;color:#8b2537;font-weight:700}
 .educator-intro{border-left:5px solid #8b2537;margin:1rem 0 1.75rem}.educator-intro p{margin:.4rem 0 0}.educator-task{margin:1.5rem 0}.educator-task h2{margin:.5rem 0}.educator-task>p{line-height:1.65}.educator-choices{display:grid;gap:.7rem;margin:1.2rem 0}.educator-choice{appearance:none;text-align:left;border:1px solid #d8dfe8;background:#f8f9fc;color:#172d4e;border-radius:12px;padding:1rem;font:inherit;line-height:1.5;cursor:pointer}.educator-choice.selected{border:2px solid #8b2537;background:#fff5f6}.educator-feedback{padding:1rem 1.2rem;background:#f0f4f8;color:#172d4e;border-left:4px solid #172d4e;border-radius:10px;margin:1rem 0;line-height:1.55}.educator-feedback p{margin:.5rem 0}.educator-task label{display:block;margin:1rem 0 .6rem;font-weight:600}.educator-task textarea{width:100%;border:1px solid #b9c3d1;border-radius:10px;padding:1rem;font:inherit;line-height:1.5;resize:vertical;min-height:130px}.educator-task .btn{margin-top:1rem}.educator-finish{margin:1.5rem 0}
 @media(max-width:790px){.educator-course-grid{grid-template-columns:1fr}.educator-module-card{flex-wrap:wrap}.educator-status{width:100%;margin-left:2rem}.educator-page{padding-inline:1rem}}
+
+/* Read → understand → check learning format */
+.educator-reading p{line-height:1.8;margin:1rem 0;color:#334155;font-size:1rem}
+.educator-takeaway{border-left:4px solid #8b2537;background:#f8f5f6;border-radius:9px;padding:1rem 1.2rem;margin-top:1.5rem}
+.educator-takeaway p{margin:.35rem 0 0}
+.educator-scenario{font-weight:550;color:#172d4e}
+.educator-choice:focus-visible,.educator-module-card:focus-visible{outline:3px solid #8b2537;outline-offset:3px}
