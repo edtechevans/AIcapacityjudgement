@@ -1,7 +1,6 @@
-/* AI Capacity x Judgement — student learning experience v2.
+/* AI Capacity x Judgement — V2 interactive learning experience.
  * Static-first formative learning. No student accounts or server-side gradebook.
- * Local storage contains only an optional display alias, selections and progress.
- * Free-text learning responses remain in memory and are not saved or transmitted.
+ * No lesson requires written responses. Progress records selected-response checkpoints only.
  */
 (function(){
 "use strict";
@@ -41,12 +40,12 @@ function count(grade){const a=LESSONS.filter(l=>l.grade===+grade);return {done:a
 function summary(grade){const k=count(grade);return Math.round(k.done/k.total*100)}
 function currentLesson(){return LESSON_BY_ID[state.lessonId]}
 function getRecord(id){if(!state.records[id])state.records[id]={attempts:0,practicePassed:false,reflected:false,completed:false,lastStage:0};return state.records[id]}
-function stageName(record){if(!record)return "Not started";if(record.completed)return "Completed";if(record.applied)return "Ready to reflect";if(record.practicePassed)return "Ready to apply";if(record.knowledgePassed&&record.modelSeen)return "Practising";if(record.knowledgePassed)return "Exploring examples";if(record.lastOpenedAt)return "Ready to begin";return "Not started";}
+function stageName(record){if(!record)return "Not started";if(record.completed)return "Completed";if(record.applied)return "Ready to transfer";if(record.practicePassed)return "Ready to apply";if(record.knowledgePassed&&record.modelSeen)return "Practising";if(record.knowledgePassed)return "Exploring examples";if(record.lastOpenedAt)return "Ready to begin";return "Not started";}
 function hasLearningCheckpoint(record){return !!(record&&(record.knowledgePassed||record.modelSeen||record.practicePassed||(record.lastStage||0)>=1));}
 function resumeLesson(grade){return LESSONS.filter(l=>{const record=state.records[l.id];return l.grade===+grade&&record&&!record.completed&&hasLearningCheckpoint(record);}).sort((a,b)=>(state.records[b.id].lastOpenedAt||0)-(state.records[a.id].lastOpenedAt||0))[0]||null;}
 function checkpoint(id,stage){const record=getRecord(id);record.lastStage=Math.max(record.lastStage||0,stage);record.lastOpenedAt=Date.now();persist();}
 function gradeLane(grade,track){const n=pathInfo(grade,track);const pct=Math.round(n.done/n.total*100);return '<div class="lane lane-'+track+'"><div class="lane-top"><span>'+trackLabel(track)+'</span><strong>'+n.done+' / '+n.total+'</strong></div>'+progressBar(pct,trackLabel(track)+' modules practised')+'</div>';}
-function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed||r.applied?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,reflection:"",topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,reason:"",coachMode:"independent",labMode:null,labModesSeen:[],labTuning:{},labObservation:"",seniorMilestones:{},knowledgeMisses:0,context:0,format:"written",fields:{purpose:"",decision:"",evidence:"",work:"",revision:""},applyStep:0,confirmed:false,notesDirty:false,modelPrediction:"",reflectionMode:"written",reflection:{learning:"",transfer:""},reflectionConfirmed:false};}return practice[id]}
+function getPractice(id){if(!practice[id]){const act=ACTIVITIES[id];const r=state.records[id]||{};const maxStage=r.completed||r.applied?4:r.practicePassed?3:r.knowledgePassed?(r.modelSeen?2:1):0;const savedStage=Number.isInteger(r.lastStage)?r.lastStage:0;practice[id]={stage:Math.max(0,Math.min(savedStage,maxStage)),selected:null,sort:{},order:act&&act.kind==="sequence"?act.start.slice():[],checked:false,feedback:null,topicIndex:r.knowledgePassed?2:0,maxTopic:r.knowledgePassed?2:0,knowledgeAnswer:null,knowledgeFeedback:null,modelSeen:!!r.modelSeen,coachMode:"independent",labMode:null,labModesSeen:[],labTuning:{},seniorMilestones:{},knowledgeMisses:0,context:0,applyChoice:null,applyMulti:{},applySort:{},applyOrder:[],applyFeedback:null,transferChoice:null,transferFeedback:null};}return practice[id]}
 function pathInfo(grade,track){const a=LESSONS.filter(l=>l.grade===+grade && l.track===track);return {done:a.filter(l=>state.records[l.id]?.completed).length,total:a.length}}
 function score(grade){const d=state.diagnostics[grade];if(!d||!d.completed)return null;const correct={};d.answers.forEach((answer,i)=>{correct[DIAGNOSTICS[grade][i][0]]=answer===DIAGNOSTICS[grade][i][3]});const cap=["A1","A2","A3"].filter(s=>correct[s]).length;const jud=["B1","B2","B3"].filter(s=>correct[s]).length;return {correct,capacity:cap,judgement:jud};}
 function recs(grade){const s=score(grade);return ["capacity","judgement"].map(track=>{
@@ -200,7 +199,7 @@ function snapshot(){
  '<div class="learning-return"><button class="btn btn-outline" data-action="courses">See all Grade '+state.grade+' modules →</button></div></main>';
 }
 function activityDescription(a){return a.intro||""}
-function lessonSteps(){return ["Learn","Model","Practise","Apply","Reflect"];}
+function lessonSteps(){return ["Learn","Model","Practise","Apply","Transfer"];}
 function coachingOptions(l,w,r){
  const guide=LEARNING_SCAFFOLDS[l.id];
  const needsSupport=!!(w.feedback&&!w.feedback.passed)||(r.attempts||0)>=2&&!r.practicePassed;
@@ -300,11 +299,7 @@ function learningLabHtml(l,w){
  '<p class="lab-question"><strong>Investigate:</strong> '+esc(lab.question)+'</p>'+choices+labTuningHtml(l,w)+
  (result||'<p class="small muted lab-start-hint">Choose one tool or condition. Make a prediction, then try another and compare what changes.</p>')+
  '<p class="lab-progress" role="status">'+(seen.length>=2?'Both conditions explored. You can now attempt the guided challenge below.':seen.length+' of 2 conditions explored · Explore two different choices before checking the guided challenge.')+'</p>'+
- '<div class="lab-observation-field"><label for="lab-observation"><strong>What changed, and why might that matter?</strong></label><textarea id="lab-observation" data-lab-observation="true" rows="2" maxlength="900" placeholder="I predicted… I observed… This does or does not show…">'+esc(w.labObservation||"")+'</textarea><p class="small muted">Optional learning notes; writing remains in this tab and is not graded, saved or transmitted.</p></div>'+
- '<details class="learning-support lab-offline"><summary>Try the investigation without a live AI tool</summary><p>'+esc(classroomPlan(l).offline)+'</p></details>'+ 
- '<div class="lab-guidance"><p><strong>What this model cannot show:</strong> '+esc(lab.explanation)+'</p>'+
- '<p><strong>Make sense of it:</strong> '+esc(lab.reflection)+'</p></div>'+
- '<p class="small muted">Your laboratory choices and written observations are temporary; they are not student grades or saved records.</p></section>';
+ '<div class="lab-observation-field"><strong>Compare the evidence</strong><p>Notice what changes between the conditions. Then use the guided challenge below to interpret what the evidence means.</p></div><p class="small muted">Laboratory choices are exploratory, not student grades.</p></section>';
 }
 function inquiryBriefHtml(l){
  const brief=INQUIRY_BRIEFS[l.id];if(!brief)return "";
@@ -331,16 +326,84 @@ function evidenceGuideHtml(l){
  const p=classroomPlan(l);
  return '<details class="performance-evidence"><summary>What meaningful evidence could look like</summary><div class="performance-evidence-inner"><p><strong>Age-appropriate outcome:</strong> '+esc(p.response)+'</p><p><strong>Required evidence:</strong> '+esc(INQUIRY_BRIEFS[l.id].evidence)+'</p><div class="rubric-table-wrap" role="region" aria-label="Scrollable teacher-review rubric" tabindex="0"><table class="rubric-table"><caption>Teacher-reviewed learning evidence — not automatically scored</caption><thead><tr><th scope="col">Dimension</th><th scope="col">Developing</th><th scope="col">Applying</th><th scope="col">Transferring</th></tr></thead><tbody>'+Object.values(TEACHER_RUBRIC).map(c=>'<tr><th scope="row">'+esc(c.name)+'</th><td>'+esc(c.developing)+'</td><td>'+esc(c.applying)+'</td><td>'+esc(c.transferring)+'</td></tr>').join("")+'</tbody></table></div><p class="small muted">This is a descriptive teacher-review guide. The site cannot assess written reasoning or verify a real-world artefact.</p></div></details>';
 }
-function transferChallengeHtml(l){
- const p=classroomPlan(l);
- return '<section class="unseen-transfer" aria-label="Unseen transfer challenge"><div class="eyebrow">Transfer · A new situation</div><h3>Can you use this somewhere unfamiliar?</h3><p>'+esc(p.transfer)+'</p><p><strong>Show your thinking:</strong> Explain how you would gather evidence, make a responsible choice and revise or test your conclusion.</p><p class="small muted">Try independently before asking for support. A teacher or peer can review your work using school-approved tools; this website cannot judge its quality.</p></section>';
+const APPLY_SPECS={
+ A1:{kind:"multi",prompt:"Which moves would make this investigation more trustworthy?",options:[["Test more than one case",1,"A broader test makes it harder to mistake one success for reliable performance."],["Use the first impressive result",0,"One successful result is weak evidence."],["Look for failure cases and limitations",1,"Failures reveal boundaries that average performance can hide."],["Compare the result with an independent source or baseline",1,"Independent evidence helps test whether the system deserves trust."]]},
+ A2:{kind:"sequence",prompt:"Build a responsible workflow for working with AI.",steps:["Clarify the purpose and success criteria","Give the tool useful, safe context","Compare or test the response","Verify important claims and revise"],tip:"Good prompting is part of a cycle: purpose, interaction, checking and revision."},
+ A3:{kind:"sort",prompt:"Classify each move by whether it strengthens learner ownership.",categories:["Strengthens ownership","Risks replacing the learning"],items:[["Generate possibilities, then choose and develop one yourself",0,"AI can widen possibilities while the learner still makes the important decisions."],["Submit an AI-produced final product you cannot explain",1,"A finished output is not evidence of your understanding."],["Compare alternatives against your own criteria",0,"Criteria keep the learner in control of quality and purpose."],["Let the tool make every creative decision",1,"Automation can remove the decisions the learning is meant to develop."]]},
+ B1:{kind:"single",prompt:"Which decision best protects the learning goal?",options:[["Use AI whenever it makes the task faster",0,"Efficiency is useful only when it does not remove the target thinking."],["Decide what thinking the learner must do, then choose where AI can support without replacing it",1,"Start with the learning purpose, then decide whether and where AI belongs."],["Avoid AI in every learning task",0,"A blanket ban ignores situations where AI can provide useful support without replacing learning."]]},
+ B2:{kind:"multi",prompt:"Which actions strengthen trust in an AI-assisted claim?",options:[["Trace important claims to trustworthy independent evidence",1,"Independent evidence is stronger than confidence or fluency."],["Treat precise wording as proof",0,"Specific detail can still be wrong or fabricated."],["Check whether cited sources actually exist and support the claim",1,"Source verification matters before reuse."],["Look for missing context, uncertainty or competing evidence",1,"Trustworthy judgement includes what the response leaves out."]]},
+ B3:{kind:"sort",prompt:"Classify these choices by whether they demonstrate responsible use.",categories:["Responsible safeguard","Needs a rethink"],items:[["Remove unnecessary personal information before using an approved tool",0,"Data minimisation reduces avoidable exposure."],["Upload sensitive records because the output may be useful",1,"Potential usefulness does not override privacy or safeguarding responsibilities."],["Consider who could be affected by an automated decision",0,"Consequences and fairness belong in the decision."],["Assume a popular tool is automatically school-approved",1,"Popularity is not evidence of approval, privacy or suitability."]]}
+};
+const TRANSFER_SPECS={
+ A1:{prompt:"In a new subject, a tool performs well on familiar examples but poorly on unusual ones. What is the strongest conclusion?",options:[["The unusual cases can be ignored because average performance is good",0],["The system may have learned patterns that do not transfer; investigate the edge cases before relying on it",1],["The tool must be completely useless",0]],feedback:"Transfer means recognising that performance depends on data, context and the cases used to test it."},
+ A2:{prompt:"You get a useful-looking response after improving your prompt. What should happen next?",options:[["Use it immediately because the prompt was detailed",0],["Check it against the goal and verify important claims before deciding what to use",1],["Keep adding more words to the prompt until the response is longer",0]],feedback:"Prompt quality can improve relevance, but verification and judgement still matter."},
+ A3:{prompt:"AI gives you several strong design ideas. Which next move best demonstrates authorship?",options:[["Choose, combine or challenge ideas using your own criteria, then develop something you can explain",1],["Select the most polished idea and submit it unchanged",0],["Ask the tool to make every remaining decision",0]],feedback:"Capacity grows when AI expands possibilities while the learner keeps meaningful creative control."},
+ B1:{prompt:"A new AI feature can complete a learning task very quickly. What question should come first?",options:[["How much time will it save?",0],["What thinking is this task meant to develop, and would the feature support or remove it?",1],["Will everyone think the output looks professional?",0]],feedback:"Judgement begins with purpose. Faster is not automatically better for learning."},
+ B2:{prompt:"Two sources disagree with a confident AI answer. What is the most defensible response?",options:[["Trust the AI because it sounds certain",0],["Investigate the disagreement using reliable evidence and revise the claim if needed",1],["Pick whichever source supports your original view",0]],feedback:"Truth and trust require evidence, not confidence or confirmation."},
+ B3:{prompt:"An AI tool could help with a high-stakes decision. What should happen before use?",options:[["Check purpose, privacy, fairness, approval, human oversight and possible consequences",1],["Use it first and discuss safeguards only if a problem occurs",0],["Assume responsibility belongs to the software provider",0]],feedback:"Responsible use requires anticipating consequences and keeping human accountability visible."}
+};
+function applicationSpec(l){return APPLY_SPECS[l.strand]||APPLY_SPECS.B1}
+function transferSpec(l){return TRANSFER_SPECS[l.strand]||TRANSFER_SPECS.B1}
+function applicationReady(l,w){
+ const a=applicationSpec(l);
+ if(a.kind==="single")return w.applyChoice!==null;
+ if(a.kind==="multi")return a.options.every((_,i)=>Object.prototype.hasOwnProperty.call(w.applyMulti||{},i));
+ if(a.kind==="sort")return a.items.every((_,i)=>w.applySort?.[i]!==undefined);
+ if(a.kind==="sequence")return (w.applyOrder||[]).length===a.steps.length;
+ return false;
+}
+function applicationPassed(l,w){
+ const a=applicationSpec(l);
+ if(a.kind==="single")return a.options[w.applyChoice]?.[1]===1;
+ if(a.kind==="multi")return a.options.every((x,i)=>!!w.applyMulti?.[i]===!!x[1]);
+ if(a.kind==="sort")return a.items.every((x,i)=>w.applySort?.[i]===x[1]);
+ if(a.kind==="sequence")return a.steps.every((_,i)=>w.applyOrder?.[i]===i);
+ return false;
+}
+function applicationInteractionHtml(l,w){
+ const a=applicationSpec(l);
+ if(a.kind==="sequence"&&!(w.applyOrder||[]).length){
+   const base=a.steps.map((_,i)=>i);
+   w.applyOrder=base.length===4?[1,3,0,2]:base.slice().reverse();
+ }
+ let controls="";
+ if(a.kind==="single")controls='<div class="option-list">'+a.options.map((x,i)=>'<label class="option '+(w.applyChoice===i?"chosen":"")+'"><input type="radio" name="apply-choice" value="'+i+'" '+(w.applyChoice===i?"checked":"")+'><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(x[0])+'</span></label>').join("")+'</div>';
+ if(a.kind==="multi")controls='<div class="v2-multi-list">'+a.options.map((x,i)=>'<label class="v2-multi-option"><input type="checkbox" data-apply-multi="'+i+'" '+(w.applyMulti?.[i]===true?"checked":"")+'><span>'+esc(x[0])+'</span></label>').join("")+'</div><p class="small muted">Select every action you would take, then check your thinking.</p>';
+ if(a.kind==="sort")controls='<div class="sort-list">'+a.items.map((x,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p>'+esc(x[0])+'</p><select data-apply-sort="'+i+'"><option value="">Choose…</option>'+a.categories.map((c,n)=>'<option value="'+n+'" '+(w.applySort?.[i]===n?"selected":"")+'>'+esc(c)+'</option>').join("")+'</select></div></div>').join("")+'</div>';
+ if(a.kind==="sequence")controls='<p class="small muted">Use the arrow buttons to put the steps in the most defensible order. No dragging is required.</p><ol class="sequence-list">'+w.applyOrder.map((pos,i)=>'<li class="sequence-item"><span class="sequence-number">'+(i+1)+'</span><span class="sequence-text">'+esc(a.steps[pos])+'</span><div class="move-actions"><button class="move-btn" data-action="apply-move" data-index="'+i+'" data-dir="-1" aria-label="Move '+esc(a.steps[pos])+' up" '+(i===0?"disabled":"")+'>↑</button><button class="move-btn" data-action="apply-move" data-index="'+i+'" data-dir="1" aria-label="Move '+esc(a.steps[pos])+' down" '+(i===w.applyOrder.length-1?"disabled":"")+'>↓</button></div></li>').join("")+'</ol>';
+ const feedback=w.applyFeedback?'<div id="application-feedback" class="feedback '+(w.applyFeedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.applyFeedback.passed?"Application check passed.":"Use the feedback and try again.")+'</strong><p>'+esc(w.applyFeedback.message)+'</p>'+(w.applyFeedback.details?.length?'<ul class="feedback-details">'+w.applyFeedback.details.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':"")+'</div>':"";
+ return '<section class="v2-application"><div class="eyebrow">Apply · New context</div><h3>'+esc(a.prompt)+'</h3>'+controls+feedback+'<button class="btn" data-action="check-application" '+(!applicationReady(l,w)?"disabled":"")+'>Check my decision →</button></section>';
+}
+function checkApplication(){
+ const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),a=applicationSpec(l);
+ if(!applicationReady(l,w)){showNotice("Complete each part of the challenge before checking.");return;}
+ const passed=applicationPassed(l,w),details=[];
+ if(a.kind==="multi")a.options.forEach((x,i)=>{if(!!w.applyMulti[i]!==!!x[1])details.push(x[2]);});
+ if(a.kind==="sort")a.items.forEach((x,i)=>{if(w.applySort[i]!==x[1])details.push("Example "+(i+1)+": "+x[2]);});
+ let message=passed?(a.tip||"Your choices protect the learning goal while keeping evidence and responsibility visible."):"Some choices need another look. Focus on purpose, evidence, learner agency and consequences.";
+ if(a.kind==="single"&&w.applyChoice!==null)message=a.options[w.applyChoice][2];
+ w.applyFeedback={passed,message,details};
+ if(passed){r.applied=true;checkpoint(l.id,3);}
+ persist();render(true,"application-feedback");
+}
+function transferChallengeHtml(l,w){
+ const t=transferSpec(l);
+ return '<section class="unseen-transfer" aria-label="Unseen transfer challenge"><div class="eyebrow">Transfer · A different situation</div><h3>Can you carry the idea somewhere new?</h3><p>'+esc(t.prompt)+'</p><div class="option-list">'+t.options.map((x,i)=>'<label class="option '+(w.transferChoice===i?"chosen":"")+'"><input type="radio" name="transfer-choice" value="'+i+'" '+(w.transferChoice===i?"checked":"")+'><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(x[0])+'</span></label>').join("")+'</div>'+(w.transferFeedback?'<div id="transfer-feedback" class="feedback '+(w.transferFeedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.transferFeedback.passed?"You transferred the idea.":"Reconsider the principle.")+'</strong><p>'+esc(t.feedback)+'</p></div>':"")+'<button class="btn" data-action="check-transfer" '+(w.transferChoice===null?"disabled":"")+'>Check transfer →</button></section>';
+}
+function checkTransfer(){
+ const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),t=transferSpec(l);
+ if(w.transferChoice===null)return;
+ const passed=t.options[w.transferChoice]?.[1]===1;
+ w.transferFeedback={passed};
+ if(passed){r.reflected=true;r.completed=true;checkpoint(l.id,4);persist();}
+ render(true,"transfer-feedback");
 }
 function activityHtml(l,w){const a=ACTIVITIES[l.id];if(!a)return '<p>Activity unavailable.</p>';let body='<div class="eyebrow">Interactive challenge · '+esc(a.kind==="sort"?"Classify":a.kind==="sequence"?"Build a workflow":a.kind==="prompt"?"Compare prompts":a.kind==="evidence"?"Check the evidence":"Make a decision")+'</div><h2>'+esc(a.title)+'</h2><p>'+esc(activityDescription(a))+'</p>';
 if(a.kind==="sort")body+='<div class="sort-list">'+a.items.map((item,i)=>'<div class="sort-item"><div class="item-number">'+(i+1)+'</div><div class="sort-question"><p>'+esc(item[0])+'</p><label class="small" for="sort-'+i+'">Your classification</label><select id="sort-'+i+'" data-sort="'+i+'"><option value="">Choose a category…</option>'+a.categories.map((x,n)=>'<option value="'+n+'" '+(w.sort[i]===n?"selected":"")+'>'+esc(x)+'</option>').join("")+'</select>'+(w.checked?'<div class="item-feedback '+(w.sort[i]===item[1]?"right":"try-again")+'">'+(w.sort[i]===item[1]?"✓ ":"↗ ")+esc(item[2])+'</div>':"")+'</div></div>').join("")+'</div>';
 if(["prompt","decision","evidence"].includes(a.kind))body+='<div class="option-list">'+a.options.map((item,i)=>'<label class="option '+(w.selected===i?"chosen":"")+'"><input type="radio" name="activity-choice" value="'+i+'" '+(w.selected===i?"checked":"")+'><span class="option-letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(item[0])+'</span></label>').join("")+'</div>'+(w.checked&&a.kind==="prompt"&&w.selected!==null?'<div class="example-output"><strong>Illustrative response</strong><p>'+esc(a.options[w.selected][1])+'</p></div>':"");
-if(["prompt","decision","evidence"].includes(a.kind))body+='<label for="practice-reason" class="input-label" style="margin-top:19px">Why do you think this is the strongest choice?</label><textarea id="practice-reason" rows="3" maxlength="1200" placeholder="I would choose this because…">'+esc(w.reason||"")+'</textarea><p class="small muted">Explain your reasoning in a sentence or two (at least 25 characters). This is a thinking exercise, not automatically graded writing.</p>';
+
 if(a.kind==="sequence")body+='<p class="small muted" style="margin-bottom:13px">Move each step using the arrow buttons, then check your sequence. Other real-world processes may be iterative.</p><ol class="sequence-list">'+w.order.map((pos,i)=>'<li class="sequence-item"><span class="sequence-number">'+(i+1)+'</span><span class="sequence-text">'+esc(a.steps[pos])+'</span><div class="move-actions"><button class="move-btn" data-action="move" data-index="'+i+'" data-dir="-1" aria-label="Move '+esc(a.steps[pos])+' up" '+(i===0?"disabled":"")+'>↑</button><button class="move-btn" data-action="move" data-index="'+i+'" data-dir="1" aria-label="Move '+esc(a.steps[pos])+' down" '+(i===w.order.length-1?"disabled":"")+'>↓</button></div></li>').join("")+'</ol>';
-if(w.feedback)body+='<div id="activity-feedback" class="feedback '+(w.feedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.feedback.passed?"Challenge passed. Your reasoning is not automatically graded.":"Useful attempt. Review what needs changing.")+'</strong><p>'+esc(w.feedback.message)+'</p>'+(w.feedback.details?.length?'<ul class="feedback-details">'+w.feedback.details.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':"")+(w.feedback.nextStep?'<p class="feedback-next"><strong>Try this next:</strong> '+esc(w.feedback.nextStep)+'</p>':"")+(a.tip?'<p class="small">'+esc(a.tip)+'</p>':"")+'</div>';
+if(w.feedback)body+='<div id="activity-feedback" class="feedback '+(w.feedback.passed?"feedback-good":"feedback-retry")+'" role="status" tabindex="-1"><strong>'+(w.feedback.passed?"Challenge passed.":"Useful attempt. Review what needs changing.")+'</strong><p>'+esc(w.feedback.message)+'</p>'+(w.feedback.details?.length?'<ul class="feedback-details">'+w.feedback.details.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':"")+(w.feedback.nextStep?'<p class="feedback-next"><strong>Try this next:</strong> '+esc(w.feedback.nextStep)+'</p>':"")+(a.tip?'<p class="small">'+esc(a.tip)+'</p>':"")+'</div>';
 if(!getRecord(l.id).practicePassed||w.retrying)body+='<button class="btn" data-action="check" style="margin-top:20px" '+(LEARNING_LABS[l.id]&&(w.labModesSeen||[]).length<2?'disabled aria-describedby="lab-prerequisite"':"")+'>Check my thinking →</button>'+(LEARNING_LABS[l.id]&&(w.labModesSeen||[]).length<2?'<p class="small muted" id="lab-prerequisite">Compare two laboratory conditions above before checking this answer.</p>':"");else body+='<div class="mastery-note">✓ Challenge passed. You can move on to apply your thinking, or practise again.</div><button class="btn btn-outline btn-small" data-action="retry" style="margin-top:15px">Try challenge again</button>';
 return body;}
 function lesson(){const l=currentLesson();if(!l)return courses();const k=KNOWLEDGE[l.id],w=getPractice(l.id),r=getRecord(l.id),stage=Math.min(4,Number(w.stage)||0);if(!k)return '<main id="main-content" class="lesson-layout"><h1>Lesson not available</h1><button class="btn" data-action="courses">Return to courses</button></main>';
@@ -379,81 +442,32 @@ if(stage===2){
   body='<div class="eyebrow">Guided practice</div><h2 id="stage-title" tabindex="-1">Try the idea yourself.</h2><p class="small muted">Use what you have learned to make a decision. Mistakes are part of the learning: feedback will help you improve.</p>'+coachingOptions(l,w,r)+learningLabHtml(l,w)+activityHtml(l,w);
  }
  if(stage===3){
- const step=Math.min(2,w.applyStep||0);
- const fs=w.fields||{purpose:"",decision:"",evidence:"",work:"",revision:""};
- const minNotes=w.format==="written"?35:18;
- const planned=["purpose","decision","evidence"].every(x=>(fs[x]||"").trim().length>=minNotes);
- const enough=planned&&["work","revision"].every(x=>(fs[x]||"").trim().length>=minNotes);
- const progressNames=["Choose your challenge","Plan your approach","Create, test & improve"];
- const header='<div class="eyebrow">Apply what you know</div><h2 id="stage-title" tabindex="-1">Make your learning matter.</h2>'+
- '<p>Use what you learned to respond to a meaningful problem. Work with an approved tool, teacher-provided examples or a non-AI alternative as appropriate.</p>'+
- '<div class="application-success"><strong>What good work will show</strong><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">You decide the tool and format. Use the criteria to improve your work—not to earn a score here.</p></div>'+
- '<nav class="apply-steps" aria-label="Your application journey">'+progressNames.map((name,i)=>'<div class="apply-step '+(step===i?"current":i<step?"passed":"")+'" '+(i===step?'aria-current="step"':"")+'><span>'+(i<step?"✓":i+1)+'</span>'+esc(name)+'</div>').join("")+'</nav>'+(step===0?inquiryBriefHtml(l)+capstoneGuideHtml(l)+seniorPortfolioHtml(l,w)+evidenceGuideHtml(l):'');
- let section="";
- if(step===0){
-  const options=ct.map(([title,task],i)=>'<button class="context-card '+(w.context===i?"selected":"")+'" data-action="context-choice" data-index="'+i+'" aria-pressed="'+(w.context===i)+'"><span class="context-num">'+(i+1)+'</span><strong>'+esc(title)+'</strong><span>'+esc(task)+'</span></button>').join("");
-  section='<h3 id="apply-heading" tabindex="-1" class="apply-heading">What would you like to work on?</h3><div class="context-grid">'+options+'</div>'+
-  '<div class="context-brief"><strong>Your chosen challenge</strong><p>'+esc(activeContext[1])+'</p><p class="small muted">'+esc(l.activity)+'</p></div>'+
-  '<div class="eyebrow" style="margin-top:24px">How would you like to express your work?</div><div class="mode-list">'+[["written","Write an explanation"],["visual","Sketch or storyboard"],["talk","Discuss or present"]].map(([id,label])=>'<button class="mode-option '+(w.format===id?"selected":"")+'" data-action="format-choice" data-format="'+id+'" aria-pressed="'+(w.format===id)+'">'+esc(label)+'</button>').join("")+'</div>'+
-  '<p class="small muted">You may use paper, approved applications or a discussion with someone else. You are still responsible for the work and the decisions.</p><div class="transfer-cue"><strong>Use it beyond this lesson</strong><p>'+esc(guide.transfer)+'</p></div>';
- }
- if(step===1){
-  section='<h3 id="apply-heading" tabindex="-1" class="apply-heading">Think it through before you create.</h3><p class="small muted">'+(w.format==="written"?"Write at least a full sentence for each response.":"Brief notes are enough to describe your spoken or visual work.")+' The form checks length, not quality.</p><details class="learning-support"><summary>Need a planning scaffold?</summary><p>'+esc(guide.support)+'</p></details>'+
-  '<div class="project-notes"><label for="plan-purpose"><strong>1. What will you do, and who will benefit?</strong><span>Describe the problem, your goal and your audience.</span></label><textarea id="plan-purpose" data-plan-field="purpose" maxlength="2000" rows="3" placeholder="My goal is… The people who need this are…">'+esc(fs.purpose||"")+'</textarea>'+
-  '<label for="plan-decision"><strong>2. Where does AI belong—or not belong?</strong><span>Explain your decision using something you learned.</span></label><textarea id="plan-decision" data-plan-field="decision" maxlength="2000" rows="3" placeholder="I would… because… I would avoid…">'+esc(fs.decision||"")+'</textarea>'+
-  '<label for="plan-evidence"><strong>3. How will you check, listen and improve?</strong><span>Plan how you will gather evidence, test and seek feedback.</span></label><textarea id="plan-evidence" data-plan-field="evidence" maxlength="2000" rows="3" placeholder="I will test… Ask… Revise…">'+esc(fs.evidence||"")+'</textarea></div>';
- }
- if(step===2){
-  section='<h3 id="apply-heading" tabindex="-1" class="apply-heading">Make, test and improve.</h3><p>Create a real work sample: a text, sketch, storyboard, experiment or presentation. Work may be created outside this site; describe what you tried and what changed.</p>'+
-  '<div class="project-notes"><label for="plan-work"><strong>4. What did you actually create or try?</strong><span>Explain what your work sample included and how it responded to the need.</span></label><textarea id="plan-work" data-plan-field="work" maxlength="2000" rows="3" placeholder="I created or tried… Here is what it included…">'+esc(fs.work||"")+'</textarea>'+
-  '<label for="plan-revision"><strong>5. What did testing or feedback change?</strong><span>Describe feedback or a self-check and one revision made or planned.</span></label><textarea id="plan-revision" data-plan-field="revision" maxlength="2000" rows="3" placeholder="My test or feedback showed… I revised or would revise…">'+esc(fs.revision||"")+'</textarea></div>'+
-  '<div class="project-criteria"><strong>Before finishing, check that you:</strong><ul><li>Understand the idea well enough to explain it.</li><li>Made a reasoned AI-use or non-use decision.</li><li>Identified evidence or someone who can give feedback.</li><li>Made or tried something and can explain a revision.</li></ul></div>'+
-  '<label class="confirm-line"><input type="checkbox" id="project-confirm" '+(w.confirmed?"checked":"")+'> I have actually made or tried something, reflected on feedback, and understand this site does not grade my work.</label>';
- }
- body=header+section+'<div class="application-actions">'+
- (step>0?'<button class="btn btn-outline" data-action="apply-prev">← Previous</button>':"")+
- '<button class="btn btn-outline" data-action="copy-plan">Copy my notes</button>'+
- '<button class="btn btn-outline" data-action="download-notes">Download my notes</button>'+
- (step<2?'<button class="btn" data-action="apply-next" '+(step===1&&!planned?"disabled":"")+'>Continue →</button>':
- '<button class="btn" data-action="record" '+(!r.practicePassed||!enough||!w.confirmed?"disabled":"")+'>Record my application →</button>')+
- '</div><p class="privacy-note">Your notes are not saved by this website. Copy or download them before refreshing or closing the tab. Keep files private and avoid personal or sensitive data.</p>';
+ const activeContext=ct[w.context]||ct[0];
+ body='<div class="eyebrow">Apply what you know</div><h2 id="stage-title" tabindex="-1">Make a decision in a new situation.</h2>'+
+ '<p>Apply the idea without writing an answer. Choose a context, then complete a structured challenge that asks you to use the principle rather than repeat it.</p>'+
+ '<div class="application-success"><strong>What good thinking will show</strong><ul>'+guide.criteria.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul><p class="small muted">These criteria describe the thinking behind the challenge. Completion is not a teacher-assessed grade.</p></div>'+
+ '<h3 class="apply-heading">Choose a context</h3><div class="context-grid">'+ct.map(([title,task],i)=>'<button class="context-card '+(w.context===i?"selected":"")+'" data-action="context-choice" data-index="'+i+'" aria-pressed="'+(w.context===i)+'"><span class="context-num">'+(i+1)+'</span><strong>'+esc(title)+'</strong><span>'+esc(task)+'</span></button>').join("")+'</div>'+
+ '<div class="context-brief"><strong>Your context</strong><p>'+esc(activeContext[1])+'</p></div>'+
+ applicationInteractionHtml(l,w);
 }
 if(stage===4){
  if(r.completed){
-  body='<div class="eyebrow">Review and move forward</div><h2 id="stage-title" tabindex="-1">What will you do differently?</h2><div class="completion-mark" aria-hidden="true">✓</div>'+
-  '<p>You studied the ideas, examined a worked example, practised the skill, applied it to a challenge and reflected on where to use it next.</p>'+
-  '<div class="completed-evidence"><div><strong>Understanding</strong><span>✓ Core idea checked</span></div><div><strong>Practice</strong><span>✓ Guided challenge passed</span></div><div><strong>Application</strong><span>✓ Work recorded</span></div><div><strong>Reflection</strong><span>✓ Next-step thinking completed</span></div></div>'+
-  '<div class="review-question"><strong>Keep transferring this learning</strong><p>'+esc(guide.transfer)+'</p><p>Try this in a new class or real situation. Seek feedback from someone affected, then explain what changed.</p><p class="small muted">This site records completed practice, not a judgement of mastery or a teacher-assessed result.</p></div>'+
- (Object.values(w.fields||{}).some(v=>String(v).trim())||Object.values(w.reflection||{}).some(v=>String(v).trim())?
- '<div class="reflection-save"><strong>Keep a copy of your learning</strong><p>Your work and reflection are still open in this tab but are not saved with progress. Copy or download them before leaving this lesson.</p><div class="application-actions"><button class="btn btn-outline" data-action="copy-plan">Copy my notes</button><button class="btn btn-outline" data-action="download-notes">Download my notes</button></div></div>':
- '<p class="small muted">Your earlier notes are not stored by this site. You can revisit the ideas and practise the skill again.</p>')+
+  body='<div class="eyebrow">Module complete</div><h2 id="stage-title" tabindex="-1">You used the idea beyond the example.</h2><div class="completion-mark" aria-hidden="true">✓</div>'+
+  '<p>You learned the concept, compared approaches, practised with feedback, applied it in a structured challenge and transferred it to a different situation.</p>'+
+  '<div class="completed-evidence"><div><strong>Understanding</strong><span>✓ Core idea checked</span></div><div><strong>Practice</strong><span>✓ Guided challenge passed</span></div><div><strong>Application</strong><span>✓ New-context decision passed</span></div><div><strong>Transfer</strong><span>✓ Unfamiliar scenario passed</span></div></div>'+
+  '<div class="review-question"><strong>Keep the principle, not just the answer</strong><p>'+esc(guide.transfer)+'</p><p class="small muted">Completion records successful selected-response checkpoints. It does not claim teacher-assessed mastery.</p></div>'+
   '<div class="hero-buttons">'+(nextSuggested?'<button class="btn" data-lesson="'+nextSuggested.id+'">Next: '+esc(nextSuggested.title)+' →</button>':'<button class="btn" data-action="courses">Explore more courses →</button>')+'<button class="btn btn-outline" data-action="snapshot">Review my learning →</button></div>';
  }else{
-  const reflect=w.reflection||{learning:"",transfer:""};
-  const written=w.reflectionMode==="written";
-  const reflectionReady=w.reflectionConfirmed&&(!written||["learning","transfer"].every(x=>(reflect[x]||"").trim().length>=25));
-  body='<div class="eyebrow">Make your learning stick</div><h2 id="stage-title" tabindex="-1">Pause, reflect and transfer.</h2>'+
-  '<p>You have applied the skill. Before recording this module as practised, explain what changed in your thinking and where you will use it next. There is no score for your reflection.</p>'+transferChallengeHtml(l)+
-  '<div class="reflection-prompt"><strong>1. What did you learn or change?</strong><p>Look back at your work, a misconception you corrected, feedback you received or a decision you reconsidered. What is your evidence?</p><p class="reflection-evidence-question"><strong>Connect with your investigation:</strong> '+esc(INQUIRY_BRIEFS[l.id]?.evidence||l.evidence)+'</p></div>'+
-  '<div class="reflection-prompt"><strong>2. Where could this help next?</strong><p>'+esc(guide.transfer)+'</p></div>'+
-  '<fieldset class="reflection-modes"><legend>How would you like to reflect?</legend><div class="mode-list">'+
-  [["written","Write it here"],["spoken","Discuss or explain aloud"],["visual","Sketch or show it"]].map(([id,label])=>'<label class="reflection-mode-option '+(w.reflectionMode===id?"selected":"")+'"><input type="radio" name="reflection-mode" value="'+id+'" '+(w.reflectionMode===id?"checked":"")+'><span>'+esc(label)+'</span></label>').join("")+
-  '</div></fieldset>'+
-  (written?
-  '<div class="project-notes reflection-notes"><label for="reflection-learning"><strong>What changed in your thinking, and what shows that?</strong><span>Explain an improvement or a misconception you overcame.</span></label><textarea id="reflection-learning" data-reflect-field="learning" maxlength="2000" rows="3" placeholder="At first I thought… I tried… Now I think… because…">'+esc(reflect.learning||"")+'</textarea>'+
-  '<label for="reflection-transfer"><strong>What will you do differently in a new situation?</strong><span>Make your next step specific and explain why.</span></label><textarea id="reflection-transfer" data-reflect-field="transfer" maxlength="2000" rows="3" placeholder="Next time in… I will… because…">'+esc(reflect.transfer||"")+'</textarea>'+
-  '<p class="small muted">A sentence or two for each response is enough. Your writing stays in this tab; copy or download it to keep it.</p></div>':
-  '<div class="reflection-offline"><strong>Take your thinking somewhere you can share it.</strong><p>Answer both questions aloud with a partner, teacher or yourself, or sketch your explanation on paper. Include one real piece of evidence and one next step. This site does not record speech or images.</p></div>')+
-  '<label class="confirm-line reflection-confirm"><input type="checkbox" id="reflection-confirm" '+(w.reflectionConfirmed?"checked":"")+'> I have reflected on what changed and how to apply it elsewhere. I understand this is not teacher-assessed.</label>'+
-  '<div class="application-actions"><button class="btn btn-outline" data-action="copy-plan">Copy my notes</button><button class="btn btn-outline" data-action="download-notes">Download my notes</button><button class="btn" data-action="finish-reflection" '+(!reflectionReady?"disabled":"")+'>Finish and record my learning →</button></div>'+
-  '<p class="privacy-note">Your written reflection is never uploaded or saved in progress records. This site only stores the completion checkpoint locally.</p>';
+  body='<div class="eyebrow">Transfer your learning</div><h2 id="stage-title" tabindex="-1">Use the principle somewhere unfamiliar.</h2>'+
+  '<p>This final check changes the context. Choose the most defensible response and use the feedback to test whether the idea travels with you.</p>'+
+  transferChallengeHtml(l,w);
  }
 }
 const canContinue=stage===0?!!r.knowledgePassed:stage===1?!!w.modelSeen:stage===2?!!r.practicePassed:stage===3?!!r.applied:false;
-return '<main id="main-content" class="lesson-layout page"><button class="back" data-action="courses">← Grade '+l.grade+' modules</button><article class="lesson-panel"><div class="breadcrumb">'+trackLabel(l.track)+' <span aria-hidden="true">/</span> '+esc(l.strand)+' <span aria-hidden="true">/</span> Grade '+l.grade+'</div><div class="eyebrow">Learning module · '+esc(l.title)+'</div><h1 id="main-title" tabindex="-1">'+esc(l.title)+'</h1><p class="lead">'+esc(l.objective)+'</p><div class="lesson-progress-heading"><span>Stage '+(stage+1)+' of 5 · '+labels[stage]+'</span><span>'+'Journey steps '+(stage===4&&r.completed?5:stage)+' of 5</span></div><div class="step-meter" role="progressbar" aria-label="Journey stages reached, not assessed mastery" aria-valuenow="'+(stage===4&&r.completed?5:stage)+'" aria-valuemin="0" aria-valuemax="5"><div style="width:'+(stage===4&&r.completed?100:stage/5*100)+'%"></div></div><nav class="step-track" aria-label="Lesson stages">'+labels.map((x,i)=>{const locked=(i===1&&!r.knowledgePassed)||(i===2&&!w.modelSeen)||(i===3&&!r.practicePassed)||(i===4&&!r.applied);return '<button class="step-dot '+(i===stage?"active":i<stage?"done":"")+'" data-action="stage" data-stage="'+i+'" '+(locked?"disabled":"")+' '+(i===stage?'aria-current="step"':"")+'><span class="step-number">'+(i<stage?"✓":i+1)+'</span><span>'+x+'</span></button>'}).join("")+'</nav><p class="step-scroll-hint" aria-hidden="true">Swipe to see all five stages →</p><section class="step-content" aria-label="Current learning stage">'+body+'</section><div class="step-controls">'+(stage>0?'<button class="btn btn-outline" data-action="prev">← Previous stage</button>':'<button class="btn btn-outline" data-action="courses">Exit lesson</button>')+(stage===0&&!canContinue?'<span class="small muted continue-hint">Read all three ideas and pass the short check to continue.</span>':stage<3?'<div class="continue-stack"><button class="btn" data-action="next" '+(!canContinue?"disabled":"")+'>Continue →</button>'+(!canContinue?'<span class="small muted">'+(stage===0?"Read all three ideas and pass the short check.":stage===1?"Reveal and consider the worked example.":"Complete the practice activity to continue.")+'</span>':"")+'</div>':stage===3?'<button class="btn btn-outline" data-action="courses">Return to courses</button>':'<button class="btn btn-outline" data-action="courses">Back to courses</button>')+'</div><div class="privacy-note">Learning preview · Your free-text drafts are not transmitted or saved. Only your lesson progress is recorded on this device.</div></article></main>';}
+return '<main id="main-content" class="lesson-layout page"><button class="back" data-action="courses">← Grade '+l.grade+' modules</button><article class="lesson-panel"><div class="breadcrumb">'+trackLabel(l.track)+' <span aria-hidden="true">/</span> '+esc(l.strand)+' <span aria-hidden="true">/</span> Grade '+l.grade+'</div><div class="eyebrow">Learning module · '+esc(l.title)+'</div><h1 id="main-title" tabindex="-1">'+esc(l.title)+'</h1><p class="lead">'+esc(l.objective)+'</p><div class="lesson-progress-heading"><span>Stage '+(stage+1)+' of 5 · '+labels[stage]+'</span><span>'+'Journey steps '+(stage===4&&r.completed?5:stage)+' of 5</span></div><div class="step-meter" role="progressbar" aria-label="Journey stages reached, not assessed mastery" aria-valuenow="'+(stage===4&&r.completed?5:stage)+'" aria-valuemin="0" aria-valuemax="5"><div style="width:'+(stage===4&&r.completed?100:stage/5*100)+'%"></div></div><nav class="step-track" aria-label="Lesson stages">'+labels.map((x,i)=>{const locked=(i===1&&!r.knowledgePassed)||(i===2&&!w.modelSeen)||(i===3&&!r.practicePassed)||(i===4&&!r.applied);return '<button class="step-dot '+(i===stage?"active":i<stage?"done":"")+'" data-action="stage" data-stage="'+i+'" '+(locked?"disabled":"")+' '+(i===stage?'aria-current="step"':"")+'><span class="step-number">'+(i<stage?"✓":i+1)+'</span><span>'+x+'</span></button>'}).join("")+'</nav><p class="step-scroll-hint" aria-hidden="true">Swipe to see all five stages →</p><section class="step-content" aria-label="Current learning stage">'+body+'</section><div class="step-controls">'+(stage>0?'<button class="btn btn-outline" data-action="prev">← Previous stage</button>':'<button class="btn btn-outline" data-action="courses">Exit lesson</button>')+(stage===0&&!canContinue?'<span class="small muted continue-hint">Read all three ideas and pass the short check to continue.</span>':stage<3?'<div class="continue-stack"><button class="btn" data-action="next" '+(!canContinue?"disabled":"")+'>Continue →</button>'+(!canContinue?'<span class="small muted">'+(stage===0?"Read all three ideas and pass the short check.":stage===1?"Reveal and consider the worked example.":"Complete the practice activity to continue.")+'</span>':"")+'</div>':stage===3?'<button class="btn btn-outline" data-action="courses">Return to courses</button>':'<button class="btn btn-outline" data-action="courses">Back to courses</button>')+'</div><div class="privacy-note">Learning preview · No written responses are required. Only selected-response progress is recorded on this device.</div></article></main>';}
 
 function about(){
- const journey=[["01","Learn","Build understanding through clear explanations, examples and useful vocabulary."],["02","Model","Compare approaches and notice what makes a decision more thoughtful."],["03","Practise","Try an interactive challenge, use feedback and improve your reasoning."],["04","Apply","Choose a meaningful problem, create or test something and seek feedback."],["05","Reflect","Explain what you learned and how you could use it somewhere new."]];
+ const journey=[["01","Learn","Build understanding through clear explanations, examples and useful vocabulary."],["02","Model","Compare approaches and notice what makes a decision more thoughtful."],["03","Practise","Try an interactive challenge, use feedback and improve your reasoning."],["04","Apply","Use the idea in a new context through a structured decision, classification or workflow challenge."],["05","Transfer","Use the principle again in an unfamiliar situation and learn from immediate feedback."]];
  return '<main id="main-content" class="max section page about-page"><div class="about-brand-lockup">'+BRAND_MARK+'<div class="eyebrow">The thinking behind the curriculum</div></div>'+
  '<h1 id="main-title" tabindex="-1">AI skills need <span class="about-accent">thoughtful choices.</span></h1>'+
  '<p class="hero-lead">Learning how to work with AI and knowing when, why—or whether—to use it are different skills. Here, you develop both.</p>'+
@@ -643,7 +657,7 @@ function checkActivity(){
   if(selected.some(x=>x===undefined)){w.feedback={passed:false,message:"Choose a category for every example before checking."};w.checked=false;render();return;}
   const missed=a.items.map((item,i)=>selected[i]===item[1]?null:{item,index:i}).filter(Boolean);
   passed=missed.length===0;
-  feedback=passed?"All examples matched the intended classifications. Explain why the categories fit.":(a.items.length-missed.length)+" of "+a.items.length+" classifications match. Focus on the examples below, then try again.";
+  feedback=passed?"All examples matched the intended classifications. Review the feedback to see why the categories fit.":(a.items.length-missed.length)+" of "+a.items.length+" classifications match. Focus on the examples below, then try again.";
   details=missed.map(({item,index})=>"Example "+(index+1)+": "+item[2]);
  }else if(a.kind==="sequence"){
   passed=a.steps.every((step,i)=>w.order[i]===i);
@@ -655,10 +669,9 @@ function checkActivity(){
   }
  }else{
   if(w.selected===null){w.feedback={passed:false,message:"Choose an option first."};render();return;}
-  if((w.reason||"").trim().length<25){w.feedback={passed:false,message:"Explain why you chose this option before checking. Your explanation is not automatically graded."};render();return;}
   passed=w.selected===a.correct;
   feedback=a.options[w.selected][a.kind==="prompt"?2:1];
-  if(passed)feedback+=" The choice matches this activity's intended response; your written explanation has not been assessed.";
+  if(passed)feedback+=" The choice matches this activity's intended response.";
  }
  nextStep=passed?guide.stretch:guide.support;
  w.checked=true;w.feedback={passed,message:feedback,nextStep,details};
@@ -667,10 +680,6 @@ function checkActivity(){
  persist();render();
  const feedbackEl=$("#activity-feedback");if(feedbackEl)feedbackEl.focus({preventScroll:true});
 }
-function recordReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);const fields=w.fields||{};const minNotes=w.format==="written"?35:18;const sufficient=["purpose","decision","evidence","work","revision"].every(key=>(fields[key]||"").trim().length>=minNotes);if(!r.knowledgePassed||!w.modelSeen||!r.practicePassed||!sufficient||!w.confirmed){showNotice("Complete the learning sequence and explain your application first.");return;}r.applied=true;r.reflected=false;r.completed=false;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
-function reflectionReady(w){return !!(w.reflectionConfirmed&&(w.reflectionMode!=="written"||["learning","transfer"].every(x=>(w.reflection?.[x]||"").trim().length>=25)));}
-function finishReflection(){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id);if(!r.applied||!r.practicePassed||!reflectionReady(w)){showNotice("Complete both reflection questions, or explain them in your chosen format, before finishing.");return;}r.reflected=true;r.completed=true;w.stage=4;checkpoint(l.id,4);goto("lesson",{focusStage:true});}
-function updateReflectionButton(){const w=getPractice(state.lessonId),button=$('[data-action="finish-reflection"]');if(button)button.disabled=!reflectionReady(w);}
 document.addEventListener("click",async(e)=>{
 const t=e.target.closest("[data-action],[data-grade],[data-lesson]");if(!t)return;if(t.tagName==="A"&&typeof e.preventDefault==="function")e.preventDefault();
 if(t.dataset.grade){gradeTo(t.dataset.grade);return;}
@@ -701,19 +710,10 @@ if(action==="concept-next"){const w=getPractice(state.lessonId);w.topicIndex=Mat
 if(action==="concept"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n>=0&&n<=2&&n<=(w.maxTopic||0))w.topicIndex=n;render(true);return}
 if(action==="knowledge-check"){const l=currentLesson(),w=getPractice(l.id),r=getRecord(l.id),k=KNOWLEDGE[l.id];if(w.topicIndex!==2||w.knowledgeAnswer===null)return;const passed=w.knowledgeAnswer===k.check[2];w.knowledgeFeedback={passed};if(passed){r.knowledgePassed=true;checkpoint(l.id,0);}else{w.knowledgeMisses=(w.knowledgeMisses||0)+1;persist();}render(true,"knowledge-feedback");return}
 if(action==="model-reveal"){const w=getPractice(state.lessonId);w.modelSeen=true;getRecord(state.lessonId).modelSeen=true;checkpoint(state.lessonId,1);render(true,"worked-model");return}
-if(action==="apply-prev"){const w=getPractice(state.lessonId);w.applyStep=Math.max(0,(w.applyStep||0)-1);render(true,"apply-heading");return}
-if(action==="apply-next"){const w=getPractice(state.lessonId);const fields=w.fields||{};if(w.applyStep===1&& !["purpose","decision","evidence"].every(k=>(fields[k]||"").trim().length>=(w.format==="written"?35:18)))return;w.applyStep=Math.min(2,(w.applyStep||0)+1);render(true,"apply-heading");return}
-if(action==="context-choice"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n===0||n===1)w.context=n;render();const selected=$(`[data-action="context-choice"][data-index="${n}"]`);if(selected?.focus)selected.focus({preventScroll:true});return}
-if(action==="format-choice"){const w=getPractice(state.lessonId);if(["written","visual","talk"].includes(t.dataset.format))w.format=t.dataset.format;render();const chosen=$(`[data-action="format-choice"][data-format="${w.format}"]`);if(chosen?.focus)chosen.focus({preventScroll:true});return}
-if(action==="copy-plan"){
- const l=currentLesson(),w=getPractice(l.id),text=planText(l,w);
- if(typeof navigator!=="undefined"&&navigator.clipboard?.writeText){
-  navigator.clipboard.writeText(text).then(()=>{w.notesDirty=false;showNotice("Notes copied. Paste them into a school-approved place to keep them.");})
-   .catch(()=>showNotice("Copy was unavailable. Download your notes instead."));
- }else showNotice("Copy is unavailable in this browser. Download your notes instead.");
- return;
-}
-if(action==="download-notes"){downloadPlan();return}
+if(action==="check-application"){checkApplication();return}
+if(action==="check-transfer"){checkTransfer();return}
+if(action==="apply-move"){const w=getPractice(state.lessonId),i=+t.dataset.index,j=i+(+t.dataset.dir);if(j<0||j>=w.applyOrder.length)return;const temp=w.applyOrder[i];w.applyOrder[i]=w.applyOrder[j];w.applyOrder[j]=temp;w.applyFeedback=null;render();return}
+if(action==="context-choice"){const w=getPractice(state.lessonId),n=+t.dataset.index;if(n>=0){w.context=n;w.applyFeedback=null;render();const selected=$(\`[data-action="context-choice"][data-index="\${n}"]\`);if(selected?.focus)selected.focus({preventScroll:true});}return}
 if(action==="stage"){const l=currentLesson(),w=getPractice(l.id),step=+t.dataset.stage,r=getRecord(l.id);if((step===1&&!r.knowledgePassed)||(step===2&&!w.modelSeen)||(step===3&&!r.practicePassed)||(step===4&&!r.applied))return;w.stage=Math.min(4,Math.max(0,step));checkpoint(l.id,w.stage);goto("lesson",{focusStage:true});return}
 if(action==="prev"){const w=getPractice(state.lessonId);w.stage=Math.max(0,(w.stage||0)-1);checkpoint(state.lessonId,w.stage);goto("lesson",{focusStage:true});return}
 if(action==="next"){const w=getPractice(state.lessonId),r=getRecord(state.lessonId);if((w.stage===0&&!r.knowledgePassed)||(w.stage===1&&!w.modelSeen)||(w.stage===2&&!r.practicePassed))return;w.stage=Math.min(3,(w.stage||0)+1);checkpoint(state.lessonId,w.stage);goto("lesson",{focusStage:true});return}
@@ -746,8 +746,6 @@ if(action==="check"){checkActivity();return}
  if(action==="coach-revisit"){const id=state.lessonId;if(!getRecord(id).knowledgePassed)return;const w=getPractice(id);w.stage=1;checkpoint(id,1);goto("lesson",{focusStage:true});return}
 if(action==="retry"){const w=getPractice(state.lessonId);w.checked=false;w.feedback=null;w.retrying=true;render();return}
 if(action==="move"){const w=getPractice(state.lessonId),i=+t.dataset.index,j=i+(+t.dataset.dir);if(j<0||j>=w.order.length)return;const temp=w.order[i];w.order[i]=w.order[j];w.order[j]=temp;w.checked=false;w.feedback=null;render();return}
-if(action==="record"){recordReflection();return}
-if(action==="finish-reflection"){finishReflection();return}
 if(action==="saveprofile"){state.name=($("#profile-name")?.value||"Learner").trim().slice(0,40)||"Learner";persist();goto("profile");showNotice("Your display alias was saved on this device.");return}
 if(action==="logout"){confirmClear=true;render();const warning=$("#clear-warning");if(warning?.focus)warning.focus();return}
 if(action==="cancel-clear"){confirmClear=false;render();return}
@@ -758,27 +756,16 @@ const t=e.target;
 if(t.name==="diagnostic-choice"&&diagnosticRun){diagnosticRun.answers[diagnosticRun.index]=+t.value;render();const chosen=$('input[name="diagnostic-choice"]:checked');if(chosen?.focus)chosen.focus();return}
 if(t.name==="knowledge-choice"){const w=getPractice(state.lessonId);w.knowledgeAnswer=+t.value;w.knowledgeFeedback=null;render();const selected=$('input[name="knowledge-choice"]:checked');if(selected?.focus)selected.focus();return}
 if(t.name==="activity-choice"){const w=getPractice(state.lessonId);w.selected=+t.value;w.checked=false;w.feedback=null;render();const selected=$('input[name="activity-choice"]:checked');if(selected?.focus)selected.focus();return}
+if(t.name==="apply-choice"){const w=getPractice(state.lessonId);w.applyChoice=+t.value;w.applyFeedback=null;render();const selected=$('input[name="apply-choice"]:checked');if(selected?.focus)selected.focus();return}
+if(t.name==="transfer-choice"){const w=getPractice(state.lessonId);w.transferChoice=+t.value;w.transferFeedback=null;render();const selected=$('input[name="transfer-choice"]:checked');if(selected?.focus)selected.focus();return}
+if(t.dataset?.applyMulti!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.applyMulti;w.applyMulti[i]=!!t.checked;w.applyFeedback=null;render();const box=$(`[data-apply-multi="${i}"]`);if(box?.focus)box.focus({preventScroll:true});return}
+if(t.dataset?.applySort!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.applySort;w.applySort[i]=t.value===""?undefined:+t.value;w.applyFeedback=null;render();const box=$(`[data-apply-sort="${i}"]`);if(box?.focus)box.focus({preventScroll:true});return}
 if(t.id==="import-progress"){const file=t.files?.[0];if(file)importProgress(file);return}
 
 if(t.dataset?.sort!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.sort;w.sort[i]=t.value===""?undefined:+t.value;w.checked=false;w.feedback=null;render();const choice=$("#sort-"+i);if(choice?.focus)choice.focus({preventScroll:true});return}
 if(t.dataset?.seniorMilestone!==undefined){const l=currentLesson(),w=getPractice(l.id),i=Number(t.dataset.seniorMilestone),guide=CAPSTONE_GUIDES[l.id];if(!guide||!Number.isInteger(i)||i<0||i>=guide.phases.length)return;w.seniorMilestones[i]=!!t.checked;render();const next=$('[data-senior-milestone="'+i+'"]');if(next?.focus)next.focus({preventScroll:true});return;}
-if(t.id==="project-confirm"){const w=getPractice(state.lessonId);w.confirmed=!!t.checked;updateProjectButton();return}
-if(t.name==="reflection-mode"){const w=getPractice(state.lessonId);if(["written","spoken","visual"].includes(t.value))w.reflectionMode=t.value;render(true,"stage-title");return}
-if(t.id==="reflection-confirm"){const w=getPractice(state.lessonId);w.reflectionConfirmed=!!t.checked;updateReflectionButton();return}
-});
-function updateProjectButton(){const w=getPractice(state.lessonId),f=w.fields||{},minNotes=w.format==="written"?35:18;const next=$('[data-action="apply-next"]');if(next&&w.applyStep===1)next.disabled=!["purpose","decision","evidence"].every(k=>(f[k]||"").trim().length>=minNotes);const b=$('[data-action="record"]');if(b)b.disabled=!(getRecord(state.lessonId).knowledgePassed&&getRecord(state.lessonId).practicePassed&&w.modelSeen&&w.confirmed&&["purpose","decision","evidence","work","revision"].every(k=>(f[k]||"").trim().length>=minNotes));}
-document.addEventListener("input",(e)=>{
-const t=e.target;
-if(t.id==="practice-reason"){getPractice(state.lessonId).reason=t.value.slice(0,1200);return} if(t.dataset?.labObservation){getPractice(state.lessonId).labObservation=t.value.slice(0,900);return}
-if(t.dataset?.planField){const w=getPractice(state.lessonId);if(!w.fields)w.fields={};w.fields[t.dataset.planField]=t.value.slice(0,2000);w.notesDirty=true;updateProjectButton();return}
-if(t.dataset?.reflectField){const w=getPractice(state.lessonId);if(!w.reflection)w.reflection={};w.reflection[t.dataset.reflectField]=t.value.slice(0,2000);w.notesDirty=true;updateReflectionButton();return}
 });
 function syncHistory(){if(!state.gradeChosen){if(!readRoute())state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
-window.addEventListener("beforeunload",e=>{
- if(Object.values(practice).some(w=>w?.notesDirty)){
-  e.preventDefault();e.returnValue="";
- }
-});
 window.addEventListener("popstate",syncHistory);
 window.addEventListener("hashchange",syncHistory);
 if(state.gradeChosen){if(!readRoute()||state.page==="welcome")state.page="home";}else{const initialHash=window.location?.hash||"";
