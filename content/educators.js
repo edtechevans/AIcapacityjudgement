@@ -67,14 +67,14 @@ function moduleView(){
  const match=moduleData(selected);if(!match)return overview();
  const {module:m,course:c,index}=match,r=record(m.id);let stageIndex=Number.isInteger(r.stage)?r.stage:0;stageIndex=Math.max(0,Math.min(STAGES.length-1,stageIndex));if(!canVisit(m,r,stageIndex))stageIndex=STAGES.findIndex(s=>!stageDone(m,r,s));if(stageIndex<0)stageIndex=4;r.stage=stageIndex;
  const stage=STAGES[stageIndex],done=stageDone(m,r,stage),finished=moduleDone(m,r),next=STAGES[stageIndex+1],nextModule=c.modules[index+1];
- const nav=STAGES.map((s,i)=>{const completed=stageDone(m,r,s),enabled=canVisit(m,r,i);return '<button type="button" class="educator-stage-pill '+(i===stageIndex?"current":"")+' '+(completed?"done":"")+'" data-edu-stage="'+i+'" '+(enabled?"":"disabled")+' aria-current="'+(i===stageIndex?"step":"false")+'"><span>'+String(i+1).padStart(2,"0")+'</span>'+LABELS[i]+(completed?' <span aria-label="completed">✓</span>':"")+'</button>'}).join("");
+ const nav=STAGES.map((s,i)=>{const completed=stageDone(m,r,s),enabled=canVisit(m,r,i);return '<button type="button" class="educator-stage-pill '+(i===stageIndex?"current":"")+' '+(completed?"done":"")+'" data-edu-stage="'+i+'" '+(enabled?"":"disabled")+' aria-current="'+(i===stageIndex?"step":"false")+'"><span>'+String(i+1).padStart(2,"0")+'</span>'+LABELS[i]+(completed?' <span aria-hidden="true">✓</span>':"")+'</button>'}).join("");
  return '<main id="main-content" class="page max section educator-page"><button type="button" class="back" data-educator-back="1">← All educator modules</button><div class="eyebrow">'+esc(c.title)+' · Module '+(index+1)+' of 4 · 30 minutes</div><h1 id="main-title" tabindex="-1">'+esc(m.title)+'</h1><p class="educator-question">'+esc(m.question)+'</p><div class="educator-intro"><strong>Learning focus</strong><p>'+esc(m.focus)+'</p></div><nav class="educator-stages" aria-label="Module learning stages">'+nav+'</nav><section class="educator-task educator-stage-body"><div class="eyebrow">'+String(stageIndex+1).padStart(2,"0")+' · '+LABELS[stageIndex]+'</div><h2>'+({learn:"Understand the idea",model:"Compare the choices",practise:"Practise professional decisions",apply:"Apply to a real teaching challenge",transfer:"Use it in a new context"}[stage])+'</h2>'+contentHtml(m,r,stage)+'</section>'+
  (done&&next?'<div class="educator-stage-next"><p>Stage complete. Continue when ready.</p><button type="button" class="btn" data-edu-next="1">Continue to '+LABELS[stageIndex+1]+' →</button></div>':"")+
  (finished?'<section class="educator-finish" role="status"><strong>✓ Module completed</strong><p>You completed all five formative stages. This records practice and decisions, not certified mastery.</p>'+(nextModule?'<button type="button" class="btn btn-small" data-educator-open="'+esc(nextModule.id)+'">Next module →</button>':'<button type="button" class="btn btn-small" data-educator-back="1">View both pathways →</button>')+'</section>':"")+
  (stage==="transfer"&&!finished?'<p class="small muted">A module is complete after its Learn, Model, Practise, Apply and Transfer checks have all been successfully completed.</p>':"")+
  '</main>';
 }
-function rerender(selector){if(typeof window.refreshEducators==="function")window.refreshEducators();if(selector){const target=document.querySelector(selector);if(target&&typeof target.focus==="function")try{target.focus({preventScroll:true})}catch(_){target.focus()}}}
+function rerender(selector){if(typeof window.refreshEducators==="function")window.refreshEducators();if(selector==="#main-title"&&typeof window.scrollTo==="function")window.scrollTo({top:0,behavior:"auto"});if(selector){const target=document.querySelector(selector);if(target&&typeof target.focus==="function")try{target.focus({preventScroll:true})}catch(_){target.focus()}}}
 function attempt(key){
  if(!selected)return;const match=moduleData(selected);if(!match)return;
  const {module:m}=match,r=record(selected),stage=STAGES[r.stage]||"learn";
@@ -89,7 +89,7 @@ window.educatorOpenOverview=function(){selected=null};
 document.addEventListener("click",function(e){
  const t=e.target.closest("[data-educator-open],[data-educator-back],[data-edu-stage],[data-edu-next],[data-edu-single],[data-edu-check],[data-edu-move]");if(!t)return;
  e.preventDefault();
- if(t.dataset.educatorBack!==undefined){selected=null;save();rerender('[data-educator-open]');return;}
+ if(t.dataset.educatorBack!==undefined){selected=null;save();rerender("#main-title");return;}
  if(t.dataset.educatorOpen){selected=t.dataset.educatorOpen;save();rerender("#main-title");return;}
  if(!selected)return;const match=moduleData(selected);if(!match)return;
  const {module:m}=match,r=record(selected);
