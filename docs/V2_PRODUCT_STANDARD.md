@@ -59,3 +59,21 @@ The public GitHub Pages deployment is a preview and cannot make educator content
 - Transfer must use a different situation from the teaching example.
 - All 42 student modules and 12 educator modules must remain reachable.
 - Progress data must store checkpoints, not written learner content.
+
+
+## V2.1 progression standard
+
+V2.1 adds a stricter content-quality requirement: **Apply and Transfer must be module-specific, not merely strand-specific.** Across the 42 student modules, prompts should draw on the module scenario, progression move, misconception, principle and grade-level demand. Each grade should use at least three interaction families across its six modules.
+
+Cognitive demand should visibly rise across the seven recommended grades:
+- Grade 6 — notice and compare
+- Grade 7 — test and verify
+- Grade 8 — analyse and design
+- Grade 9 — evaluate and challenge
+- Grade 10 — transfer and defend
+- Grade 11 — investigate and architect
+- Grade 12 — stress-test and steward
+
+A3 should consolidate the three Capacity strands. B3 should function as the grade's full **Capacity × Judgement integration challenge**. Feedback should coach rather than merely score, using the pattern **What you noticed → What matters → Try this elsewhere**.
+
+Signature interactions may recur as recognisable learning routines—such as **Spot the weak evidence**, **Where did the thinking disappear?**, **Which step should the human keep?**, **Who carries the risk?**, and **What changed when AI entered the workflow?**—but the underlying scenario, evidence and decision must remain specific to the module and developmental stage.
