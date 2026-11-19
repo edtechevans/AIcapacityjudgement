@@ -16,8 +16,8 @@ const LEARNING_SCAFFOLDS = {
   "6-A2": {
     "notice": "What is missing from the vague prompt: task, audience, success criteria or verification?",
     "support": "Try: ‘Explain ___ to ___ in ___ form; include ___ and flag what you cannot verify’.",
-    "stretch": "Write two different prompts for the same goal. Predict which output a younger student could actually use.",
-    "transfer": "In language learning, improve a prompt so it helps you practise rather than write your assignment.",
+    "stretch": "Compare two different prompts for the same goal. Predict which output a younger student could actually use.",
+    "transfer": "In language learning, improve a prompt so it helps you practise rather than complete the assignment for you.",
     "criteria": [
       "State the audience and learning goal.",
       "Revise an instruction and explain why.",
@@ -94,9 +94,9 @@ const LEARNING_SCAFFOLDS = {
     "notice": "Which revision improves the reader's understanding without changing the author's meaning?",
     "support": "Keep a two-column log: ‘feedback received’ and ‘why I accepted or declined it’.",
     "stretch": "Get feedback from a person and an AI example; compare where they disagree.",
-    "transfer": "In Language & Literature, revise a paragraph while preserving your voice.",
+    "transfer": "In Language & Literature, compare revisions and decide which best preserves the writer's voice.",
     "criteria": [
-      "Begin with your own draft or design.",
+      "Begin with an idea or design you can explain as your own.",
       "Evaluate feedback against a clear purpose.",
       "Explain revisions and ownership."
     ]
@@ -204,7 +204,7 @@ const LEARNING_SCAFFOLDS = {
     "notice": "Are the test cases varied enough to support the confident reliability claim?",
     "support": "Use a small test matrix: condition, expected result, output, issue and uncertainty.",
     "stretch": "Design difficult edge cases to expose a failure that average results might hide.",
-    "transfer": "In a digital system review, write a reproducible test report with limitations.",
+    "transfer": "In a digital system review, identify the evidence a reproducible test report would need, including its limitations.",
     "criteria": [
       "Define and vary test conditions.",
       "Report failures and uncertainty honestly.",
@@ -237,7 +237,7 @@ const LEARNING_SCAFFOLDS = {
     "notice": "Which parts of the AI-use diary show growing dependence rather than useful support?",
     "support": "Colour-code the diary: support, substitution, uncertainty; explain one difficult case.",
     "stretch": "Develop a plan for retaining independent skills when help is always available.",
-    "transfer": "During essay planning, set explicit boundaries for AI assistance.",
+    "transfer": "During essay planning, choose explicit boundaries for AI assistance.",
     "criteria": [
       "Identify signs of dependence.",
       "Protect a skill that needs independent practice.",
@@ -268,7 +268,7 @@ const LEARNING_SCAFFOLDS = {
   },
   "10-A1": {
     "notice": "What evidence would make a new AI system's accuracy claim credible and testable?",
-    "support": "Write a test protocol: claims, conditions, counterexamples, metrics and limitations.",
+    "support": "Build a test protocol by ordering the claims, conditions, counterexamples, metrics and limitations that matter.",
     "stretch": "Propose a falsifiable claim and explain the weakest evidence that would support it.",
     "transfer": "In an unfamiliar subject, brief younger students about a system's strengths and limits.",
     "criteria": [
@@ -301,7 +301,7 @@ const LEARNING_SCAFFOLDS = {
   },
   "10-B1": {
     "notice": "Can you explain both your AI-use and non-use decisions without appealing to convenience?",
-    "support": "Keep a decision log with goal, tool choice, evidence, risk and reflection.",
+    "support": "Use a decision checklist covering goal, tool choice, evidence, risk and review.",
     "stretch": "Defend an unpopular but principled decision in a short peer conference.",
     "transfer": "In your Personal Project, explain a deliberate choice not to automate a key step.",
     "criteria": [
@@ -314,7 +314,7 @@ const LEARNING_SCAFFOLDS = {
     "notice": "Which statements are established facts, which are inferences and which remain contested?",
     "support": "Use a claim–evidence–certainty table; distinguish missing evidence from conflicting evidence.",
     "stretch": "Explain how your conclusion changes when a credible new source disagrees.",
-    "transfer": "In a contemporary-issues inquiry, write a qualified evidence-based argument.",
+    "transfer": "In a contemporary-issues inquiry, identify which claims would make an argument qualified and evidence-based.",
     "criteria": [
       "Separate evidence, inference and opinion.",
       "Represent uncertainty proportionately.",
