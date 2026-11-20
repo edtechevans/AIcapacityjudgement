@@ -7,17 +7,17 @@ A Grades 6–12 and educator formative learning experience, with 42 student modu
 **Public curriculum showcase:** https://edtechevans.github.io/AIcapacityjudgement/#/curriculum — a dedicated page for educators, school leaders, caregivers and collaborators that can be viewed **without selecting a grade or logging in**. It contains the seven-year progression, six-strand explorer, all 42 module titles and learning objectives, grade-specific performance tasks and assessment expectations. Browsing the overview does not change a learner's grade or record progress.
 
 
-## V4 — Educator course: eight modules in four hours (20 November 2026)
+## V4 — Educator course: eight modules in four hours (20 November 2026; V4.1 accessible-language update)
 
 The **Educators** area now offers two equal pathways: **AI Capacity** (C1–C4) and **AI Judgement** (J1–J4), with four 30-minute modules in each and a total indicative learning time of **four hours**.
 
-The live learning sequence in each module is **Learn → Model → Practise → Apply → Transfer**. Across eight modules there are 48 structured formative decisions, including single choice, multiple selection, classification and button-operated ordering. There are **no written answers, uploads or drag-only activities**. Feedback explains decisions; a module records completion only after all five stages are passed. The progress key is reset for this substantive rebuild so earlier pilot completions are not counted.
+The live learning sequence in each module is **Learn → Model → Practise → Apply → Transfer**. Across eight modules there are 56 structured formative decisions, including a follow-up when new evidence changes the situation, including single choice, multiple selection, classification and button-operated ordering. There are **no written answers, uploads or drag-only activities**. Feedback explains decisions; a module records completion only after all five stages are passed. The progress key is reset for this substantive rebuild and V4.1 question changes so earlier pilot completions are not counted.
 
 AISG's **Engagement for All** and six Transformative Learning Framework facets provide the pedagogical lens, with UDL and MTSS used where relevant to barrier removal, evidence review and accountable support decisions. This is an instructional approach, not a TLF checklist course. The 42 Grades 6–12 student modules remain unchanged.
 
 The educator route is [open directly](https://edtechevans.github.io/AIcapacityjudgement/#/educators). Public hosting remains a preview: browser-local progress, no staff sign-in or completion reporting, and no claims of validated professional competence. See [educator deployment notes](docs/EDUCATOR_PATHWAY.md) and [curriculum specification](docs/EDUCATOR_REBUILD_TLF_MTSS_V3.md).
 
-**Version note:** Earlier V2 notes below refer to the prior 12-module educator pilot and are retained as historical release documentation; V4 supersedes that educator architecture.
+**Version note:** Earlier V2 notes below refer to the prior 12-module educator pilot and are retained as historical release documentation; V4.1 supersedes that educator architecture. The revised course uses simpler English, optional glossaries, more challenging choices and a balanced answer key. The 30-minute/module duration remains an estimate pending a genuine ten-teacher pilot.
 
 ## V2.1 — Module-specific challenge and transfer
 
