@@ -1397,3 +1397,13 @@ select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
   .dashboard-hero .hero-buttons{margin-top:16px}
   .dashboard-meter .progress-orbit{width:125px;height:125px}
 }
+
+
+/* AISG identity: red Start Here centre, preserve the muted progress ring. */
+.dashboard-hero .dashboard-meter--action .progress-orbit--empty .orbit-inner{
+  background:#B32635;
+  color:#FFF;
+}
+.dashboard-hero .dashboard-meter--action:hover .progress-orbit--empty .orbit-inner{
+  background:#9D2030;
+}
