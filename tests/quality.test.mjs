@@ -101,3 +101,65 @@ test("A3 and B3 cannot complete until cumulative synthesis is passed",async()=>{
 test("public curriculum and educator learning remain available before grade selection",async()=>{const h=app();await h.click({action:"educators"});assert.equal(h.hash,"#/educators");assert.match(h.html,/Educator learning/);await h.click({action:"curriculum"});assert.equal(h.hash,"#/curriculum")});
 test("progress backup stores checkpoints rather than response content",()=>{const appJs=read("app.js");assert.ok(appJs.includes('format:"AI-CJ-local-progress"'));assert.ok(!appJs.includes("LEARNING NOTES"));assert.ok(!appJs.includes("downloadPlan"))});
 test("V2.1 assets load before the application",()=>{const html=read("index.html"),v=html.indexOf("content/v21-interactions.js"),edu=html.indexOf("content/educators.js"),appPos=html.indexOf('src="./app.js');assert.ok(v>=0&&edu>v&&appPos>edu);assert.match(html,/v21-20261119/)});
+
+
+test("educator V4.1 has eight accessible 30-minute modules and 56 distinct practice decisions",()=>{
+ const context=createContext({window:{}});
+ runInContext(read("content/educator-v4-data.js"),context,{filename:"content/educator-v4-data.js"});
+ const data=context.window.EDUCATOR_V4;
+ assert.equal(data.version,"4.1");
+ assert.deepEqual(Array.from(data.courses,c=>c.modules.length),[4,4]);
+ assert.equal(data.courses.reduce((n,c)=>n+c.minutes,0),240);
+ const modules=Array.from(data.courses).flatMap(c=>Array.from(c.modules));
+ assert.equal(new Set(modules.map(m=>m.title)).size,8);
+ const counts=[0,0,0],patterns=new Set(),multis=new Set();let total=0;
+ for(const module of modules){
+  assert.equal(module.minutes,30);
+  assert.equal(module.glossary.length,3,"Plain-English glossary missing in "+module.id);
+  assert.ok(module.ideas.every(x=>x[1].length>90),"Substantive teaching missing in "+module.id);
+  const tasks=[module.tasks.learn,module.tasks.model,...Array.from(module.tasks.practice),module.tasks.apply,module.tasks.followup,module.tasks.transfer];
+  assert.equal(tasks.length,7,module.id+" must have a follow-up decision");
+  total+=tasks.length;
+  for(const task of tasks){
+   assert.ok(["single","multi","classify","order"].includes(task.kind),module.id+" interaction family");
+   assert.ok(task.prompt.length>25,module.id+" prompt is too thin");
+   if(task.kind==="single"){
+    assert.equal(task.options.length,3);
+    assert.equal(task.options.filter(o=>o[1]===1).length,1);
+    assert.ok(task.options.every(o=>o[2]?.length>25),"Each answer needs explanatory feedback");
+    counts[task.options.findIndex(o=>o[1]===1)]++;
+   }
+   if(task.kind==="multi"){
+    const key=task.options.filter(o=>o[1]===1).length;
+    assert.ok(key>=2&&key<task.options.length,"Multi-select needs plausible alternatives");
+    multis.add(key+"/"+task.options.length);
+   }
+   if(task.kind==="classify"){
+    assert.ok(task.items.every(o=>o[1]===0||o[1]===1));
+    patterns.add(Array.from(task.items,x=>x[1]).join(""));
+   }
+   if(task.kind==="order")assert.equal(task.steps.length,4);
+  }
+ }
+ assert.equal(total,56);
+ assert.deepEqual(counts,[11,11,11],"Single-choice answer positions must be balanced");
+ assert.ok(patterns.size>=5,"Classification answer positions must vary");
+ assert.ok(multis.size>=3,"Select-all questions must not share a predictable answer count");
+});
+test("educator V4.1 has plain-language support and never asks for writing",()=>{
+ const runtime=read("content/educators.js"),data=read("content/educator-v4-data.js");
+ assert.ok(runtime.includes("educator-glossary"));
+ assert.ok(runtime.includes("educator-new-evidence"));
+ assert.ok(runtime.includes("aicj-educator-progress-v41"));
+ assert.ok(!runtime.match(/<textarea/gi));
+ assert.ok(!data.match(/<textarea/gi));
+ const context=createContext({window:{}});
+ runInContext(data,context);
+ const modules=Array.from(context.window.EDUCATOR_V4.courses).flatMap(c=>Array.from(c.modules));
+ const teaching=modules.map(m=>m.ideas.map(x=>x[1]).join(" ")).join(" ");
+ for(const word of ["epistemic trust","construct-irrelevant","triangulate"]){
+  assert.ok(!teaching.includes(word),"An unexplained jargon phrase remains in teaching: "+word);
+ }
+ assert.ok(teaching.includes("Multi-Tiered System of Supports"));
+ assert.ok(teaching.includes("Universal Design for Learning"));
+});
