@@ -83,3 +83,24 @@
  .educator-module-card{min-height:0}
 }
 @media(prefers-reduced-motion:reduce){.educator-meter span{transition:none}}
+
+
+/* V4.1 · Language accessibility and evidence-responsive practice */
+.educator-learning-step{max-width:820px;background:#f4f7fb;border-left:4px solid #17395f;border-radius:8px;padding:.85rem 1rem;color:#233c5b;line-height:1.65;margin:1rem 0}
+.educator-learning-step strong{color:#17395f}
+.educator-glossary{border:1px solid #d8e0e9;background:#f8fafc;border-radius:12px;margin:1.1rem 0 1.45rem;color:#233c5b}
+.educator-glossary summary{padding:1rem 1.15rem;font-weight:700;cursor:pointer;min-height:44px;line-height:1.5}
+.educator-glossary summary:focus-visible{outline:3px solid #b41334;outline-offset:2px;border-radius:8px}
+.educator-glossary[open] summary{border-bottom:1px solid #d8e0e9}
+.educator-glossary dl{display:grid;gap:.8rem;margin:0;padding:1rem 1.2rem}
+.educator-glossary dl>div{display:grid;grid-template-columns:minmax(110px,.38fr) minmax(0,1fr);gap:.75rem}
+.educator-glossary dt{font-weight:750;color:#17395f}
+.educator-glossary dd{margin:0;line-height:1.6;color:#43536a}
+.educator-new-evidence{background:#edf3fa;border-left:4px solid #17395f;border-radius:12px;padding:1rem 1.2rem;margin:1.75rem 0 .75rem}
+.educator-new-evidence strong{font-weight:800;color:#17395f}
+.educator-new-evidence p{line-height:1.65;margin:.45rem 0 0;color:#334155}
+.educator-next-evidence{border-left:3px solid #b8c7d8;padding:.4rem .85rem;color:#44556d}
+@media(max-width:640px){
+ .educator-glossary dl>div{grid-template-columns:1fr;gap:.15rem}
+ .educator-glossary summary{padding:.9rem}
+}
