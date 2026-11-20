@@ -19,7 +19,7 @@ const capacity=[
  ["Evaluate the whole workflow","Separate four steps: ask AI for a draft, check the facts, make a teaching decision and share only the result you trust. Can you see the original source? Is anything missing? Which decisions must you make yourself?"],
  ["Know when not to use AI","AI may help with lesson ideas, but should not decide issues such as student safety, discipline or learning support. Use your school's approved process and trained staff for decisions that affect students. A better prompt does not remove these duties."]
  ],
- {scenario:"A teacher requests a short explanation of a recent scientific finding for tomorrow's class. The answer is polished and includes two plausible-looking citations.",
+ {scenario:"A teacher requests a short explanation of a recent scientific finding for tomorrow's class. The answer is polished and includes two references that look real.",
  weak:"Copy the explanation and citations into the lesson because they sound convincing.",
  strong:"Use the response as a draft; open the cited research independently, verify the claim and context, and revise or discard unsupported details.",
  why:"AI capacity can speed preparation, but reliable learning materials require evidence and professional review."},
@@ -28,13 +28,13 @@ const capacity=[
  ["The answer may be useful, but important claims need independent verification.",1,"This separates generative capability from trust in whether a claim is supported."],
  ["All AI-generated explanations should be rejected regardless of use.",0,"Responsible practice uses context, evidence and proportionate caution."]
  ],"Distinguish generating an answer from knowing whether the answer is true."),
- model:S("The citations in the modelled science example are inaccessible. What is the strongest action?",[
+ model:S("The teacher cannot open the references in the science example. What should they do?",[
  ["Keep the explanation but remove the references.",0,"Removing citations does not independently establish the explanation."],
  ["Search for inspectable primary sources; revise or omit claims without adequate support.",1,"A source check protects the integrity of the learning."],
  ["Ask the same AI tool to confirm that its citations are real.",0,"Self-confirmation is not independent evidence."]
  ],"Verification requires evidence external to the original output."),
  practice:[
- M("A geography teacher asks AI for a comparison of flood risks. Which safeguards are defensible?",[
+ M("A geography teacher uses AI to compare flood risks. Which checks should they make?",[
  ["Check location-specific claims against current authoritative information.",1,"Context and date matter for risk claims."],
  ["Ask the system to separate assumptions from sourced evidence.",1,"Explicit uncertainty makes review easier."],
  ["Treat a precise-looking map or number as verified.",0,"Apparent precision can conceal invented data."],
@@ -47,7 +47,7 @@ const capacity=[
  ["Upload confidential student case notes to a public chatbot for a prediction.",1,"Sensitive records and consequential predictions are out of bounds."]
  ],"Classify based on evidence, data sensitivity and consequences, not novelty.")
  ],
- apply:O("Sequence a responsible AI-assisted source summary for an MYP inquiry.",[
+ apply:O("Put the steps for an AI-supported middle-school inquiry summary in order.",[
  "Define the learning goal and what information is actually needed.",
  "Request a draft using non-sensitive information and inspectable source material.",
  "Verify factual claims and perspectives independently.",
@@ -67,11 +67,11 @@ const capacity=[
  ["Protect the intended thinking","A word bank, captions, audio version or picture organiser can make a task easier to access. But if AI writes the student's argument or conclusion, it may take away the thinking the task was meant to develop."],
  ["Use MTSS as a response cycle","In a Multi-Tiered System of Supports (MTSS), Tier 1 is strong teaching and access for everyone. Some students need extra focused help (Tier 2). A smaller number may need more intensive individual help (Tier 3). Teams use several sources of evidence and check progress. One score does not decide a student's support level."]
  ],
- {scenario:"An MYP student understands ecosystems orally and visually but struggles to express causal reasoning in the language of instruction.",
+ {scenario:"A Grade 7 student can explain food webs using pictures or speech, but finds it hard to write about causes and effects in English.",
  weak:"Ask AI to write the complete explanation for submission.",
- strong:"Offer translated key terms, sentence starters and a visual food-web scaffold while the student chooses evidence and builds the causal explanation.",
- why:"The barrier is linguistic expression, not necessarily conceptual understanding. The scaffold supports access while preserving reasoning."},
- {learn:S("Which design best maintains a common ambitious learning goal?",[
+ strong:"Offer translated key words, sentence starters and a picture of the food web. The student still chooses the evidence and explains what causes what.",
+ why:"English writing may be the barrier, not understanding the science. The supports help students show their own thinking."},
+ {learn:S("Which plan keeps the same strong learning goal for every student?",[
  ["Give every learner an identical format regardless of barriers.",0,"Uniform format is not the same as equitable opportunity."],
  ["Provide accessible pathways while retaining the same target understanding and evidence criteria.",1,"Access can vary without reducing the intellectual target."],
  ["Use AI to complete the difficult thinking for students who need support.",0,"Removing the target thinking is substitution, not a scaffold."]
@@ -88,20 +88,20 @@ const capacity=[
  ["Offer a glossary and two contrasting worked examples.",0,"The learner still constructs a response."],
  ["Automatically choose all evidence and claims for the student.",1,"Core intellectual decisions are no longer the student's."]
  ],"A scaffold preserves the learning objective even when access pathways change."),
- M("An inclusive Tier 1 inquiry includes multilingual and neurodiverse learners. Which design moves help?",[
+ M("A class has students who speak different languages and learn in different ways. Which teaching choices help everyone take part?",[
  ["Offer predictable steps and optional visual/audio access.",1,"Predictability and multimodal access support more learners."],
  ["Use the same high-level inquiry question with flexible means of demonstrating understanding.",1,"A common goal can have multiple expression routes."],
  ["Assume the same diagnosis explains every student's participation.",0,"Individual variability cannot be reduced to a label."],
  ["Collect brief formative evidence before deciding who needs additional support.",1,"Responsive design is based on what learners demonstrate."]
  ],"Universal access first; additional support should be responsive to evidence.")
  ],
- apply:O("Place the support-design moves in a defensible order.",[
+ apply:O("Put the steps for choosing learning support in a sensible order.",[
  "Define the essential concept and intellectual demand.",
  "Identify likely access barriers using learner information and task analysis.",
  "Design accessible Tier 1 routes that protect the goal.",
  "Check learner responses and adjust or consult for targeted support when indicated."
  ],"Design for variability, notice actual responses, then improve."),
- transfer:S("A student can explain a geometry concept accurately with a model but scores poorly on a long reading-heavy test. What is the strongest next move?",[
+ transfer:S("A student can explain geometry with a model but gets a low score on a test with long English instructions. What should the teacher do next?",[
  ["Automatically assign an intervention tier from the test score.",0,"One assessment is insufficient and may conflate language with mathematical understanding."],
  ["Check whether reading demand is essential to the target, offer another valid expression route, and gather more evidence.",1,"The educator tests the barrier hypothesis without lowering the goal."],
  ["Ask AI to complete future assessments on the student's behalf.",0,"This prevents valid evidence of learning."]
@@ -117,8 +117,8 @@ const capacity=[
  ],
  {scenario:"Students plan a campaign to reduce single-use plastic near school. AI can instantly produce a logo, slogans and a complete slide deck.",
  weak:"Ask each group to submit the best-looking AI-generated campaign.",
- strong:"Students investigate local waste patterns, interview stakeholders, choose an audience, test claims and use AI for alternative formats or critique while keeping decisions and evidence their own.",
- why:"Real-world purpose, original student thinking and meaningful audience response distinguish authenticity from polished production."},
+ strong:"Students study local waste, talk with people affected, choose who will hear their campaign, check their claims and use AI only for ideas or feedback. Students make the important decisions.",
+ why:"Real people, student ideas and useful feedback make this authentic learning—not just a polished product."},
  {learn:S("Which feature most strongly signals an authentic learning experience?",[
  ["An AI-generated design looks professionally finished.",0,"Appearance does not establish authentic inquiry or purpose."],
  ["Students investigate a genuine problem and make accountable choices for a real audience.",1,"Authenticity depends on purpose, process, evidence and contribution."],
@@ -163,11 +163,11 @@ const capacity=[
  ["Technology should strengthen relationships","Working together is more than dividing a task into sections. Students need to listen, share ideas, disagree respectfully and make decisions together. AI should not replace those conversations."],
  ["Use evidence in collaborative planning","Teams can use approved tools to organise information that does not identify students. They can discuss possible barriers, agree on a support and check if it helps. In MTSS, people—not an AI model—decide what support to try or change."]
  ],
- {scenario:"A grade-level team wants a shared plan for students struggling to use feedback. Someone suggests pasting individual student records into an open chatbot to 'identify the weak students'.",
- weak:"Upload the records to get a rapid ranking and an automatic intervention assignment.",
+ {scenario:"A Grade 7 team wants to help students use feedback more effectively. One teacher suggests adding student records to a public AI tool to rank who needs support.",
+ weak:"Upload the records and let AI choose who needs extra support.",
  strong:"Review permitted, anonymous patterns together, agree on a clear skill target, design a Tier 1 feedback routine, and monitor students' response before considering additional support.",
- why:"Collective capacity improves when AI assists preparation and analysis while human teams protect relationships and own consequential decisions."},
- {learn:S("What most clearly distinguishes collaborative learning from parallel AI production?",[
+ why:"AI can help teachers plan together, but the team must protect student information and make decisions that affect students."},
+ {learn:S("Which example shows students learning together rather than only combining AI-generated work?",[
  ["Everyone produces an AI-generated section independently.",0,"Work division is not necessarily purposeful collaboration."],
  ["Learners negotiate decisions, learn from perspectives and contribute to shared understanding.",1,"Shared reasoning and equitable contribution matter."],
  ["The group submits the longest possible final piece of work.",0,"Volume is not an indicator of collaboration."]
@@ -215,8 +215,8 @@ const judgement=[
  ],
  {scenario:"Students must build a historical argument using primary sources. Some propose asking AI for a full thesis, evidence and reasoning, then editing the prose.",
  weak:"Permit fully generated reasoning because students still improve the writing style.",
- strong:"Require an initial student claim and source analysis; permit AI-generated counterarguments or critique, followed by an independent defence and revision.",
- why:"The learning target is source interpretation and argument construction. Edits to generated prose do not evidence those skills."},
+ strong:"Students first build a claim from sources. They may then use AI to suggest another view, before explaining and improving their own argument.",
+ why:"The goal is to understand sources and build an argument. Editing AI-written sentences does not show those skills."},
  {learn:S("When does an AI scaffold become substitution?",[
  ["When it provides alternative vocabulary or formats.",0,"Access support need not remove intellectual work."],
  ["When it completes the reasoning or choices the learner was meant to develop.",1,"The defining issue is who performs the target thinking."],
@@ -234,19 +234,19 @@ const judgement=[
  ["Students independently explain what changed after comparing two critiques.",0,"Metacognition is visible."],
  ["AI determines the final position and students sign their names.",1,"Student voice and judgement are absent."]
  ],"Agency can be observed in decisions, explanations and revisions."),
- M("A student is stuck on a complex mathematical proof. Which responses preserve learning?",[
+ M("A Grade 8 student is stuck explaining why a geometry pattern always works. Which supports keep the thinking with the student?",[
  ["Offer a carefully chosen hint rather than the whole solution.",1,"A hint can move learning forward without finishing it."],
  ["Provide a simpler analogous example for comparison.",1,"An analogy can clarify a strategy while preserving transfer."],
  ["Immediately provide the complete proof to copy.",0,"Copying prevents evidence of proof construction."],
  ["Ask the student to explain the next step independently after a scaffold.",1,"Independent reasoning reveals what the learner can now do."]
  ],"Targeted assistance should move learners toward independent competence.")
  ],
- apply:S("An MYP Design teacher wants to permit AI for a prototype challenge. Which policy is most defensible?",[
+ apply:S("A Grade 8 Design teacher wants to allow AI during a prototype project. Which plan best protects learning?",[
  ["AI may generate the final concept and decisions if students can describe the result.",0,"Describing a finished outcome is weaker than producing the intended design reasoning."],
  ["Students define criteria, evaluate iterations and justify decisions; AI may offer options for critique.",1,"The design process remains student-owned."],
  ["AI is banned, even for accessibility support, without considering goals.",0,"Responsible non-use must also follow contextual reasoning."]
  ],"Make the boundaries of human intellectual ownership explicit."),
- transfer:S("A Grade 8 Language & Literature student asks AI to explain an unfamiliar poem before reading it. What best protects interpretive agency?",[
+ transfer:S("A Grade 8 student asks AI to explain a new poem before reading it. What best protects the student's own interpretation?",[
  ["Require an initial personal close reading, then use AI as a contrasting interpretation to scrutinise.",1,"Comparison comes after the student's interpretive work."],
  ["Use the AI interpretation as the student's opening argument.",0,"That reverses the intended ownership."],
  ["Grade the fluency of the AI-produced response.",0,"Fluency is not evidence of literary analysis."]
@@ -260,10 +260,10 @@ const judgement=[
  ["MTSS is an ongoing response cycle","Start by checking whether Tier 1 teaching is accessible and working. If students need more help, a team may plan Tier 2 small-group support and check progress. Tier 3 involves more intensive, individual support planned by qualified staff. These tiers describe the help provided—not a fixed label for a child."],
  ["Belonging and cultural responsiveness matter","Ask how students have been able to show what they know. Consider relationships, classroom expectations and perspectives you may not have heard. AI can help organise approved, anonymous information, but it must not diagnose students or decide who needs a referral."]
  ],
- {scenario:"A multilingual MYP learner scores poorly on one timed English reading-intensive science test, yet explains scientific concepts accurately using diagrams and oral discussion.",
- weak:"Use AI to label the learner as low ability and recommend Tier 2 immediately.",
- strong:"Examine whether the test introduced an unnecessary language barrier, strengthen Tier 1 access, gather multiple demonstrations of science understanding and monitor the response.",
- why:"The data may be showing a measurement barrier. Good decisions distinguish the target science understanding from unrelated language demand."},
+ {scenario:"A Grade 8 student who is learning English scores poorly on a timed science test with lots of reading. However, they explain the science well with diagrams and discussion.",
+ weak:"Use the test score to put the student in a Tier 2 group straight away.",
+ strong:"Check whether the English reading made the test harder than the science goal. Offer clearer ways to show understanding, collect more evidence and check progress.",
+ why:"The low score may reflect a language barrier rather than weak science understanding. The team needs more evidence."},
  {learn:S("Which MTSS statement is most accurate?",[
  ["A single low score automatically places a student in Tier 2.",0,"Support decisions depend on converging evidence, context and response over time."],
  ["MTSS uses quality instruction, additional support and ongoing review, with people accountable for decisions.",1,"It is a system of instruction and responsiveness, not a fixed label."],
@@ -288,7 +288,7 @@ const judgement=[
  "Monitor learner response and adjust, continue or escalate through approved procedures."
  ],"Notice → hypothesise → support → monitor → improve.")
  ],
- apply:M("A grade team sees declining assignment completion and belonging scores for a fictional cohort. Which next moves are justified?",[
+ apply:M("A year-level team sees fewer assignments completed and lower belonging survey results. What should they do next?",[
  ["Check task design, workload, relationships and student perspectives before inferring causes.",1,"Different data sources can reveal different barriers."],
  ["Review whether universal supports are accessible and implemented consistently.",1,"Tier 1 quality is the starting point."],
  ["Automatically assign every student a risk tier based on a dashboard score.",0,"This exceeds what aggregate indicators can justify."],
@@ -308,11 +308,11 @@ const judgement=[
  ["Feedback must be acted upon","AI can suggest changes quickly. Students learn when they decide which feedback to use and why. Teachers still need to check that feedback is accurate, fair and helpful."],
  ["Trust is designed, not detected","Tell students clearly what AI help is allowed. Include small checks where they explain or demonstrate learning independently. AI-detection tools can be wrong and should not be treated as proof of cheating. Protect student data and review important assessment decisions yourself."]
  ],
- {scenario:"A Grade 9 science student submits a polished investigation report. The school cannot tell whether the student can independently explain its assumptions and evaluate the evidence.",
+ {scenario:"A Grade 9 science student submits an excellent investigation report. The teacher is unsure whether the student can explain their choices and check the evidence without AI.",
  weak:"Use a detector score to declare the report authentic or inauthentic.",
- strong:"Use a transparent process log, targeted questions about the analysis and a short independent new-context performance aligned with the assessed skills.",
- why:"The question is what the student understands and can transfer, not whether an algorithm feels suspicious about writing style."},
- {learn:S("Which approach makes the strongest assessment claim in an AI-rich environment?",[
+ strong:"Check drafts and notes, ask focused questions about the investigation, and give a short new task the student completes independently.",
+ why:"The question is what the student understands and can do in a new situation—not what an AI detector guesses from writing style."},
+ {learn:S("Which assessment gives the strongest evidence of student learning when AI is available?",[
  ["Use the final product alone as conclusive evidence.",0,"Product quality may not show independent understanding."],
  ["Combine outcome-aligned process and independent transfer evidence, with clear use expectations.",1,"The evidence matches the claim."],
  ["Rely on AI detection as the final decision-maker.",0,"Detection is too uncertain for a conclusive finding."]
@@ -342,7 +342,7 @@ const judgement=[
  "Introduce equitable process, explanation and independent-transfer checkpoints.",
  "Communicate boundaries and review the combined evidence using professional judgement."
  ],"Design the assessment around evidence, then decide what role AI may play."),
- transfer:S("A student produces correct statistics with AI but cannot interpret confidence intervals in a new example. What conclusion is warranted?",[
+ transfer:S("A Grade 8 student uses AI to make a correct graph but cannot explain the scale in a different graph. What should the teacher conclude?",[
  ["The final product proves full mastery.",0,"Correct output does not demonstrate independent interpretation."],
  ["The evidence suggests further teaching and assessment of interpretation are needed.",1,"The independent transfer gap is informative."],
  ["The student necessarily committed misconduct.",0,"A learning gap alone is not a misconduct finding."]
@@ -356,17 +356,17 @@ const judgement=[
  ["Notice evidence, not impressions","A lesson may feel successful without helping everyone learn. Look at what students say, choose, make and do together. Ask who could take part, whose views were included and what learning evidence is visible."],
  ["Reflect, improve and remain accountable","Use AI only where it adds real value and you can manage the risks. Check whether the plan includes everyone and protects learning. Review the evidence, decide what to improve, and remember that not using AI can be the right choice."]
  ],
- {scenario:"A team proposes an AI-supported community air-quality inquiry. Students have varied language proficiency and access needs. The tool could generate a complete project report instantly, but the learning goal is to investigate evidence and propose meaningful action.",
+ {scenario:"A Grade 8 team plans a local air-quality project. Students have different language and learning needs. AI could write a full report quickly, but the goal is for students to study evidence and recommend useful action.",
  weak:"Publish the AI report, award a grade for its polish and call the task transformative.",
- strong:"Students frame the inquiry, examine trustworthy data and local perspectives, build their own claims, use approved AI support for access or critique, and communicate a justified recommendation to an authentic audience.",
- why:"Capacity helps with preparation and access; judgement protects evidence, ownership, belonging and purposeful action."},
+ strong:"Students choose a question, check local data and views, build their own ideas, use approved AI only for support or feedback, and share recommendations with people who can use them.",
+ why:"AI can make work easier. Teachers still need to protect good evidence, student voice, inclusion and meaningful action."},
  {learn:S("Which principle best summarises the Capacity × Judgement relationship?",[
  ["If AI can generate the output, using it is automatically preferable.",0,"Capability alone cannot establish pedagogical benefit."],
  ["Use AI when it strengthens the intended learning and protects people, evidence and agency; otherwise limit or refuse it.",1,"Purpose and accountable judgement determine use."],
  ["Never use AI when students are learning independently.",0,"Support and non-use both need contextual justification."]
  ],"More capacity does not automatically create more transformative learning."),
  model:S("In the air-quality inquiry, which activity makes the greatest difference to authenticity?",[
- ["Students test claims against local evidence and communicate to a genuine audience.",1,"Investigation and consequence make the task meaningful."],
+ ["Students test claims against local evidence and communicate to real people who may use the work.",1,"Investigation and consequence make the task meaningful."],
  ["AI produces as many attractive posters as possible.",0,"Quantity and polish are not the intended learning."],
  ["The teacher delegates grading to a public chatbot.",0,"This undermines validity and privacy."]
  ],"Make inquiry, authentic purpose and student contribution visible."),
@@ -391,7 +391,7 @@ const judgement=[
  "Gather student evidence through inquiry, decisions, work and relationships.",
  "Review impact and make the next design adjustment with accountable colleagues."
  ],"Design → Notice → Reflect → Improve."),
- transfer:S("A different team wants AI to write feedback and decide support tiers for all students after one quiz. Which decision best transfers the course principles?",[
+ transfer:S("A Grade 8 PE teacher wants AI to create personal exercise plans based on one fitness test. Which approach is most responsible?",[
  ["Automate everything because the data is numerical.",0,"Numbers do not remove validity, privacy or contextual concerns."],
  ["Use reviewed AI drafting where permitted, use more than one source of evidence about student learning, preserve human support decisions and monitor responses.",1,"This preserves purpose, evidence, inclusion and accountability."],
  ["Stop offering any feedback because AI introduces uncertainty.",0,"Thoughtful feedback remains essential, whether or not AI is used."]
@@ -523,7 +523,7 @@ const revisedSingles={
   ],
   transfer:[
    ["Record the correct final product as success and offer extra practice only if the next test is also weak.",0,"The new example already shows an important gap in independent understanding."],
-   ["Teach and check the interpretation of confidence intervals again, using the student's new-context response as evidence.",1,"This responds to the learning gap the independent task revealed."],
+   ["Teach and check how to read a graph scale again, using the new example as evidence.",1,"This responds to the learning gap the independent task revealed."],
    ["Change the mark based on whether AI was used, even without clear task expectations.",0,"Assessment should follow communicated criteria and evidence, not unsupported assumptions."]
   ]
  },
@@ -539,9 +539,9 @@ const revisedSingles={
    ["Use a simulated community response to avoid the time needed for local feedback.",0,"A simulation can help prepare, but it does not replace learning from genuine stakeholders."]
   ],
   transfer:[
-   ["Use AI to draft possible support ideas, then let a teacher assign tiers from the quiz results.",0,"A single quiz is not enough evidence for support levels, even with a teacher making the choice."],
-   ["Review approved AI suggestions against several sources, keep support decisions with staff and check student response.",1,"This combines appropriate use with human responsibility and MTSS practice."],
-   ["Avoid AI in feedback planning, but still assign extra support from the one quiz.",0,"Not using AI does not fix a weak evidence base."]
+   ["Use AI to create a plan for every student and approve it if the fitness scores look sensible.",0,"One score is not enough to design a safe, personal exercise plan."],
+   ["Start with safe learning goals, offer student choices, use approved ideas only when helpful, and check individual needs through school guidance and other evidence.",1,"Students need safe choices and teacher judgement, not a plan based on one score."],
+   ["Give every student the same workout instead of checking their needs.",0,"Avoiding AI does not remove the need for safe, inclusive teaching."]
   ]
  }
 };
@@ -635,9 +635,9 @@ const multiOverrides={
   ["Use AI to merge contributions without asking the group to review the changes.",0,"A polished merge can hide lost voices or meaning."]
  ],
  j1:[
-  ["Give a targeted hint, then ask the student to choose the next proof step.",1,"The student makes the next mathematical decision."],
-  ["Provide a full proof first and ask the student to copy it with notes.",0,"This can help study, but it does not demonstrate independent proof-building."],
-  ["Use a shorter related example, then return to the original proof.",1,"An example can guide without completing the target problem."],
+  ["Give a short hint, then ask the student to explain the next step.",1,"The student makes the next mathematical decision."],
+  ["Provide the full explanation first and ask the student to copy it with notes.",0,"This can help study, but it does not demonstrate independent proof-building."],
+  ["Use a shorter related example, then return to the original problem.",1,"An example can guide without completing the target problem."],
   ["Let AI fill missing steps, with students checking only whether they look right.",0,"Recognising a plausible step is weaker than building the reasoning."]
  ],
  j2:[
