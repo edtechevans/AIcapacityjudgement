@@ -552,6 +552,148 @@ for(const m of [...capacity,...judgement]){
  }
 }
 
+
+/* Accessible definitions appear only when educators ask for them. */
+const plainWords={
+ c1:[["AI output","Text, an image or another result made by an AI tool."],["Check a claim","Find trustworthy evidence you can open and compare with the claim."],["Source","The original place a claim or idea comes from."]],
+ c2:[["UDL","Universal Design for Learning: plan different ways to access and show learning."],["MTSS","Multi-Tiered System of Supports: plan, check and adjust teaching and extra help using evidence."],["Scaffold","A temporary support such as a hint, picture or word bank that leaves the thinking with the student."]],
+ c3:[["Authentic audience","Real people who may use, respond to or benefit from student work."],["Inquiry","Investigating a question by finding and checking evidence."],["Prototype","An early version that students test and improve."]],
+ c4:[["Workflow","The steps a group follows to complete a task."],["Anonymous information","Information that does not identify an individual student."],["Shared decision","A choice made through discussion and responsibility, not by one person or tool alone."]],
+ j1:[["Agency","Having a meaningful say in learning and taking ownership of choices."],["Scaffold","A temporary hint, example or support that helps students do their own thinking."],["Independent work","What a student can explain or do without a tool completing it for them."]],
+ j2:[["MTSS","Multi-Tiered System of Supports: a cycle of teaching, added support and reviewing progress."],["Tier 1 / 2 / 3","Tier 1: strong teaching for all. Tier 2: extra focused support. Tier 3: more intensive individual support."],["Belonging","Feeling welcomed, included and connected at school."]],
+ j3:[["Valid assessment","An assessment that really measures the skill or understanding it is meant to measure."],["Feedback","Information that helps students decide what to improve next."],["Transfer","Using what you have learned in a different situation."]],
+ j4:[["Engagement for All","A commitment to learning that includes, challenges and supports every student."],["Taking action","Using learning to make a useful difference."],["Evidence of learning","What students say, choose, make and do that shows their understanding."]]
+};
+const followups={
+ c1:S("New information: two official sources give different numbers for the same local issue. What should the teacher do next?",[
+ ["Use the newer number because it is more recent, then add a footnote.",0,"The sources may measure different things; date alone does not settle the difference."],
+ ["Compare dates, definitions and methods, explain the difference, and choose evidence that fits the lesson goal.",1,"Understanding why numbers differ gives students a more trustworthy account."],
+ ["Ask AI to combine the two figures into one number that avoids disagreement.",0,"A combined number without a valid method can hide the problem."]
+ ],"Good judgement includes showing uncertainty when sources disagree."),
+ c2:S("New information: after several lessons with accessible Tier 1 supports, three learners still struggle with the same science skill. What next?",[
+ ["Plan extra focused teaching, agree on a short progress check and review the response with the support team.",1,"Additional help is based on evidence and reviewed for impact."],
+ ["Give those students the same easier science objective for the rest of the unit.",0,"A lower target is not automatically the right response to continued difficulty."],
+ ["Send every student with a low score to the same fixed support group.",0,"Support should respond to the specific skill and context, not one label."]
+ ],"MTSS adds support in response to evidence; it does not label students permanently."),
+ c3:S("New information: community members say the students' plastic-reduction idea is hard to carry out. Which next step is best?",[
+ ["Use AI to rewrite the plan to match the community response and submit the final version.",0,"Students miss the chance to evaluate feedback and revise their own thinking."],
+ ["Have students compare feedback with their evidence, test another idea and explain the revised choice.",1,"Students learn from authentic feedback and make the next decision."],
+ ["Keep the first plan because students already completed the main learning activity.",0,"Authentic work grows when student ideas meet real constraints."]
+ ],"Meaningful action includes responding to real-world feedback."),
+ c4:S("New information: a shared lesson plan works for most students, but quieter multilingual learners are contributing less. What should the team change?",[
+ ["Give more speaking time to the most confident students so the group can finish.",0,"This may speed work but further limits voice and shared learning."],
+ ["Add different ways to prepare and share ideas, then check each learner's contribution.",1,"Accessible group roles and evidence of participation make collaboration more equitable."],
+ ["Use AI to assign students permanent roles based on English test scores.",0,"A score is not enough to define how someone should contribute."]
+ ],"Team workflows should respond to who is and is not taking part."),
+ j1:S("New information: student prototypes look strong, but most design criteria came from AI. What would best improve evidence of agency?",[
+ ["Ask learners to explain why they kept or changed each criterion and test at least one criterion they developed themselves.",1,"Students can demonstrate ownership through decisions, testing and revision."],
+ ["Give more marks for fluent explanations of the final product.",0,"Fluency alone may not show who chose the design criteria."],
+ ["Reduce the task to choosing the best AI-generated design.",0,"This further limits student control of the design process."]
+ ],"Agency becomes visible when students make and defend meaningful choices."),
+ j2:S("New information: after three weeks, one small group's participation improves but another group's does not. What is the most useful next step?",[
+ ["Keep both groups on the same support plan until the next formal exam.",0,"Waiting may miss the chance to adjust a support that is not helping."],
+ ["Check whether each support was delivered as planned, review learner evidence and adjust the second group's approach.",1,"A response cycle tests what worked and what needs to change."],
+ ["Move the second group automatically to a more intensive tier based on limited progress.",0,"More intensive support requires wider evidence and the right professional process."]
+ ],"Notice differences in response, then make careful changes."),
+ j3:S("New information: students can explain their project choices in class but struggle to apply the idea in a fresh example. What does this suggest?",[
+ ["The final project is still enough evidence because they can explain their choices.",0,"Explaining a past choice does not always show they can apply the idea elsewhere."],
+ ["Add teaching and checks that target using the idea in a new context before claiming secure understanding.",1,"The independent transfer gap gives the teacher a useful next step."],
+ ["Require another polished final product, this time without any AI tools.",0,"A new product may still fail to show transfer unless the task measures it directly."]
+ ],"Use evidence of transfer to guide further instruction."),
+ j4:S("New information: the air-quality project produces strong proposals, but multilingual students rarely speak in the final group discussion. Which improvement best fits Engagement for All?",[
+ ["Keep the presentation format because the proposals are academically strong.",0,"A strong product alone does not show who had a voice."],
+ ["Offer preparation time and different ways to contribute while keeping evidence and student decisions central.",1,"Access, voice and the learning goal can be strengthened together."],
+ ["Have AI speak on behalf of students who use English less confidently.",0,"This may hide the perspectives the task was designed to include."]
+ ],"Taking action should make meaningful participation possible for more students.")
+};
+const multiOverrides={
+ c1:[
+  ["Check important flood-risk claims with current local or official sources.",1,"Local risks and dates need independent checking."],
+  ["Ask AI to mark which of its numbers are verified and use only those.",0,"An AI label is not independent verification."],
+  ["Compare results from two AI chats and accept figures on which they agree.",0,"Two models may repeat the same mistake or source."],
+  ["Keep individual students' home locations out of an unapproved tool.",1,"Privacy boundaries still apply to teacher planning."]
+ ],
+ c2:[
+  ["Provide optional diagrams, audio and word banks for key ideas.",1,"Several entry points can remove access barriers."],
+  ["Keep the core learning goal while allowing more than one way to show understanding.",1,"Different formats do not require lower expectations."],
+  ["Offer the easiest possible task only to students on a language-support list.",0,"A label should not automatically lower learning goals."],
+  ["Use quick classroom checks to see whether extra support is needed.",1,"Actual response to teaching helps guide the next step."],
+  ["Use last year's test bands as permanent groups for every topic.",0,"Needs vary by subject, skill and time."]
+ ],
+ c3:[
+  ["Let students choose and refine a research question about their local environment.",1,"Question choice helps students own the inquiry."],
+  ["Check AI summaries against data and sources students can inspect.",1,"An AI summary is not evidence by itself."],
+  ["Ask AI to write the likely conclusion before students analyse evidence.",0,"This risks making the inquiry confirm a ready-made claim."],
+  ["Invite people affected by the issue to question the students' proposals.",1,"Authentic feedback makes the work more meaningful."],
+  ["Let AI rank the proposed solutions without explaining its criteria.",0,"Unclear criteria remove student evaluation of trade-offs."]
+ ],
+ c4:[
+  ["Ask everyone to offer and question ideas before the group chooses a direction.",1,"Shared thinking requires equitable discussion."],
+  ["Invite perspectives from students who may see the problem differently.",1,"Different experiences can improve the solution."],
+  ["Let the fastest group member make the final choice after collecting AI drafts.",0,"Contribution is not the same as shared decision-making."],
+  ["Check both group progress and what each student has learned.",1,"Both shared outcomes and individual understanding matter."],
+  ["Use AI to merge contributions without asking the group to review the changes.",0,"A polished merge can hide lost voices or meaning."]
+ ],
+ j1:[
+  ["Give a targeted hint, then ask the student to choose the next proof step.",1,"The student makes the next mathematical decision."],
+  ["Provide a full proof first and ask the student to copy it with notes.",0,"This can help study, but it does not demonstrate independent proof-building."],
+  ["Use a shorter related example, then return to the original proof.",1,"An example can guide without completing the target problem."],
+  ["Let AI fill missing steps, with students checking only whether they look right.",0,"Recognising a plausible step is weaker than building the reasoning."]
+ ],
+ j2:[
+  ["Check task design, student views and classroom relationships before deciding what caused the change.",1,"Several explanations may fit the first data point."],
+  ["Look at whether universal teaching and access supports were used as planned.",1,"Tier 1 quality must be considered."],
+  ["Use the dashboard's risk group as a starting tier assignment, then ask teachers to approve it.",0,"A dashboard label alone cannot justify a tier assignment."],
+  ["Make a small change, set a review date and monitor learning and belonging.",1,"A measured trial helps teams learn what works."],
+  ["Assume the cohort average explains the needs of each individual student.",0,"Group patterns cannot replace individual context."]
+ ],
+ j3:[
+  ["Students compare AI suggestions with success criteria and choose what to change.",1,"Students make the feedback decision."],
+  ["AI rewrites the weak sections first so students can see a high-quality final answer.",0,"This may reduce opportunities to practise revision."],
+  ["Students accept or reject a suggestion and explain the choice through a selected criterion.",1,"Evaluating feedback can strengthen learning."],
+  ["The teacher checks feedback only when the AI reports low confidence.",0,"Important feedback still needs human review for fit and fairness."]
+ ],
+ j4:[
+  ["Decide which thinking and decisions must remain with students.",1,"Ownership needs to be defined before choosing tools."],
+  ["Identify access barriers and offer supports that keep the learning goal strong.",1,"Inclusive design preserves challenge."],
+  ["Let AI produce a polished model project that students can copy if needed.",0,"Copying the model can hide student thinking."],
+  ["Check approvals, privacy, sources and who is responsible.",1,"Safeguards remain necessary."],
+  ["Plan evidence of what students say, choose, create and do.",1,"Evidence helps the teacher decide what improved."],
+  ["Ask AI to suggest intervention tiers from quiz scores, then review only unusual cases.",0,"Support decisions need human judgement and multiple sources of evidence."]
+ ]
+};
+const classOrder={
+ c1:[0,1,3,2],c2:[1,0,2,3],c3:[1,3,0,2],c4:[0,2,1,3],
+ j1:[1,0,3,2],j2:[0,1,2,3],j3:[0,3,1,2],j4:[3,0,2,1]
+};
+/* Rebalance single-answer locations without changing which response is best.
+ * Target answer positions are balanced across the complete 8-module course.
+ * Fixed seeded order prevents patterns and avoids shifting choices on reload.
+ */
+let singleList=[];
+for(const m of [...capacity,...judgement]){
+ m.glossary=plainWords[m.id];
+ m.tasks.followup=followups[m.id];
+ for(const stage of ["learn","model","apply","followup","transfer"]){
+  if(m.tasks[stage]?.kind==="single")singleList.push(m.tasks[stage]);
+ }
+ const classifiers=m.tasks.practice.filter(t=>t.kind==="classify");
+ for(const c of classifiers)c.items=classOrder[m.id].map(i=>c.items[i]);
+ const multis=[...m.tasks.practice,m.tasks.apply].filter(t=>t.kind==="multi");
+ for(const q of multis)q.options=multiOverrides[m.id];
+}
+let seed=20261120;
+const random=()=>{seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296};
+const mix=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a};
+const targets=mix(Array.from({length:singleList.length},(_,i)=>i%3));
+singleList.forEach((t,i)=>{
+ let n=0;
+ while(t.options.findIndex(o=>o[1]===1)!==targets[i]&&n++<4)t.options.push(t.options.shift());
+});
+for(const m of [...capacity,...judgement]){
+ for(const q of [...m.tasks.practice,m.tasks.apply])if(q.kind==="multi")mix(q.options);
+}
+
 window.EDUCATOR_V4={
  version:"4.1",
  courses:[
