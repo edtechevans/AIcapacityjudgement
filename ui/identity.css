@@ -1363,3 +1363,37 @@ select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
 .v21-synthesis h3{margin:.45rem 0 1rem;color:var(--brand-ink);line-height:1.35}
 .v21-synthesis>.btn{margin-top:1rem}
 @media(max-width:760px){.v21-feedback-grid{grid-template-columns:1fr}.knowledge-claim{font-size:1rem}.v21-synthesis{padding:1rem}}
+
+
+/* Compact homepage hero · 2026-11-20
+   Reduce desktop vertical footprint while keeping all actions and journey cues. */
+@media(min-width:851px){
+  .dashboard-hero{
+    padding:25px clamp(28px,4vw,54px);
+    gap:clamp(20px,2.8vw,34px);
+  }
+  .dashboard-hero h1{
+    font-size:clamp(2.2rem,3.75vw,3.55rem);
+    line-height:1.055;
+    margin-block:10px;
+  }
+  .dashboard-hero .hero-lead{margin-top:10px;line-height:1.5}
+  .dashboard-hero .hero-buttons{margin-top:15px;margin-bottom:0}
+  .dashboard-secondary-links{margin-top:2px}
+  .dashboard-meter{padding:15px 14px 12px;gap:9px}
+  .dashboard-meter .progress-orbit{width:112px;height:112px;padding:9px}
+  .dashboard-meter .orbit-start-icon{font-size:1.8rem}
+  .dashboard-meter .orbit-start-text{font-size:.81rem}
+  .dashboard-meter p{font-size:.73rem}
+}
+@media(min-width:621px) and (max-width:850px){
+  .dashboard-hero{padding:26px}
+  .dashboard-hero h1{margin-block:10px}
+  .dashboard-meter .progress-orbit{width:125px;height:125px}
+}
+@media(max-width:620px){
+  .dashboard-hero{padding-block:23px;gap:20px}
+  .dashboard-hero h1{margin-block:11px}
+  .dashboard-hero .hero-buttons{margin-top:16px}
+  .dashboard-meter .progress-orbit{width:125px;height:125px}
+}
