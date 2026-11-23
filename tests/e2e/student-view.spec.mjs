@@ -5,7 +5,10 @@ test("teacher can preview a Grade 6 student-only My Learning page without changi
   await page.locator('[data-action="pick-grade"][data-pick="9"]').click();
   await expect(page.locator(".course-intro")).toBeVisible();
   const before=await page.evaluate(()=>localStorage.getItem("aicj-studio-v2"));
-  await page.locator('[data-action="student-preview"]').click();
+  await page.locator("#student-preview-trigger").hover();
+  await expect(page.locator("#student-preview-options")).toBeVisible();
+  await expect(page.locator(".student-preview-option")).toHaveCount(7);
+  await page.locator('[data-action="student-preview"][data-student-grade="6"]').click();
   await expect(page).toHaveURL(/#\/student$/);
   await expect(page.locator("#main-title")).toHaveText("My Learning");
   await expect(page.locator(".student-work-card")).toHaveCount(6);
@@ -65,4 +68,38 @@ test("when all Grade 6 modules are complete there is no repeated next lesson",as
  await expect(page.locator(".student-next-button")).toHaveCount(0);
  await expect(page.locator(".student-finished")).toContainText("You have completed all six modules.");
  await expect(page.locator(".student-completed .student-work-card")).toHaveCount(6);
+});
+
+test("teacher can choose Grade 12 via the floating menu without modifying saved progress",async({page})=>{
+ await page.goto("/#/welcome");
+ await page.locator('[data-action="pick-grade"][data-pick="8"]').click();
+ const saved=await page.evaluate(()=>localStorage.getItem("aicj-studio-v2"));
+ const picker=page.locator("#student-preview-trigger");
+ await picker.click();
+ await expect(page.locator("#student-preview-options")).toBeVisible();
+ await page.locator('[data-student-grade="12"]').click();
+ await expect(page).toHaveURL(/#\/student\/12$/);
+ await expect(page.locator(".student-grade-pill")).toContainText("Grade 12");
+ await expect(page.locator(".student-work-card")).toHaveCount(6);
+ await expect(page.locator('[data-lesson="12-A1"].student-work-card')).toBeVisible();
+ await expect(page.locator(".topbar")).toHaveCount(0);
+ await page.locator('[data-lesson="12-A1"].student-work-card').click();
+ await expect(page.locator(".lesson-panel")).toBeVisible();
+ await expect(page).toHaveURL(/#\/student\/12$/);
+ await page.locator('.lesson-layout [data-action="courses"]').first().click();
+ await expect(page.locator("#main-title")).toHaveText("My Learning");
+ await page.locator('[data-action="student-exit"]').click();
+ await expect(page).toHaveURL(/#\/grade\/8$/);
+ expect(await page.evaluate(()=>localStorage.getItem("aicj-studio-v2"))).toBe(saved);
+});
+
+test("all Grade 6–12 direct student URLs show only their own six modules",async({page})=>{
+ for(const grade of [6,7,8,9,10,11,12]){
+  await page.goto("/#/student/"+grade);
+  await expect(page.locator("#main-title")).toHaveText("My Learning");
+  await expect(page.locator(".student-grade-pill")).toContainText("Grade "+grade);
+  await expect(page.locator(".student-work-card")).toHaveCount(6);
+  await expect(page.locator('.student-work-card[data-lesson="'+grade+'-A1"]')).toBeVisible();
+  await expect(page.locator(".topbar")).toHaveCount(0);
+ }
 });
