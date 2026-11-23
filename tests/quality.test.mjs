@@ -243,3 +243,41 @@ test("Grade 6 through 12 student direct routes show only the requested grade",()
   assert.ok(!h.html.includes('class="topbar"'));
  }
 });
+
+
+test("student My Learning groups A1–A3 in Capacity and B1–B3 in Judgement for all grades",()=>{
+ for(const grade of [6,7,8,9,10,11,12]){
+  const h=app({},"#/student/"+grade);
+  const left=h.html.indexOf('class="student-pathway-column student-pathway-capacity"');
+  const right=h.html.indexOf('class="student-pathway-column student-pathway-judgement"');
+  assert.ok(left>=0&&right>left,"Both ordered pathway columns required for Grade "+grade);
+  assert.match(h.html,/student-pathway-heading"><h3>AI Capacity<\/h3>/);
+  assert.match(h.html,/student-pathway-heading"><h3>AI Judgement<\/h3>/);
+  let lastLeft=left,lastRight=right;
+  for(let strand=1;strand<=3;strand++){
+   const a=h.html.indexOf('data-lesson="'+grade+'-A'+strand+'"',left);
+   const b=h.html.indexOf('data-lesson="'+grade+'-B'+strand+'"',right);
+   assert.ok(a>lastLeft&&a<right,"A"+strand+" belongs in left column of Grade "+grade);
+   assert.ok(b>lastRight,"B"+strand+" belongs in right column of Grade "+grade);
+   lastLeft=a;lastRight=b;
+  }
+  assert.ok(h.html.includes('class="student-work-grid student-pathway-columns"'));
+ }
+});
+test("completed student modules stay in their Capacity or Judgement column",()=>{
+ const key="aicj-studio-v2";
+ const records={"9-A1":{completed:true,lastStage:4},"9-B2":{completed:true,lastStage:4}};
+ const h=app({[key]:JSON.stringify({grade:9,recommendedGrade:9,gradeChosen:true,name:"Learner",records})},"#/student/9");
+ const todo=h.html.slice(h.html.indexOf('id="student-work-title"'),h.html.indexOf('<details class="student-completed">'));
+ assert.ok(!todo.includes('data-lesson="9-A1"'));
+ assert.ok(!todo.includes('data-lesson="9-B2"'));
+ assert.ok(todo.includes('data-lesson="9-A2"'));
+ assert.ok(todo.includes('data-lesson="9-B1"'));
+ const done=h.html.slice(h.html.indexOf('<details class="student-completed">'));
+ const left=done.indexOf('class="student-pathway-column student-pathway-capacity"');
+ const right=done.indexOf('class="student-pathway-column student-pathway-judgement"');
+ assert.ok(left>=0&&right>left);
+ const a=done.indexOf('data-lesson="9-A1"',left);
+ const b=done.indexOf('data-lesson="9-B2"',right);
+ assert.ok(a>left&&a<right&&b>right,"Completed modules remain in their correct columns");
+});
