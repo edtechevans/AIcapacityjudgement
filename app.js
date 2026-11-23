@@ -34,15 +34,24 @@ let confirmClear=false;
 let pendingSharedLesson="";
 let curriculumView={grade:8,strand:"A1"};
 // The student view is a single-purpose UI; real account entitlements require school SSO.
-let studentMode=false,studentPreview=false,studentActiveLesson=false,studentViewBackup=null;
-function enterStudentView(fromTeacherButton=false){
- if(studentMode)return;
+let studentMode=false,studentPreview=false,studentActiveLesson=false,studentViewBackup=null,studentPickerOpen=false;
+function enterStudentView(fromTeacherButton=false,grade=6){
+ const chosen=Number(grade);
+ if(studentMode||!Object.prototype.hasOwnProperty.call(GRADES,String(chosen)))return;
  if(fromTeacherButton)studentViewBackup={state:{...state},practice,diagnosticRun,hash:window.location?.hash||"#/home"};
- studentMode=true;studentPreview=!!fromTeacherButton;studentActiveLesson=false;
- state.page="student";state.lessonId="";state.grade=6;state.recommendedGrade=6;state.gradeChosen=true;state.track="all";
+ studentMode=true;studentPreview=!!fromTeacherButton;studentActiveLesson=false;studentPickerOpen=false;
+ state.page="student";state.lessonId="";state.grade=chosen;state.recommendedGrade=chosen;state.gradeChosen=true;state.track="all";
  if(fromTeacherButton){state.name="Learner";state.records={};state.diagnostics={};state.legacyDone={};practice={};diagnosticRun=null;}
  else if(!state.name)state.name="Learner";
  notice="";
+}
+function studentPreviewPicker(){
+ return '<div class="student-preview-picker '+(studentPickerOpen?'is-open':'')+'">'+
+ '<button type="button" id="student-preview-trigger" class="student-preview-fab" data-action="student-preview-menu" aria-haspopup="true" aria-controls="student-preview-options" aria-expanded="'+studentPickerOpen+'" aria-label="Choose the grade for Student View">Student View <span aria-hidden="true">⌃</span></button>'+
+ '<div class="student-preview-options" id="student-preview-options" role="group" aria-label="Select grade to preview">'+
+ '<div class="student-preview-caption">Preview student learning</div>'+
+ [6,7,8,9,10,11,12].map(g=>'<button type="button" class="student-preview-option" data-action="student-preview" data-student-grade="'+g+'">Grade '+g+' <span aria-hidden="true">↗</span></button>').join('')+
+ '</div></div>';
 }
 function exitStudentPreview(){
  if(!studentPreview||!studentViewBackup)return;
@@ -594,7 +603,7 @@ function welcome(){
  '</main>';
 }
 window.refreshEducators=function(){if(state.page==="educators")render(false)};
-function render(focus,targetId="main-title"){if(document.documentElement?.dataset)document.documentElement.dataset.reading=state.reading;$("#app").innerHTML='<div class="site '+(studentMode?"student-simple":"")+'"><button type="button" class="skip-link" data-action="skip-main">Skip to main content</button>'+(studentMode?window.StudentModeUI.header(BRAND_MARK,studentPreview):nav())+(studentMode?(studentActiveLesson?'<div class="student-lesson-label">Grade 6 · My Learning</div>'+lesson():window.StudentModeUI.home(LESSONS,state.records,studentPreview)):state.page==="welcome"?welcome():state.page==="home"?home():state.page==="courses"?courses():state.page==="diagnostic"?diagnostic():state.page==="snapshot"?snapshot():state.page==="lesson"?lesson():state.page==="about"?about():state.page==="educators"?window.renderEducators():state.page==="teacher-guides"?window.renderTeacherGuides():state.page==="curriculum"?publicCurriculum({grade:curriculumView.grade,strand:curriculumView.strand,escape:esc,gradeChosen:state.gradeChosen,assignedGrade:state.grade}):state.page==="stages"?stageExplorer():profile())+(studentMode?'':'<button type="button" class="student-preview-fab" data-action="student-preview" aria-label="Preview the Grade 6 student My Learning page">Student View <span aria-hidden="true">↗</span></button>')+(studentMode?'':foot())+'<div id="global-announcer" class="site-toast '+(notice?"is-visible":"")+'" role="status" aria-live="polite">'+esc(notice)+'</div></div>';
+function render(focus,targetId="main-title"){if(document.documentElement?.dataset)document.documentElement.dataset.reading=state.reading;$("#app").innerHTML='<div class="site '+(studentMode?"student-simple":"")+'"><button type="button" class="skip-link" data-action="skip-main">Skip to main content</button>'+(studentMode?window.StudentModeUI.header(BRAND_MARK,studentPreview,state.grade):nav())+(studentMode?(studentActiveLesson?'<div class="student-lesson-label">Grade '+state.grade+' · My Learning</div>'+lesson():window.StudentModeUI.home(LESSONS,state.records,studentPreview,state.grade,GRADES[state.grade].headline)):state.page==="welcome"?welcome():state.page==="home"?home():state.page==="courses"?courses():state.page==="diagnostic"?diagnostic():state.page==="snapshot"?snapshot():state.page==="lesson"?lesson():state.page==="about"?about():state.page==="educators"?window.renderEducators():state.page==="teacher-guides"?window.renderTeacherGuides():state.page==="curriculum"?publicCurriculum({grade:curriculumView.grade,strand:curriculumView.strand,escape:esc,gradeChosen:state.gradeChosen,assignedGrade:state.grade}):state.page==="stages"?stageExplorer():profile())+(studentMode?'':studentPreviewPicker())+(studentMode?'':foot())+'<div id="global-announcer" class="site-toast '+(notice?"is-visible":"")+'" role="status" aria-live="polite">'+esc(notice)+'</div></div>';
 const track=$(".step-track");
 if(track?.querySelector){
   const active=track.querySelector(".step-dot.active");
@@ -604,11 +613,17 @@ if(track?.querySelector){
   }
 }
 const mainElement=$("#main-content");if(mainElement)mainElement.tabIndex=-1;const pageTitle=studentMode?(studentActiveLesson?(currentLesson()?.title||"Lesson"):"My Learning"):state.page==="lesson"?(currentLesson()?.title||"Lesson"):state.page==="courses"?"Grade "+state.grade+" modules":state.page==="snapshot"?"My learning":state.page==="diagnostic"?"Starting snapshot":state.page==="profile"?"My profile":state.page==="about"?"About":state.page==="educators"?"My Learning · Educator pathway":state.page==="teacher-guides"?"Teaching Guides":state.page==="curriculum"?"Curriculum":state.page==="home"?"Home":state.page==="stages"?"Explore stages":"Welcome";document.title=state.page==="welcome"?"AI Capacity × Judgement":pageTitle+" · AI Capacity × Judgement";if(focus){const main=$("#"+targetId)||$("#main-title");if(main)main.focus({preventScroll:true})}}
-function routePath(page){if(studentMode)return "/student";if(page==="stages")return "/stages";if(page==="courses")return "/grade/"+state.grade+(state.track!=="all"?"/"+state.track:"");if(page==="snapshot")return "/grade/"+state.grade+"/snapshot";if(page==="diagnostic")return "/grade/"+state.grade+"/check-in";if(page==="lesson")return "/lesson/"+state.lessonId;return "/"+(page==="welcome"?"welcome":page);}
+function routePath(page){if(studentMode)return "/student"+(state.grade===6?"":"/"+state.grade);if(page==="stages")return "/stages";if(page==="courses")return "/grade/"+state.grade+(state.track!=="all"?"/"+state.track:"");if(page==="snapshot")return "/grade/"+state.grade+"/snapshot";if(page==="diagnostic")return "/grade/"+state.grade+"/check-in";if(page==="lesson")return "/lesson/"+state.lessonId;return "/"+(page==="welcome"?"welcome":page);}
 function writeRoute(replace){const url="#"+routePath(state.page);if(!window.location||window.location.hash===url)return;if(window.history&&typeof window.history.pushState==="function"){window.history[replace?"replaceState":"pushState"]({},"",url);}else{window.location.hash=url;}}
 function readRoute(){
  const hash=window.location?.hash||"";
- if(hash==="#/student"){if(!studentMode)enterStudentView(false);state.page="student";return true;}
+ const studentRoute=hash.match(/^#\/student(?:\/(6|7|8|9|10|11|12))?$/);
+ if(studentRoute){
+  const grade=Number(studentRoute[1]||6);
+  if(!studentMode)enterStudentView(false,grade);
+  else if(state.grade!==grade){state.grade=grade;state.lessonId="";studentActiveLesson=false;if(studentPreview){state.records={};practice={};}}
+  state.page="student";return true;
+ }
  if(studentMode){studentActiveLesson=false;state.page="student";writeRoute(true);return true;}
  if(hash==="#/curriculum"){state.page="curriculum";return true;}if(hash==="#/educators"){state.page="educators";return true;}if(hash==="#/teacher-guides"){state.page="teacher-guides";return true;}if(hash==="#/about"){state.page="about";return true;}
  if(!state.gradeChosen||!hash.startsWith("#/"))return false;
@@ -646,7 +661,7 @@ function gradeTo(g){
  pendingSharedLesson="";persist();
  if(shared)openLesson(shared);else goto("courses",{replace:true});
 }
-function openLesson(id){if(studentMode){if(!LESSON_BY_ID[id]||LESSON_BY_ID[id].grade!==6)return;state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");return;}if(!state.gradeChosen||!LESSON_BY_ID[id]){showNotice("Choose a starting grade first.");return;}if(LESSON_BY_ID[id].grade!==state.grade){if(window.AUTH_CONFIG?.deployment==="sharepoint"&&LESSON_BY_ID[id].grade!==state.recommendedGrade){showNotice("Your school controls stage access.");return;}state.grade=LESSON_BY_ID[id].grade;state.track="all";persist();}if(state.page!=="courses")state.track="all";state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");}
+function openLesson(id){if(studentMode){if(!LESSON_BY_ID[id]||LESSON_BY_ID[id].grade!==state.grade)return;state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");return;}if(!state.gradeChosen||!LESSON_BY_ID[id]){showNotice("Choose a starting grade first.");return;}if(LESSON_BY_ID[id].grade!==state.grade){if(window.AUTH_CONFIG?.deployment==="sharepoint"&&LESSON_BY_ID[id].grade!==state.recommendedGrade){showNotice("Your school controls stage access.");return;}state.grade=LESSON_BY_ID[id].grade;state.track="all";persist();}if(state.page!=="courses")state.track="all";state.lessonId=id;getPractice(id);checkpoint(id,getPractice(id).stage||0);goto("lesson");}
 function checkActivity(){
  const l=currentLesson(),a=ACTIVITIES[l.id],w=getPractice(l.id),r=getRecord(l.id),guide=LEARNING_SCAFFOLDS[l.id];
  if(LEARNING_LABS[l.id]&&(w.labModesSeen||[]).length<2&&!r.practicePassed){showNotice("Explore two laboratory conditions and compare the evidence before checking the guided challenge.");return;}
@@ -680,11 +695,13 @@ function checkActivity(){
  const feedbackEl=$("#activity-feedback");if(feedbackEl)feedbackEl.focus({preventScroll:true});
 }
 document.addEventListener("click",async(e)=>{
+if(studentPickerOpen&&!e.target.closest(".student-preview-picker")){studentPickerOpen=false;if(!e.target.closest("[data-action],[data-grade],[data-lesson]")){render();return;}}
 const t=e.target.closest("[data-action],[data-grade],[data-lesson]");if(!t)return;if(t.tagName==="A"&&typeof e.preventDefault==="function")e.preventDefault();
 if(t.dataset.grade){gradeTo(t.dataset.grade);return;}
 if(t.dataset.lesson){openLesson(t.dataset.lesson);return;}
 const action=t.dataset.action;
-if(action==="student-preview"){enterStudentView(true);writeRoute(false);render(true);if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});return;}
+if(action==="student-preview-menu"){studentPickerOpen=!studentPickerOpen;render();$("#student-preview-trigger")?.focus?.({preventScroll:true});return;}
+if(action==="student-preview"){enterStudentView(true,Number(t.dataset.studentGrade||6));writeRoute(false);render(true);if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});return;}
 if(action==="student-exit"){exitStudentPreview();return;}
 if(studentMode&&["home","courses","about","curriculum","teacher-guides","educators","snapshot","profile","stages","enter","explore-stages","diagnostic","retake"].includes(action)){studentActiveLesson=false;state.page="student";render(true);if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});return;}
 if(action==="skip-main"){const main=$("#main-content");if(main?.focus)main.focus({preventScroll:true});return}
@@ -771,10 +788,13 @@ if(t.id==="import-progress"){const file=t.files?.[0];if(file)importProgress(file
 if(t.dataset?.sort!==undefined){const w=getPractice(state.lessonId),i=+t.dataset.sort;w.sort[i]=t.value===""?undefined:+t.value;w.checked=false;w.feedback=null;render();const choice=$("#sort-"+i);if(choice?.focus)choice.focus({preventScroll:true});return}
 if(t.dataset?.seniorMilestone!==undefined){const l=currentLesson(),w=getPractice(l.id),i=Number(t.dataset.seniorMilestone),guide=CAPSTONE_GUIDES[l.id];if(!guide||!Number.isInteger(i)||i<0||i>=guide.phases.length)return;w.seniorMilestones[i]=!!t.checked;render();const next=$('[data-senior-milestone="'+i+'"]');if(next?.focus)next.focus({preventScroll:true});return;}
 });
+document.addEventListener("keydown",(e)=>{
+ if(e.key==="Escape"&&studentPickerOpen){studentPickerOpen=false;render();$("#student-preview-trigger")?.focus?.({preventScroll:true});}
+});
 function syncHistory(){if(!state.gradeChosen){if(!readRoute())state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
 window.addEventListener("popstate",syncHistory);
 window.addEventListener("hashchange",syncHistory);
-if((window.location?.hash||"")==="#/student"){enterStudentView(false);}else if(state.gradeChosen){if(!readRoute()||state.page==="welcome")state.page="home";}else{const initialHash=window.location?.hash||"";
+if(/^#\/student(?:\/(6|7|8|9|10|11|12))?$/.test(window.location?.hash||"")){readRoute();}else if(state.gradeChosen){if(!readRoute()||state.page==="welcome")state.page="home";}else{const initialHash=window.location?.hash||"";
 const shared=initialHash.match(/^#\/lesson\/(\d+)-([A-Z]\d+)$/);
 if(shared&&LESSON_BY_ID[shared[1]+"-"+shared[2]]){pendingSharedLesson=shared[1]+"-"+shared[2];state.grade=+shared[1];}
 else{const requested=initialHash.match(/^#\/(?:grade\/|lesson\/)(\d+)/);if(requested&&GRADES[requested[1]])state.grade=+requested[1];}
