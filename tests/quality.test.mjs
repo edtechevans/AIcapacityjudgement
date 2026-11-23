@@ -210,3 +210,36 @@ test("five consistent primary navigation links appear on every teacher-facing pa
  assert.match(h.html,/data-action="snapshot">My learning progress/);
  assert.match(h.html,/data-action="explore-stages">Explore stages/);
 });
+
+test("floating Student View grade picker previews every grade and restores teacher state",async()=>{
+ for(const grade of [6,7,8,9,10,11,12]){
+  const h=app();
+  await h.click({action:"pick-grade",pick:"8"});
+  const before=h.storage["aicj-studio-v2"];
+  assert.ok(h.html.includes('data-action="student-preview-menu"'));
+  await h.click({action:"student-preview-menu"});
+  for(const option of [6,7,8,9,10,11,12])assert.ok(h.html.includes('data-student-grade="'+option+'"'));
+  await h.click({action:"student-preview",studentGrade:String(grade)});
+  assert.equal(h.hash,grade===6?"#/student":"#/student/"+grade);
+  assert.ok(h.html.includes("Grade "+grade+" · Preview"));
+  assert.ok(h.html.includes('data-lesson="'+grade+'-A1"'));
+  assert.equal((h.html.match(/class="student-work-card /g)||[]).length,6);
+  await h.click({lesson:grade+"-A1"});
+  assert.ok(h.html.includes("Grade "+grade+" · My Learning"));
+  await h.click({action:"courses"});
+  assert.ok(h.html.includes('id="main-title" tabindex="-1">My Learning</h1>'));
+  await h.click({action:"student-exit"});
+  assert.equal(h.hash,"#/grade/8");
+  assert.equal(h.storage["aicj-studio-v2"],before);
+ }
+});
+
+test("Grade 6 through 12 student direct routes show only the requested grade",()=>{
+ for(const grade of [6,7,8,9,10,11,12]){
+  const h=app({},"#/student/"+grade);
+  assert.ok(h.html.includes("Grade "+grade));
+  assert.ok(h.html.includes('data-lesson="'+grade+'-B3"'));
+  assert.equal((h.html.match(/class="student-work-card /g)||[]).length,6);
+  assert.ok(!h.html.includes('class="topbar"'));
+ }
+});
