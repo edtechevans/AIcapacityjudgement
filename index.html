@@ -33,11 +33,43 @@
   <link rel="stylesheet" href="./ui/educators.css?v=41-20261120">
   <link rel="stylesheet" href="./ui/teacher-guides.css?v=teacher-guides-compact-20261124">
   <link rel="stylesheet" href="./ui/student-view.css?v=split-capacity-judgement-20261124">
+  <style>
+    /* Keep the loading and startup-error logo aligned with its message. */
+    #app > .initial-loading {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 24px;
+      text-align: left;
+    }
+    #app > .initial-loading .brand-emblem {
+      display: block;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border-radius: 11px;
+    }
+    #app > .initial-loading p {
+      margin: 0;
+      max-width: 340px;
+      color: #172D4E;
+      font: 600 15px/1.5 system-ui, sans-serif;
+    }
+    @media (max-width: 420px) {
+      #app > .initial-loading { gap: 11px; padding: 18px; }
+      #app > .initial-loading .brand-emblem { width: 36px; height: 36px; flex-basis: 36px; }
+      #app > .initial-loading p { font-size: 14px; }
+    }
+  </style>
 </head>
 <body>
   <noscript><p style="padding:24px;font-family:system-ui,sans-serif">This learning experience needs JavaScript to run. Please enable JavaScript or ask your teacher for a printed learning resource.</p></noscript>
   <div id="app">
-    <div class="initial-loading">
+    <div class="initial-loading" role="status" aria-live="polite">
       <img src="./assets/brand/mark.svg?v=aisg-grey-20261116f" alt="" class="brand-emblem" width="64" height="64">
       <p>Opening AI Capacity × Judgement…</p>
     </div>
