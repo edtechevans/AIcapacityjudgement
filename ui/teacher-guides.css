@@ -64,3 +64,14 @@
 @media(max-width:650px){.tg-page{padding:25px 0 60px}.tg-shell{padding:0 17px}.tg-list{grid-template-columns:1fr}.tg-module{min-height:180px}.tg-detail-hero{padding:25px 23px}.tg-placement{padding:20px 23px;grid-template-columns:1fr}.tg-plan-body{padding:23px}.tg-duo{grid-template-columns:1fr}.tg-guide-end{flex-direction:column;align-items:stretch}.tg-student-link{width:100%}.tg-grade-nav button,.tg-strand-nav button{font-size:.79rem;padding:8px 11px}.tg-intro{padding:18px}}
 @media(prefers-reduced-motion:reduce){.tg-module{transition:none}.tg-module:hover{transform:none}}
 @media print{.tg-controls,.tg-list,.tg-back{display:none}.tg-page{background:#FFF;padding:0}.tg-detail-hero{print-color-adjust:exact}}
+
+
+/* Compact, task-first Teaching Guides directory. */
+.tg-page{padding-top:27px}
+.tg-heading{max-width:800px;margin-bottom:17px}
+.tg-heading h1{font-size:clamp(2.05rem,4vw,3.05rem);line-height:1.12;margin:0 0 8px}
+.tg-heading>p:last-child{font-size:.96rem;line-height:1.53;color:#50647A}
+.tg-controls{margin:18px 0 10px;gap:10px}
+.tg-count{margin-bottom:14px}
+.tg-detail-hero h1{font-family:inherit;color:#fff;font-weight:770;font-size:clamp(1.9rem,4vw,3.05rem);letter-spacing:-.045em;line-height:1.15;margin:12px 0}
+@media(max-width:650px){.tg-page{padding-top:21px}.tg-heading{margin-bottom:15px}.tg-heading h1{font-size:2.2rem}.tg-controls{margin-top:15px}}
