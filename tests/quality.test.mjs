@@ -193,12 +193,12 @@ test("five consistent primary navigation links appear on every teacher-facing pa
  await h.click({action:"pick-grade",pick:"6"});
  for(const page of ["home","courses","snapshot","stages","curriculum","teacher-guides","educators","about"]){
   await h.click({action:page});
-  const match=h.html.match(/<nav class="top-actions" aria-label="Primary navigation">([\\s\\S]*?)<\\/nav>/);
+  const match=h.html.match(/<nav class="top-actions" aria-label="Primary navigation">([\s\S]*?)<\/nav>/);
   assert.ok(match,"Missing desktop navigation on "+page);
   const actions=Array.from(match[1].matchAll(/class="navlink [^"]*" data-action="([^"]+)"/g),m=>m[1]);
   assert.deepEqual(actions,expected,"Inconsistent desktop navigation on "+page);
   assert.ok(!match[1].includes('class="avatar"'),"Profile avatar should not clutter navigation");
-  const mobile=h.html.match(/<nav class="mobile-menu-links" aria-label="Mobile navigation">([\\s\\S]*?)<\\/nav>/);
+  const mobile=h.html.match(/<nav class="mobile-menu-links" aria-label="Mobile navigation">([\s\S]*?)<\/nav>/);
   assert.ok(mobile,"Missing mobile navigation on "+page);
   const mobileActions=Array.from(mobile[1].matchAll(/data-action="([^"]+)"/g),m=>m[1]).filter(x=>x!=="reading");
   assert.deepEqual(mobileActions,expected,"Inconsistent mobile navigation on "+page);
