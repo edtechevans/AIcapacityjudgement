@@ -15,7 +15,7 @@ function app(seed={},hash=""){
  const window={location,history:{pushState(a,b,p){location.hash=p},replaceState(a,b,p){location.hash=p}},addEventListener(k,fn){listeners[k]=fn},scrollTo(){},renderEducators(){return '<main id="main-content"><h1 id="main-title">Educator learning</h1></main>'},educatorOpenOverview(){}};
  const localStorage={getItem:k=>store[k]??null,setItem(k,v){store[k]=v},removeItem:k=>delete store[k]};
  const navigator={clipboard:{writeText:async()=>{}}};const URL={createObjectURL(){return "blob:test"},revokeObjectURL(){}};
- const ctx=createContext({window,document,localStorage,Date,console,Blob,URL,navigator,setTimeout:(fn)=>fn()});content(ctx);runInContext(read("app.js"),ctx,{filename:"app.js"});
+ const ctx=createContext({window,document,localStorage,Date,console,Blob,URL,navigator,setTimeout:(fn)=>fn()});content(ctx);runInContext(read("content/student-mode.js"),ctx,{filename:"content/student-mode.js"});runInContext(read("app.js"),ctx,{filename:"app.js"});
  return {get html(){return el.innerHTML},get hash(){return location.hash},get storage(){return store},click:async ds=>hooks.click({target:{dataset:ds,tagName:"BUTTON",closest(){return this}}}),change:t=>hooks.change({target:t}),back:hash=>{location.hash=hash;listeners.popstate?.()}};
 }
 async function exploreLab(h,id){const lab=DATA.LEARNING_LABS[id];if(!lab)return;for(const [mode] of lab.modes.slice(0,2))await h.click({action:"lab-mode",mode});}
@@ -162,4 +162,27 @@ test("educator V4.1 has plain-language support and never asks for writing",()=>{
  }
  assert.ok(teaching.includes("Multi-Tiered System of Supports"));
  assert.ok(teaching.includes("Universal Design for Learning"));
+});
+
+test("Grade 6 student-only entry loads from a direct link and returns from a module",async()=>{
+ const h=app({},"#/student");
+ assert.match(h.html,/<h1 id="main-title" tabindex="-1">My Learning<\/h1>/);
+ assert.equal((h.html.match(/class="student-work-card /g)||[]).length,6);
+ assert.ok(!h.html.includes('class="topbar"'),"Student page must omit the general navigation");
+ await h.click({lesson:"6-A1"});
+ assert.match(h.html,/<article class="lesson-panel">/);
+ await h.click({action:"courses"});
+ assert.match(h.html,/<h1 id="main-title" tabindex="-1">My Learning<\/h1>/);
+ assert.equal(h.hash,"#/student");
+});
+test("teacher Student View preview returns without saving temporary progress",async()=>{
+ const h=app();
+ await h.click({action:"pick-grade",pick:"8"});
+ const before=h.storage["aicj-studio-v2"];
+ await h.click({action:"student-preview"});
+ assert.match(h.html,/Grade 6 · Preview/);
+ assert.match(h.html,/My Learning/);
+ await h.click({action:"student-exit"});
+ assert.equal(h.storage["aicj-studio-v2"],before);
+ assert.match(h.html,/Grade 8/);
 });
