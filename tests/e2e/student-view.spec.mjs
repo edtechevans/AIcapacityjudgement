@@ -63,6 +63,6 @@ test("when all Grade 6 modules are complete there is no repeated next lesson",as
  await page.goto("/#/student");
  await expect(page.locator(".student-view-count")).toContainText("6 / 6");
  await expect(page.locator(".student-next-button")).toHaveCount(0);
- await expect(page.locator(".student-finished")).toContainText("You've completed all six modules.");
+ await expect(page.locator(".student-finished")).toContainText("You have completed all six modules.");
  await expect(page.locator(".student-completed .student-work-card")).toHaveCount(6);
 });
