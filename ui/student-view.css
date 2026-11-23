@@ -1,0 +1,79 @@
+/* Student View: intentionally single-purpose, Grade 6 sample / learner landing. */
+.student-preview-fab{
+  position:fixed;right:max(22px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));
+  z-index:90;display:flex;align-items:center;gap:13px;padding:13px 18px;
+  border:1px solid #A41E2C;border-radius:100px;background:#B32635;color:#fff;
+  font:800 .88rem/1.3 inherit;letter-spacing:.005em;box-shadow:0 10px 28px rgba(44,19,31,.25);
+  cursor:pointer;transition:transform .16s ease,background .16s ease,box-shadow .16s ease;
+}
+.student-preview-fab:hover{background:#991E2B;transform:translateY(-2px);box-shadow:0 14px 32px rgba(44,19,31,.28)}
+.student-preview-fab:focus-visible,.student-simple button:focus-visible{outline:3px solid #E3A5AD;outline-offset:3px}
+.student-preview-fab svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+.student-simple{background:#F4F6F9;min-height:100vh;color:#172D4E}
+.student-simple .student-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px max(23px,calc((100vw - 1120px)/2));background:#fff;border-bottom:1px solid #DDE4EE}
+.student-header-brand{display:flex;align-items:center;gap:13px;color:#172D4E;font-weight:800;font-size:1rem}
+.student-header-brand .brand-emblem{width:36px;height:36px}
+.student-header-actions{display:flex;align-items:center;gap:12px}
+.student-grade-pill{font-weight:800;font-size:.77rem;background:#EDF1F7;color:#2C425E;padding:9px 12px;border-radius:30px}
+.student-preview-exit{font-size:.78rem;font-weight:800;border:1px solid #D7DFEA;background:#fff;border-radius:9px;padding:9px 12px;color:#172D4E;cursor:pointer}
+.student-preview-exit:hover{border-color:#B32635}
+.student-main{max-width:1120px;margin:0 auto;padding:42px 23px 70px}
+.student-view-head{display:flex;justify-content:space-between;align-items:flex-end;gap:25px;margin-bottom:26px}
+.student-kicker{font-size:.73rem;font-weight:850;letter-spacing:.11em;text-transform:uppercase;color:#B32635;margin:0 0 9px}
+.student-view-head h1{font-size:clamp(2.2rem,4.6vw,3.6rem);letter-spacing:-.055em;line-height:1.05;color:#172D4E;margin:0 0 13px;font-weight:810}
+.student-view-head p{color:#51657E;font-size:1.02rem;line-height:1.58;max-width:640px;margin:0}
+.student-view-count{padding:17px 20px;background:#fff;border:1px solid #DEE5EE;border-radius:14px;min-width:190px}
+.student-view-count strong{font-size:1.65rem;line-height:1;display:block;font-weight:850}
+.student-view-count span{display:block;color:#5C6E84;font-size:.76rem;font-weight:700;margin-top:7px}
+.student-view-count .progress-line{margin-top:10px}
+.student-next{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:26px 30px;border-radius:19px;background:#172D4E;color:#fff;box-shadow:0 12px 30px rgba(26,45,70,.12)}
+.student-next .student-kicker{color:#F0B9BF}
+.student-next h2{color:#fff;font-size:clamp(1.55rem,2.9vw,2.2rem);font-weight:800;letter-spacing:-.035em;margin:0 0 10px}
+.student-next p{color:#DCE5F0;font-size:.93rem;line-height:1.54;max-width:680px;margin:0}
+.student-next .student-next-status{display:inline-block;margin-top:12px;border-radius:5px;color:#fff;font-size:.76rem;font-weight:750}
+.student-next-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;padding:15px 20px;border:0;border-radius:10px;background:#fff;color:#172D4E;font-weight:850;font-size:.91rem;min-width:177px}
+.student-next-button:hover{background:#F7E7E9}
+.student-work-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin:34px 0 17px}
+.student-work-heading h2{margin:0;font-size:1.53rem;font-weight:800;letter-spacing:-.025em}
+.student-work-heading p{margin:6px 0 0;font-size:.88rem;color:#65758B}
+.student-work-heading .student-work-label{font-size:.73rem;font-weight:750;color:#7C8898;margin-top:7px}
+.student-work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.student-work-card{background:#fff;border:1px solid #DFE5EE;border-left:4px solid #27476C;display:flex;gap:15px;width:100%;min-height:137px;padding:20px 19px;text-align:left;border-radius:12px;cursor:pointer;color:#172D4E;transition:box-shadow .15s,border-color .15s}
+.student-work-card[data-pathway="judgement"]{border-left-color:#B32635}
+.student-work-card:hover{border-color:#9EAFC3;box-shadow:0 7px 19px rgba(22,45,75,.085)}
+.student-work-card[data-pathway="judgement"]:hover{border-left-color:#B32635}
+.student-work-code{flex:0 0 auto;align-self:flex-start;font-size:.72rem;letter-spacing:.02em;font-weight:900;padding:6px 9px;background:#E9EFF6;color:#244365;border-radius:7px}
+.student-work-card[data-pathway="judgement"] .student-work-code{background:#FAEBED;color:#A62031}
+.student-work-detail{display:flex;flex:1;flex-direction:column;min-width:0}
+.student-work-card .student-work-track{font-size:.69rem;font-weight:800;color:#6B7890;margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.student-work-card strong{font-size:1.06rem;font-weight:800;line-height:1.32;color:#172D4E}
+.student-work-card .student-work-objective{font-size:.79rem;line-height:1.42;color:#64748A;margin-top:7px}
+.student-work-end{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;padding-top:11px;font-weight:750;font-size:.73rem;color:#66768C}
+.student-work-end span:last-child{color:#B32635;font-weight:850}
+.student-view-note{font-size:.76rem;line-height:1.58;color:#6C7C8D;margin:24px 0 0}
+.student-simple .lesson-layout{padding-top:28px;padding-bottom:60px}
+.student-simple .lesson-panel{background:#fff}
+.student-simple .lesson-layout .back{font-weight:800}
+.student-simple .student-lesson-label{max-width:1110px;margin:0 auto;padding:23px 22px 0;color:#B32635;font-size:.75rem;font-weight:850;letter-spacing:.09em;text-transform:uppercase}
+.student-simple .site-toast{position:fixed;bottom:14px}
+@media(max-width:760px){
+.student-preview-fab{right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));padding:12px 15px}
+.student-simple .student-header{padding:10px 15px}
+.student-header-brand{font-size:.9rem}
+.student-header-brand .brand-emblem{width:30px;height:30px}
+.student-header-actions{gap:7px}
+.student-grade-pill{font-size:.69rem;padding:7px 9px}
+.student-preview-exit{font-size:.72rem;padding:8px 9px}
+.student-main{padding:26px 16px 60px}
+.student-view-head{flex-direction:column;align-items:stretch}
+.student-view-count{min-width:0;max-width:280px}
+.student-next{grid-template-columns:1fr;padding:23px 21px}
+.student-next-button{width:100%}
+.student-work-heading{margin-top:28px}
+.student-work-grid{grid-template-columns:1fr}
+.student-work-card{min-height:123px}
+}
+@media(prefers-reduced-motion:reduce){
+.student-preview-fab,.student-work-card{transition:none}
+.student-preview-fab:hover{transform:none}
+}
