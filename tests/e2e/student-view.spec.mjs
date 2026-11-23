@@ -99,7 +99,16 @@ test("all Grade 6–12 direct student URLs show only their own six modules",asyn
   await expect(page.locator("#main-title")).toHaveText("My Learning");
   await expect(page.locator(".student-grade-pill")).toContainText("Grade "+grade);
   await expect(page.locator(".student-work-card")).toHaveCount(6);
-  await expect(page.locator('.student-work-card[data-lesson="'+grade+'-A1"]')).toBeVisible();
+  const capacity=page.locator("#student-work-title ~ .student-pathway-columns .student-pathway-capacity");
+  const judgement=page.locator("#student-work-title ~ .student-pathway-columns .student-pathway-judgement");
+  await expect(page.locator(".student-pathway-capacity .student-pathway-heading h3")).toHaveText("AI Capacity");
+  await expect(page.locator(".student-pathway-judgement .student-pathway-heading h3")).toHaveText("AI Judgement");
+  await expect(page.locator(".student-pathway-capacity .student-work-card")).toHaveCount(3);
+  await expect(page.locator(".student-pathway-judgement .student-work-card")).toHaveCount(3);
+  for(const n of [1,2,3]){
+    await expect(page.locator('.student-pathway-capacity .student-work-card[data-lesson="'+grade+'-A'+n+'"]')).toBeVisible();
+    await expect(page.locator('.student-pathway-judgement .student-work-card[data-lesson="'+grade+'-B'+n+'"]')).toBeVisible();
+  }
   await expect(page.locator(".topbar")).toHaveCount(0);
  }
 });
