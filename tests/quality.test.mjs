@@ -12,7 +12,7 @@ function app(seed={},hash=""){
  const hooks={},el={innerHTML:""},store={...seed},location={hash},listeners={};
  const focusable={focus(){},tabIndex:0};
  const document={documentElement:{dataset:{}},title:"",querySelector(q){if(q==="#app")return el;if(q==="#guest-name"||q==="#profile-name")return {value:"Learner"};if(q==="#main-content"||q.includes("feedback")||q.endsWith(":checked")||q.startsWith("[data-"))return focusable;return null},addEventListener(k,fn){hooks[k]=fn},body:{appendChild(){}},createElement(){return {click(){},remove(){}}}};
- const window={location,history:{pushState(a,b,p){location.hash=p},replaceState(a,b,p){location.hash=p}},addEventListener(k,fn){listeners[k]=fn},scrollTo(){},renderEducators(){return '<main id="main-content"><h1 id="main-title">Educator learning</h1></main>'},educatorOpenOverview(){},renderTeacherGuides(){return '<main id="main-content"><h1 id="main-title">Teaching Guides</h1></main>'},teacherGuidesReset(){}};
+ const window={location,history:{pushState(a,b,p){location.hash=p},replaceState(a,b,p){location.hash=p}},addEventListener(k,fn){listeners[k]=fn},scrollTo(){},renderEducators(){return '<main id="main-content"><h1 id="main-title">My Learning</h1></main>'},educatorOpenOverview(){},renderTeacherGuides(){return '<main id="main-content"><h1 id="main-title">Teaching Guides</h1></main>'},teacherGuidesReset(){}};
  const localStorage={getItem:k=>store[k]??null,setItem(k,v){store[k]=v},removeItem:k=>delete store[k]};
  const navigator={clipboard:{writeText:async()=>{}}};const URL={createObjectURL(){return "blob:test"},revokeObjectURL(){}};
  const ctx=createContext({window,document,localStorage,Date,console,Blob,URL,navigator,setTimeout:(fn)=>fn()});content(ctx);runInContext(read("content/student-mode.js"),ctx,{filename:"content/student-mode.js"});runInContext(read("app.js"),ctx,{filename:"app.js"});
@@ -98,7 +98,7 @@ test("A3 and B3 cannot complete until cumulative synthesis is passed",async()=>{
  h.change({name:"transfer-choice",value:"0"});await h.click({action:"check-transfer"});assert.notEqual(JSON.parse(h.storage["aicj-studio-v2"]).records[l.id].completed,true);
  h.change({name:"synthesis-choice",value:"0"});await h.click({action:"check-synthesis"});assert.equal(JSON.parse(h.storage["aicj-studio-v2"]).records[l.id].completed,true);
 });
-test("public curriculum and educator learning remain available before grade selection",async()=>{const h=app();await h.click({action:"educators"});assert.equal(h.hash,"#/educators");assert.match(h.html,/Educator learning/);await h.click({action:"curriculum"});assert.equal(h.hash,"#/curriculum")});
+test("public curriculum and educator learning remain available before grade selection",async()=>{const h=app();await h.click({action:"educators"});assert.equal(h.hash,"#/educators");assert.match(h.html,/My Learning/);await h.click({action:"curriculum"});assert.equal(h.hash,"#/curriculum")});
 test("progress backup stores checkpoints rather than response content",()=>{const appJs=read("app.js");assert.ok(appJs.includes('format:"AI-CJ-local-progress"'));assert.ok(!appJs.includes("LEARNING NOTES"));assert.ok(!appJs.includes("downloadPlan"))});
 test("V2.1 assets load before the application",()=>{const html=read("index.html"),v=html.indexOf("content/v21-interactions.js"),edu=html.indexOf("content/educators.js"),appPos=html.indexOf('src="./app.js');assert.ok(v>=0&&edu>v&&appPos>edu);assert.match(html,/content\/v21-interactions\.js\?v=[\w-]+/)});
 
@@ -197,11 +197,13 @@ test("five consistent primary navigation links appear on every teacher-facing pa
   assert.ok(match,"Missing desktop navigation on "+page);
   const actions=Array.from(match[1].matchAll(/class="navlink [^"]*" data-action="([^"]+)"/g),m=>m[1]);
   assert.deepEqual(actions,expected,"Inconsistent desktop navigation on "+page);
+  assert.ok(match[1].includes('data-action="educators">My Learning</button>'),"Teacher learning label missing on "+page);
   assert.ok(!match[1].includes('class="avatar"'),"Profile avatar should not clutter navigation");
   const mobile=h.html.match(/<nav class="mobile-menu-links" aria-label="Mobile navigation">([\s\S]*?)<\/nav>/);
   assert.ok(mobile,"Missing mobile navigation on "+page);
   const mobileActions=Array.from(mobile[1].matchAll(/data-action="([^"]+)"/g),m=>m[1]).filter(x=>x!=="reading");
   assert.deepEqual(mobileActions,expected,"Inconsistent mobile navigation on "+page);
+  assert.ok(mobile[1].includes('data-action="educators">My Learning</button>'),"Mobile teacher learning label missing on "+page);
  }
  await h.click({action:"home"});
  assert.match(h.html,/data-action="courses">All modules in this stage/);
