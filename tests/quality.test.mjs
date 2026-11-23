@@ -281,3 +281,15 @@ test("completed student modules stay in their Capacity or Judgement column",()=>
  const b=done.indexOf('data-lesson="9-B2"',right);
  assert.ok(a>left&&a<right&&b>right,"Completed modules remain in their correct columns");
 });
+
+test("loading and recovery messages align logo and copy in a centred row",()=>{
+ const html=read("index.html");
+ const css=html.match(/<style>([\s\S]*?)<\/style>/)?.[1]||"";
+ const layout=css.match(/#app\s*>\s*\.initial-loading\s*\{([^}]*)\}/)?.[1]||"";
+ assert.match(layout,/display:\s*flex\s*;/);
+ assert.match(layout,/flex-direction:\s*row\s*;/);
+ assert.match(layout,/align-items:\s*center\s*;/);
+ assert.match(layout,/justify-content:\s*center\s*;/);
+ assert.match(html,/class="initial-loading" role="status" aria-live="polite"/);
+ assert.match(html,/This learning experience could not start\. Please reload the page\./);
+});
