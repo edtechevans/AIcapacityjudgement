@@ -87,7 +87,7 @@ const stageTitle=g=>GRADES[g]?.headline||"Learning stage";
 const stageLabel=g=>stageTitle(g)+" · Recommended Grade "+g;
 const BRAND_MARK='<img src="./assets/brand/mark.svg?v=aisg-grey-20261116f" alt="" class="brand-emblem" width="48" height="48" decoding="async">';
 // The same five primary links are used across every teacher-facing page.
-const PRIMARY_PAGES=[["home","Home"],["curriculum","Curriculum"],["teacher-guides","Teaching Guides"],["educators","Educators"],["about","About"]];
+const PRIMARY_PAGES=[["home","Home"],["curriculum","Curriculum"],["teacher-guides","Teaching Guides"],["educators","My Learning"],["about","About"]];
 function siteMenuItems(item){return PRIMARY_PAGES.map(([page,label])=>item(page,label)).join("");}
 function mobileMenu(){
  const item=(action,label)=>'<button type="button" data-action="'+action+'" '+(state.page===action?'aria-current="page"':'')+'>'+label+'</button>';
@@ -603,7 +603,7 @@ if(track?.querySelector){
     track.scrollLeft=Math.max(0,left);
   }
 }
-const mainElement=$("#main-content");if(mainElement)mainElement.tabIndex=-1;const pageTitle=studentMode?(studentActiveLesson?(currentLesson()?.title||"Lesson"):"My Learning"):state.page==="lesson"?(currentLesson()?.title||"Lesson"):state.page==="courses"?"Grade "+state.grade+" modules":state.page==="snapshot"?"My learning":state.page==="diagnostic"?"Starting snapshot":state.page==="profile"?"My profile":state.page==="about"?"About":state.page==="educators"?"Educator learning":state.page==="teacher-guides"?"Teaching Guides":state.page==="curriculum"?"Curriculum":state.page==="home"?"Home":state.page==="stages"?"Explore stages":"Welcome";document.title=state.page==="welcome"?"AI Capacity × Judgement":pageTitle+" · AI Capacity × Judgement";if(focus){const main=$("#"+targetId)||$("#main-title");if(main)main.focus({preventScroll:true})}}
+const mainElement=$("#main-content");if(mainElement)mainElement.tabIndex=-1;const pageTitle=studentMode?(studentActiveLesson?(currentLesson()?.title||"Lesson"):"My Learning"):state.page==="lesson"?(currentLesson()?.title||"Lesson"):state.page==="courses"?"Grade "+state.grade+" modules":state.page==="snapshot"?"My learning":state.page==="diagnostic"?"Starting snapshot":state.page==="profile"?"My profile":state.page==="about"?"About":state.page==="educators"?"My Learning · Educator pathway":state.page==="teacher-guides"?"Teaching Guides":state.page==="curriculum"?"Curriculum":state.page==="home"?"Home":state.page==="stages"?"Explore stages":"Welcome";document.title=state.page==="welcome"?"AI Capacity × Judgement":pageTitle+" · AI Capacity × Judgement";if(focus){const main=$("#"+targetId)||$("#main-title");if(main)main.focus({preventScroll:true})}}
 function routePath(page){if(studentMode)return "/student";if(page==="stages")return "/stages";if(page==="courses")return "/grade/"+state.grade+(state.track!=="all"?"/"+state.track:"");if(page==="snapshot")return "/grade/"+state.grade+"/snapshot";if(page==="diagnostic")return "/grade/"+state.grade+"/check-in";if(page==="lesson")return "/lesson/"+state.lessonId;return "/"+(page==="welcome"?"welcome":page);}
 function writeRoute(replace){const url="#"+routePath(state.page);if(!window.location||window.location.hash===url)return;if(window.history&&typeof window.history.pushState==="function"){window.history[replace?"replaceState":"pushState"]({},"",url);}else{window.location.hash=url;}}
 function readRoute(){
