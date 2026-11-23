@@ -1,0 +1,40 @@
+import {test,expect} from "@playwright/test";
+
+test("teacher can preview a Grade 6 student-only My Learning page without changing faculty progress",async({page})=>{
+  await page.goto("/#/welcome");
+  await page.locator('[data-action="pick-grade"][data-pick="9"]').click();
+  await expect(page.locator(".course-intro")).toBeVisible();
+  const before=await page.evaluate(()=>localStorage.getItem("aicj-studio-v2"));
+  await page.locator('[data-action="student-preview"]').click();
+  await expect(page).toHaveURL(/#\/student$/);
+  await expect(page.locator("#main-title")).toHaveText("My Learning");
+  await expect(page.locator(".student-work-card")).toHaveCount(6);
+  await expect(page.locator(".topbar")).toHaveCount(0);
+  await expect(page.locator(".mobile-menu")).toHaveCount(0);
+  await expect(page.locator(".student-grade-pill")).toContainText("Grade 6");
+
+  await page.locator(".student-next-button").click();
+  await expect(page.locator(".lesson-panel")).toContainText("What is AI, really?");
+  await expect(page).toHaveURL(/#\/student$/);
+  await page.locator('.lesson-layout [data-action="courses"]').first().click();
+  await expect(page.locator("#main-title")).toHaveText("My Learning");
+  await expect(page.locator(".student-work-card")).toHaveCount(6);
+  await page.locator('[data-action="student-exit"]').click();
+  await expect(page).toHaveURL(/#\/grade\/9$/);
+  await expect(page.locator(".course-intro")).toBeVisible();
+  const after=await page.evaluate(()=>localStorage.getItem("aicj-studio-v2"));
+  expect(after).toBe(before);
+});
+
+test("direct student link has a single learning destination without other site navigation",async({page})=>{
+  await page.goto("/#/student");
+  await expect(page.locator("#main-title")).toHaveText("My Learning");
+  await expect(page.locator(".student-work-card")).toHaveCount(6);
+  await expect(page.locator(".topbar")).toHaveCount(0);
+  await expect(page.locator('[data-action="student-exit"]')).toHaveCount(0);
+  await page.locator('.student-work-card[data-lesson="6-A1"]').click();
+  await expect(page.locator(".lesson-panel")).toBeVisible();
+  await expect(page).toHaveURL(/#\/student$/);
+  await page.locator('.lesson-layout [data-action="courses"]').first().click();
+  await expect(page.locator("#main-title")).toHaveText("My Learning");
+});
