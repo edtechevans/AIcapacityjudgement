@@ -100,7 +100,7 @@ test("A3 and B3 cannot complete until cumulative synthesis is passed",async()=>{
 });
 test("public curriculum and educator learning remain available before grade selection",async()=>{const h=app();await h.click({action:"educators"});assert.equal(h.hash,"#/educators");assert.match(h.html,/Educator learning/);await h.click({action:"curriculum"});assert.equal(h.hash,"#/curriculum")});
 test("progress backup stores checkpoints rather than response content",()=>{const appJs=read("app.js");assert.ok(appJs.includes('format:"AI-CJ-local-progress"'));assert.ok(!appJs.includes("LEARNING NOTES"));assert.ok(!appJs.includes("downloadPlan"))});
-test("V2.1 assets load before the application",()=>{const html=read("index.html"),v=html.indexOf("content/v21-interactions.js"),edu=html.indexOf("content/educators.js"),appPos=html.indexOf('src="./app.js');assert.ok(v>=0&&edu>v&&appPos>edu);assert.match(html,/v21-20261119/)});
+test("V2.1 assets load before the application",()=>{const html=read("index.html"),v=html.indexOf("content/v21-interactions.js"),edu=html.indexOf("content/educators.js"),appPos=html.indexOf('src="./app.js');assert.ok(v>=0&&edu>v&&appPos>edu);assert.match(html,/content\/v21-interactions\.js\?v=[\w-]+/)});
 
 
 test("educator V4.1 has eight accessible 30-minute modules and 56 distinct practice decisions",()=>{
