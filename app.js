@@ -86,13 +86,20 @@ function trackLabel(track){return track==="capacity"?"AI Capacity":"AI Judgement
 const stageTitle=g=>GRADES[g]?.headline||"Learning stage";
 const stageLabel=g=>stageTitle(g)+" · Recommended Grade "+g;
 const BRAND_MARK='<img src="./assets/brand/mark.svg?v=aisg-grey-20261116f" alt="" class="brand-emblem" width="48" height="48" decoding="async">';
+// The same five primary links are used across every teacher-facing page.
+const PRIMARY_PAGES=[["home","Home"],["curriculum","Curriculum"],["teacher-guides","Teaching Guides"],["educators","Educators"],["about","About"]];
+function siteMenuItems(item){return PRIMARY_PAGES.map(([page,label])=>item(page,label)).join("");}
 function mobileMenu(){
  const item=(action,label)=>'<button type="button" data-action="'+action+'" '+(state.page===action?'aria-current="page"':'')+'>'+label+'</button>';
  return '<details class="mobile-menu"><summary aria-label="Open navigation menu">☰</summary><nav class="mobile-menu-links" aria-label="Mobile navigation">'+
- (["curriculum","teacher-guides","educators"].includes(state.page)?item("home","Home")+item("curriculum","Curriculum")+item("teacher-guides","Teaching Guides")+item("educators","Educators")+item("about","About"):item("home","Home")+item("courses","Modules")+item("snapshot","My Learning")+item("stages","Explore Stages")+item("curriculum","Curriculum")+item("teacher-guides","Teaching Guides")+item("educators","Educators")+item("about","About")+item("profile","My profile"))+
+ siteMenuItems(item)+
  '<button type="button" data-action="reading" aria-pressed="'+(state.reading==="comfortable")+'">'+(state.reading==="comfortable"?"Standard reading size":"Larger reading size")+'</button></nav></details>';
 }
-function nav(){const comfort='<button class="comfort-toggle" data-action="reading" aria-pressed="'+(state.reading==="comfortable")+'" title="Toggle comfortable reading size" aria-label="'+(state.reading==="comfortable"?"Use standard text size":"Use larger text for reading")+'">Aa</button>';const item=(page,label)=>'<button class="navlink '+(state.page===page?"active":"")+'" data-action="'+page+'" '+(state.page===page?'aria-current="page"':'')+'>'+label+'</button>';return '<header class="topbar"><a href="'+(state.gradeChosen?"#/home":"#/welcome")+'" class="brand" data-action="'+(state.gradeChosen?"home":"enter")+'">'+BRAND_MARK+'<span class="brand-wordmark"><strong>AI Capacity <i>×</i> Judgement</strong></span><span class="brand-wordmark-short">AI C<span>×</span>J</span><span class="sr-only">Home</span></a><nav class="top-actions" aria-label="Primary navigation">'+(state.gradeChosen?(["curriculum","teacher-guides","educators"].includes(state.page)?item("home","Home")+item("curriculum","Curriculum")+item("teacher-guides","Teaching Guides")+item("educators","Educators")+item("about","About")+comfort:item("home","Home")+item("courses","Modules")+item("snapshot","My Learning")+item("stages","Explore Stages")+item("curriculum","Curriculum")+item("teacher-guides","Teaching Guides")+item("educators","Educators")+item("about","About")+comfort+'<button class="avatar" data-action="profile" aria-label="Open learner profile">'+esc(state.name[0]||"L").toUpperCase()+'</button>'):item("curriculum","Curriculum")+item("teacher-guides","Teaching Guides")+item("educators","Educators")+'<button class="btn btn-small" data-action="enter">Choose grade →</button>')+'</nav>'+(state.gradeChosen?mobileMenu():"")+'</header>';}
+function nav(){
+ const comfort='<button class="comfort-toggle" data-action="reading" aria-pressed="'+(state.reading==="comfortable")+'" title="Toggle comfortable reading size" aria-label="'+(state.reading==="comfortable"?"Use standard text size":"Use larger text for reading")+'">Aa</button>';
+ const item=(page,label)=>'<button class="navlink '+(state.page===page?"active":"")+'" data-action="'+page+'" '+(state.page===page?'aria-current="page"':'')+'>'+label+'</button>';
+ return '<header class="topbar"><a href="'+(state.gradeChosen?"#/home":"#/welcome")+'" class="brand" data-action="'+(state.gradeChosen?"home":"enter")+'">'+BRAND_MARK+'<span class="brand-wordmark"><strong>AI Capacity <i>×</i> Judgement</strong></span><span class="brand-wordmark-short">AI C<span>×</span>J</span><span class="sr-only">Home</span></a><nav class="top-actions" aria-label="Primary navigation">'+siteMenuItems(item)+comfort+'</nav>'+mobileMenu()+'</header>';
+}
 function foot(){return '<footer class="footer"><div class="row">'+BRAND_MARK+'<span class="footer-signature"><strong>AI Capacity × Judgement</strong><small>Growing capacity. Practising judgement.</small></span></div><span class="license">© 2026 Tim Evans · CC BY-NC-SA 4.0</span></footer>';}
 function linkLesson(l,why){const record=state.records[l.id]||{},started=hasLearningCheckpoint(record),previously=!!state.legacyDone[l.id]&&!record.completed&&!started,stage=previously?"Previously explored":stageName(record),st=STRANDS.find(s=>s.id===l.strand),action=record.completed?"Revisit":started?"Continue":"Explore";return '<button type="button" class="lesson-card track-'+l.track+'" data-lesson="'+l.id+'"><div class="lesson-tag"><span>'+esc(st.id)+' · '+esc(st.name)+'</span><span class="lesson-status '+(record.completed?"complete":previously?"legacy":started?"in-progress":"")+'">'+(record.completed?"✓ ":"")+stage+'</span></div><h3>'+esc(l.title)+'</h3><p>'+esc(l.objective)+'</p>'+(why?'<p class="recommend-reason">'+esc(why)+'</p>':"")+'<div class="end"><span>'+trackLabel(l.track)+'</span><span aria-hidden="true">'+action+' module ↗</span></div></button>';}
 
@@ -169,7 +176,7 @@ function home(){
  '<section class="dashboard-hero max"><div class="dashboard-copy"><div class="eyebrow">Your learning journey · '+esc(stageLabel(state.grade))+'</div>'+
  '<h1 id="main-title" tabindex="-1">Build your <em>capacity.</em><br>Sharpen your <em>judgement.</em></h1>'+
  '<p class="hero-lead">Learn what AI can do, when it helps, and how to use it thoughtfully in real situations.</p>'+
- '<div class="hero-buttons"><button class="btn" data-lesson="'+chosen.id+'">'+actionLabel+' →</button></div><div class="dashboard-secondary-links" aria-label="Other learning routes"><button class="btn btn-text" data-action="courses">All modules in this stage ↗</button><button class="btn btn-text" data-action="explore-stages">Explore stages →</button></div>'+
+ '<div class="hero-buttons"><button class="btn" data-lesson="'+chosen.id+'">'+actionLabel+' →</button></div><div class="dashboard-secondary-links" aria-label="Other learning routes"><button class="btn btn-text" data-action="courses">All modules in this stage ↗</button><button class="btn btn-text" data-action="explore-stages">Explore stages →</button><button class="btn btn-text" data-action="snapshot">My learning progress ↗</button></div>'+
  '</div><a class="dashboard-meter dashboard-meter--action" href="#/lesson/'+chosen.id+'" data-lesson="'+chosen.id+'"><span class="sr-only">'+esc(actionLabel+": "+chosen.title)+'. </span><div class="eyebrow">YOUR JOURNEY</div>'+
  progressDisplay+
  '<p>Progress is practice—not a grade.</p><span class="dashboard-meter-action">'+(resume?'Continue learning':review?'Review the module':'Open the lesson')+' <span aria-hidden="true">↗</span></span></a></section>'+
@@ -603,7 +610,7 @@ function readRoute(){
  const hash=window.location?.hash||"";
  if(hash==="#/student"){if(!studentMode)enterStudentView(false);state.page="student";return true;}
  if(studentMode){studentActiveLesson=false;state.page="student";writeRoute(true);return true;}
- if(hash==="#/curriculum"){state.page="curriculum";return true;}if(hash==="#/educators"){state.page="educators";return true;}if(hash==="#/teacher-guides"){state.page="teacher-guides";return true;}
+ if(hash==="#/curriculum"){state.page="curriculum";return true;}if(hash==="#/educators"){state.page="educators";return true;}if(hash==="#/teacher-guides"){state.page="teacher-guides";return true;}if(hash==="#/about"){state.page="about";return true;}
  if(!state.gradeChosen||!hash.startsWith("#/"))return false;
  const path=hash.slice(1);
  const allowed=v=>Object.prototype.hasOwnProperty.call(GRADES,String(v));
@@ -630,7 +637,7 @@ function readRoute(){
  if(["/home","/about","/profile","/stages","/educators","/teacher-guides"].includes(path)){state.page=path.slice(1);return true;}
  return false;
 }
-function goto(page,opts={}){if(studentMode){studentActiveLesson=page==="lesson";state.page="student";notice="";render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});return;}if(!state.gradeChosen&&!["welcome","curriculum","educators","teacher-guides"].includes(page))page="welcome";if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();if(page==="educators"&&typeof window.educatorOpenOverview==="function")window.educatorOpenOverview();if(page==="teacher-guides"&&typeof window.teacherGuidesReset==="function")window.teacherGuidesReset();if(page!=="profile")confirmClear=false;state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});}
+function goto(page,opts={}){if(studentMode){studentActiveLesson=page==="lesson";state.page="student";notice="";render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});return;}if(!state.gradeChosen&&!["welcome","curriculum","educators","teacher-guides","about"].includes(page))page="welcome";if(window.speechSynthesis?.speaking)window.speechSynthesis.cancel();if(page==="educators"&&typeof window.educatorOpenOverview==="function")window.educatorOpenOverview();if(page==="teacher-guides"&&typeof window.teacherGuidesReset==="function")window.teacherGuidesReset();if(page!=="profile")confirmClear=false;state.page=page;notice="";if(!opts.fromHistory)writeRoute(!!opts.replace);render(true,opts.focusStage?"stage-title":"main-title");if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});}
 function gradeTo(g){
  if(!Object.prototype.hasOwnProperty.call(GRADES,String(g)))return;
  if(state.gradeChosen&&window.AUTH_CONFIG?.deployment==="sharepoint"&&state.recommendedGrade!==+g){showNotice("Your school controls stage access.");return;}
@@ -771,7 +778,7 @@ if((window.location?.hash||"")==="#/student"){enterStudentView(false);}else if(s
 const shared=initialHash.match(/^#\/lesson\/(\d+)-([A-Z]\d+)$/);
 if(shared&&LESSON_BY_ID[shared[1]+"-"+shared[2]]){pendingSharedLesson=shared[1]+"-"+shared[2];state.grade=+shared[1];}
 else{const requested=initialHash.match(/^#\/(?:grade\/|lesson\/)(\d+)/);if(requested&&GRADES[requested[1]])state.grade=+requested[1];}
-state.page=initialHash==="#/curriculum"?"curriculum":initialHash==="#/educators"?"educators":initialHash==="#/teacher-guides"?"teacher-guides":"welcome";}
+state.page=initialHash==="#/curriculum"?"curriculum":initialHash==="#/educators"?"educators":initialHash==="#/teacher-guides"?"teacher-guides":initialHash==="#/about"?"about":"welcome";}
 if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};
 render();
 })();
