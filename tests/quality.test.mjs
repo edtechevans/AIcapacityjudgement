@@ -266,7 +266,7 @@ test("student My Learning groups A1–A3 in Capacity and B1–B3 in Judgement fo
 });
 test("completed student modules stay in their Capacity or Judgement column",()=>{
  const key="aicj-studio-v2";
- const records={"9-A1":{completed:true,lastStage:4},"9-B2":{completed:true,lastStage:4}};
+ const records={"9-A1":{knowledgePassed:true,completed:true,lastStage:4},"9-B2":{knowledgePassed:true,completed:true,lastStage:4}};
  const h=app({[key]:JSON.stringify({grade:9,recommendedGrade:9,gradeChosen:true,name:"Learner",records})},"#/student/9");
  const todo=h.html.slice(h.html.indexOf('id="student-work-title"'),h.html.indexOf('<details class="student-completed">'));
  assert.ok(!todo.includes('data-lesson="9-A1"'));
