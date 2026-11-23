@@ -77,3 +77,23 @@
 .student-preview-fab,.student-work-card{transition:none}
 .student-preview-fab:hover{transform:none}
 }
+
+
+/* Keep completed work visible but out of the student's to-do list. */
+.student-work-complete{border-left-color:#6C9A81!important;background:#FAFCFB}
+.student-work-complete .student-work-code{background:#E9F3ED!important;color:#236243!important}
+.student-work-complete .student-work-end span:first-child{color:#247147}
+.student-completed{margin-top:20px;border:1px solid #DDE5EA;border-radius:13px;background:#fff;padding:0}
+.student-completed>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:18px;cursor:pointer;padding:17px 21px;color:#1D4058;font-weight:800}
+.student-completed>summary::-webkit-details-marker{display:none}
+.student-completed>summary span:first-child{color:#26664B}
+.student-completed>summary strong{font-size:.83rem;margin-left:7px;font-weight:750}
+.student-completed-toggle{color:#60748A;font-size:.78rem;font-weight:700}
+.student-completed[open]>summary{border-bottom:1px solid #E0E6ED}
+.student-completed>.student-work-grid{padding:15px}
+.student-review-note{padding:0 20px 16px;font-size:.77rem;color:#63758A;line-height:1.5}
+.student-all-done{background:#EDF6F0;color:#246248;font-weight:750;border-radius:12px;padding:19px 22px}
+.student-finished{background:#1D4937}
+.student-finished .student-kicker{color:#BCE2CB}
+.student-finished-check{border:2px solid #A7DDC1;border-radius:50%;color:#fff;font-size:2.2rem;width:68px;height:68px;display:flex;align-items:center;justify-content:center}
+@media(max-width:540px){.student-completed>summary{padding:15px}.student-completed-toggle{font-size:.72rem}.student-finished-check{display:none}}
