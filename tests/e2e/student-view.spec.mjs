@@ -38,3 +38,31 @@ test("direct student link has a single learning destination without other site n
   await page.locator('.lesson-layout [data-action="courses"]').first().click();
   await expect(page.locator("#main-title")).toHaveText("My Learning");
 });
+
+
+test("completed Grade 6 modules remain marked complete and are not suggested again",async({page})=>{
+ const finished=id=>({attempts:1,knowledgePassed:true,modelSeen:true,practicePassed:true,applied:true,completed:true,lastStage:4});
+ await page.addInitScript(({key})=>{
+   localStorage.setItem(key,JSON.stringify({grade:6,recommendedGrade:6,gradeChosen:true,name:"Learner",records:{"6-A1":{attempts:1,knowledgePassed:true,modelSeen:true,practicePassed:true,applied:true,completed:true,lastStage:4},"6-B1":{attempts:1,knowledgePassed:true,modelSeen:true,practicePassed:true,applied:true,completed:true,lastStage:4}}}));
+ },{key:"aicj-studio-v2"});
+ await page.goto("/#/student");
+ await expect(page.locator(".student-view-count")).toContainText("2 / 6");
+ await expect(page.locator(".student-work-grid").first().locator(".student-work-card")).toHaveCount(4);
+ await expect(page.locator(".student-completed")).toContainText("Completed");
+ await expect(page.locator(".student-completed .student-work-card")).toHaveCount(2);
+ await expect(page.locator(".student-next-button")).toHaveAttribute("data-lesson","6-A2");
+ await page.locator(".student-completed summary").click();
+ await expect(page.locator('.student-work-complete[data-lesson="6-A1"]')).toContainText("Review only");
+});
+
+test("when all Grade 6 modules are complete there is no repeated next lesson",async({page})=>{
+ await page.addInitScript(()=>{
+  const records={};for(const strand of ["A1","A2","A3","B1","B2","B3"])records["6-"+strand]={knowledgePassed:true,practicePassed:true,modelSeen:true,applied:true,completed:true,lastStage:4};
+  localStorage.setItem("aicj-studio-v2",JSON.stringify({grade:6,recommendedGrade:6,gradeChosen:true,name:"Learner",records}));
+ });
+ await page.goto("/#/student");
+ await expect(page.locator(".student-view-count")).toContainText("6 / 6");
+ await expect(page.locator(".student-next-button")).toHaveCount(0);
+ await expect(page.locator(".student-finished")).toContainText("You've completed all six modules.");
+ await expect(page.locator(".student-completed .student-work-card")).toHaveCount(6);
+});
