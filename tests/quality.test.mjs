@@ -5,7 +5,7 @@ import {join} from "node:path";
 import {runInContext,createContext} from "node:vm";
 const root=join(import.meta.dirname,"..");
 const read=p=>readFileSync(join(root,p),"utf8");
-const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js","content/v21-interactions.js","content/public-curriculum.js"];
+const contentFiles=["curriculum.js","learning-data.js",...[6,7,8,9,10].map(x=>"content/grade"+x+".js"),"content/learning-scaffolds.js","content/investigations.js","content/labs.js","content/performance.js","content/senior-curriculum.js","content/senior-projects.js","content/senior-labs.js","content/representation-lab.js","content/progression.js","content/v21-interactions.js","content/elementary-data.js","content/public-curriculum.js"];
 function content(context){for(const f of contentFiles)runInContext(read(f),context,{filename:f});return runInContext("({LESSONS,GRADES,STRANDS,TRACKS,LESSON_BY_ID,ACTIVITIES,DIAGNOSTICS,KNOWLEDGE,LEARNING_SCAFFOLDS,LEARNING_LABS,V21_APPLY,V21_TRANSFER,V21_SYNTHESIS,V21_GRADE_DEMAND})",context)}
 const DATA=content(createContext({}));
 function app(seed={},hash=""){
@@ -292,4 +292,11 @@ test("loading and recovery messages align logo and copy in a centred row",()=>{
  assert.match(layout,/justify-content:\s*center\s*;/);
  assert.match(html,/class="initial-loading" role="status" aria-live="polite"/);
  assert.match(html,/This learning experience could not start\. Please reload the page\./);
+});
+
+test("public curriculum includes nine grade levels, 50 modules and embedded elementary strands without changing learner state",async()=>{
+ const h=app({}, "#/curriculum");assert.equal((h.html.match(/class="curriculum-year-tab /g)||[]).length,9);assert.match(h.html,/50<\/strong>/);assert.match(h.html,/AI or not AI\?/);assert.equal((h.html.match(/class="catalogue-module catalogue-module--/g)||[]).length,4);
+ await h.click({action:"curriculum-grade",curGrade:"5"});assert.match(h.html,/How does AI learn\?/);assert.equal((h.html.match(/class="catalogue-module catalogue-module--/g)||[]).length,4);
+ await h.click({action:"curriculum-strand",curStrand:"A3"});assert.match(h.html,/Embedded in A2/);assert.equal((h.html.match(/class="curriculum-progression-step /g)||[]).length,9);
+ await h.click({action:"curriculum-grade",curGrade:"6"});assert.equal((h.html.match(/class="catalogue-module catalogue-module--/g)||[]).length,6);assert.match(h.html,/trustworthy garden/);assert.equal(Object.keys(h.storage).length,0);
 });

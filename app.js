@@ -34,7 +34,7 @@ let diagnosticRun=null;
 let notice="";
 let confirmClear=false;
 let pendingSharedLesson="";
-let curriculumView={grade:8,strand:"A1"};
+let curriculumView={grade:Number((window.location?.search||"").match(/[?&]curriculumGrade=(4|5|6|7|8|9|10|11|12)(?:&|$)/)?.[1]||4),strand:"A1"};
 // The student view is a single-purpose UI; real account entitlements require school SSO.
 let studentMode=false,studentPreview=false,studentActiveLesson=false,studentViewBackup=null,studentPickerOpen=false;
 function enterStudentView(fromTeacherButton=false,grade=6){
@@ -614,7 +614,7 @@ if(track?.querySelector){
     track.scrollLeft=Math.max(0,left);
   }
 }
-const mainElement=$("#main-content");if(mainElement)mainElement.tabIndex=-1;const pageTitle=studentMode?(studentActiveLesson?(currentLesson()?.title||"Lesson"):"My Learning"):state.page==="lesson"?(currentLesson()?.title||"Lesson"):state.page==="courses"?"Grade "+state.grade+" modules":state.page==="snapshot"?"My learning":state.page==="diagnostic"?"Starting snapshot":state.page==="profile"?"My profile":state.page==="about"?"About":state.page==="educators"?"My Learning · Educator pathway":state.page==="teacher-guides"?"Teaching Guides":state.page==="curriculum"?"Curriculum":state.page==="home"?"Home":state.page==="stages"?"Explore stages":"Welcome";document.title=state.page==="welcome"?"AI Capacity × Judgement":pageTitle+" · AI Capacity × Judgement";if(focus){const main=$("#"+targetId)||$("#main-title");if(main)main.focus({preventScroll:true})}}
+const mainElement=$("#main-content");if(mainElement)mainElement.tabIndex=-1;const pageTitle=studentMode?(studentActiveLesson?(currentLesson()?.title||"Lesson"):"My Learning"):state.page==="lesson"?(currentLesson()?.title||"Lesson"):state.page==="courses"?"Grade "+state.grade+" modules":state.page==="snapshot"?"My learning":state.page==="diagnostic"?"Starting snapshot":state.page==="profile"?"My profile":state.page==="about"?"About":state.page==="educators"?"My Learning · Educator pathway":state.page==="teacher-guides"?"Teaching Guides":state.page==="curriculum"?"Curriculum and progression":state.page==="home"?"Home":state.page==="stages"?"Explore stages":"Welcome";document.title=state.page==="welcome"?"AI Capacity × Judgement":pageTitle+" · AI Capacity × Judgement";if(focus){const main=$("#"+targetId)||$("#main-title");if(main)main.focus({preventScroll:true})}}
 function routePath(page){if(studentMode)return "/student"+(state.grade===6?"":"/"+state.grade);if(page==="stages")return "/stages";if(page==="courses")return "/grade/"+state.grade+(state.track!=="all"?"/"+state.track:"");if(page==="snapshot")return "/grade/"+state.grade+"/snapshot";if(page==="diagnostic")return "/grade/"+state.grade+"/check-in";if(page==="lesson")return "/lesson/"+state.lessonId;return "/"+(page==="welcome"?"welcome":page);}
 function writeRoute(replace){const url="#"+routePath(state.page);if(!window.location||window.location.hash===url)return;if(window.history&&typeof window.history.pushState==="function"){window.history[replace?"replaceState":"pushState"]({},"",url);}else{window.location.hash=url;}}
 function readRoute(){
@@ -709,7 +709,7 @@ if(studentMode&&["home","courses","about","curriculum","teacher-guides","educato
 if(action==="skip-main"){const main=$("#main-content");if(main?.focus)main.focus({preventScroll:true});return}
 if(["home","courses","about","curriculum","teacher-guides","educators","snapshot","profile","stages"].includes(action)){goto(action);return}
 if(action.startsWith("teacher-")&&typeof window.teacherGuidesAction==="function"){if(window.teacherGuidesAction(action,t)){render();const main=$("#main-title");if(main)main.focus({preventScroll:true});if(window.scrollTo)window.scrollTo(0,0);}return}
-if(action==="curriculum-grade"){const g=Number(t.dataset.curGrade);if(GRADES[g]){curriculumView.grade=g;render();const tab=$("#curriculum-grade-"+g);if(tab?.focus)tab.focus({preventScroll:true});}return}
+if(action==="curriculum-grade"){const g=Number(t.dataset.curGrade);if(publicCurriculumGrades().includes(g)){curriculumView.grade=g;render();const tab=$("#curriculum-grade-"+g);if(tab?.focus)tab.focus({preventScroll:true});}return}
 if(action==="curriculum-strand"){const id=t.dataset.curStrand;if(STRANDS.some(st=>st.id===id)){curriculumView.strand=id;render();const tab=$("#curriculum-strand-"+id);if(tab?.focus)tab.focus({preventScroll:true});}return}
 if(action==="curriculum-open-grade"){const g=Number(t.dataset.curGrade);if(GRADES[g])gradeTo(g);return}
 if(action==="curriculum-jump"){const heading=$("#curriculum-explorer-heading");if(heading?.focus){heading.tabIndex=-1;heading.focus({preventScroll:true});}const target=$("#curriculum-explorer");if(target?.scrollIntoView)target.scrollIntoView({behavior:"smooth",block:"start"});return}
