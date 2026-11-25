@@ -18,8 +18,8 @@ function publicCurriculum({grade=8,strand="A1",escape,gradeChosen=false,assigned
  const progression=grades.map(g=>'<li class="curriculum-progression-step '+(g===grade?'is-current':'')+'"><div class="curriculum-progression-marker">G'+g+'</div><div><strong>'+esc(GRADES[g].headline)+'</strong><p>'+esc(SCOPE_SEQUENCE[g].strands[selectedStrand.id][0])+'</p>'+
  (g===grade?'<span class="curriculum-progression-current">Selected stage</span>':'')+'</div></li>').join("");
  return '<main id="main-content" class="curriculum-page page">'+
- '<section class="curriculum-hero max"><div class="curriculum-hero-copy"><div class="eyebrow">AI Learning Progression · Recommended Grades 6–12</div>'+
- '<h1 id="main-title" tabindex="-1">Seven stages.<br><em>Two pathways.</em><br>Your learning journey.</h1>'+
+ '<section class="curriculum-hero max"><div class="curriculum-hero-copy"><div class="eyebrow">AI Learning Progression · Grades 4–12</div>'+
+ '<h1 id="main-title" tabindex="-1">Nine stages.<br><em>Two pathways.</em><br>Your learning journey.</h1>'+
  '<p>Explore how students move from understanding what AI can and cannot do to investigating systems, defending decisions and creating with responsibility. Discover the modules, the progression and the evidence of meaningful learning.</p>'+
  '<div class="curriculum-hero-actions"><button class="btn" type="button" data-action="curriculum-jump">Explore the curriculum ↓</button>'+
  '<button class="btn btn-outline" type="button" data-action="copy-curriculum">Copy page link</button></div>'+
@@ -29,11 +29,11 @@ function publicCurriculum({grade=8,strand="A1",escape,gradeChosen=false,assigned
  '<div class="curriculum-pathway curriculum-pathway--judgement"><span>02 · AI JUDGEMENT</span><strong>When, why and whether should I use it?</strong><p>Purpose and agency · Truth and trust · Ethics and consequences</p></div>'+
  '<p class="curriculum-pathway-note"><strong>Both matter.</strong> Capacity enables possibility; judgement makes the choices purposeful, informed and accountable.</p></div></section>'+
  '<section class="curriculum-counts max" aria-label="Curriculum at a glance">'+
- '<div><strong>'+grades.length+'</strong><span>Stages · recommended G6–12</span></div><div><strong>'+LESSONS.length+'</strong><span>Learning modules</span></div>'+
+ '<div><strong>'+(grades.length+2)+'</strong><span>Stages · Grades 4–12</span></div><div><strong>'+(LESSONS.length+8)+'</strong><span>Learning modules · 42 secondary + 8 elementary</span></div>'+
  '<div><strong>'+STRANDS.length+'</strong><span>Connected strands</span></div><div><strong>'+Object.keys(LEARNING_LABS).length+'</strong><span>Offline investigations</span></div></section>'+
  '<section id="curriculum-explorer" class="curriculum-atlas max" aria-labelledby="curriculum-explorer-heading"><div class="curriculum-section-intro">'+
  '<div class="eyebrow">01 / Explore the stages</div><h2 id="curriculum-explorer-heading">Explore a stage. Follow your curiosity.</h2>'+
- '<p>Each stage develops the same six strands with greater depth. Grade recommendations guide starting points, rather than restricting learning.</p></div>'+
+ '<p>The seven secondary stages below develop all six strands with greater depth. Grade recommendations guide starting points, rather than restricting learning.</p></div>'+
  '<div class="curriculum-year-nav" role="group" aria-label="Choose a learning stage">'+yearCards+'</div>'+
  '<div class="curriculum-selected-year" id="curriculum-selected-year"><div class="curriculum-year-heading"><div><div class="curriculum-year-kicker">'+(grade>=11?'DIPLOMA-AGE LEARNING · DP'+(grade-10):'MIDDLE YEARS LEARNING · GRADE '+grade)+'</div>'+
  '<h3>'+esc(info.headline)+' <span>· Recommended Grade '+grade+'</span></h3><p>'+esc(info.focus)+'</p></div><div class="curriculum-year-big" aria-hidden="true">'+grade+'</div></div>'+
@@ -49,7 +49,7 @@ function publicCurriculum({grade=8,strand="A1",escape,gradeChosen=false,assigned
  '<div class="curriculum-year-cta"><p>Browsing the progression does not change your current stage. You can choose to explore any stage.</p>'+
  '<button type="button" class="btn btn-outline" data-action="curriculum-open-grade" data-cur-grade="'+grade+'">'+('Explore '+info.headline+' modules →')+'</button></div></div></section>'+
  '<section class="curriculum-spiral" aria-labelledby="curriculum-spiral-heading"><div class="max"><div class="curriculum-section-intro"><div class="eyebrow">02 / Learning progression</div>'+
- '<h2 id="curriculum-spiral-heading">How does learning grow across seven stages?</h2><p>Follow a strand from Grade 6 to Grade 12. The focus shifts from noticing and explaining to investigating, creating, defending and stewarding responsible systems.</p></div>'+
+ '<h2 id="curriculum-spiral-heading">How does secondary learning grow across seven stages?</h2><p>Follow a strand from Grade 6 to Grade 12. The focus shifts from noticing and explaining to investigating, creating, defending and stewarding responsible systems.</p></div>'+
  '<div class="curriculum-strand-choices" role="group" aria-label="Choose a progression strand">'+strandCards+'</div>'+
  '<section class="curriculum-spiral-detail" aria-labelledby="curriculum-selected-strand"><div class="curriculum-spiral-heading"><div><span>'+ (selectedStrand.track==="capacity"?"CAPACITY":"JUDGEMENT")+' · '+selectedStrand.id+'</span>'+
  '<h3 id="curriculum-selected-strand">'+esc(selectedStrand.name)+'</h3><p>'+esc(selectedStrand.description)+'</p></div><div class="curriculum-spiral-count">7 stages</div></div>'+
