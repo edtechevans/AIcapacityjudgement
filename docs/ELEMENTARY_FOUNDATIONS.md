@@ -1,0 +1,3 @@
+# Elementary foundations
+
+Eight 15–20 minute modules, two Capacity and two Judgement per grade, with explicit Grade 6 bridges. All examples are fictional or teacher-provided; no student AI accounts, uploads or free text. Three selected-response checks per module. Completion is practice, not verified mastery. Progress is browser-local and grade-specific; teacher preview is temporary. Shared iPads require browser/user separation. School SSO and central reporting are not connected. Physical iPad/Safari and student review are still needed. Student URLs: #/student/4 and #/student/5. Teaching guide: elementary.html?guide=1.

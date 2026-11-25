@@ -7,7 +7,7 @@ test("teacher can preview a Grade 6 student-only My Learning page without changi
   const before=await page.evaluate(()=>localStorage.getItem("aicj-studio-v2"));
   await page.locator("#student-preview-trigger").hover();
   await expect(page.locator("#student-preview-options")).toBeVisible();
-  await expect(page.locator(".student-preview-option")).toHaveCount(7);
+  await expect(page.locator(".student-preview-option")).toHaveCount(9);
   await page.locator('[data-action="student-preview"][data-student-grade="6"]').click();
   await expect(page).toHaveURL(/#\/student$/);
   await expect(page.locator("#main-title")).toHaveText("My Learning");

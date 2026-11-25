@@ -4,6 +4,8 @@
  */
 (function(){
 "use strict";
+function elementaryRoute(){const m=(window.location?.hash||"").match(/^#\/(?:student|grade)\/(4|5)$/);if(!m)return false;window.location.replace("./elementary.html?grade="+m[1]);return true;}
+if(elementaryRoute())return;
 const KEY="aicj-studio-v2";
 const OLD_KEY="aicj-studio-v1";
 const $=(selector)=>document.querySelector(selector);
@@ -50,7 +52,7 @@ function studentPreviewPicker(){
  '<button type="button" id="student-preview-trigger" class="student-preview-fab" data-action="student-preview-menu" aria-haspopup="true" aria-controls="student-preview-options" aria-expanded="'+studentPickerOpen+'" aria-label="Choose the grade for Student View">Student View <span aria-hidden="true">⌃</span></button>'+
  '<div class="student-preview-options" id="student-preview-options" role="group" aria-label="Select grade to preview">'+
  '<div class="student-preview-caption">Preview student learning</div>'+
- [6,7,8,9,10,11,12].map(g=>'<button type="button" class="student-preview-option" data-action="student-preview" data-student-grade="'+g+'">Grade '+g+' <span aria-hidden="true">↗</span></button>').join('')+
+ [4,5,6,7,8,9,10,11,12].map(g=>'<button type="button" class="student-preview-option" data-action="student-preview" data-student-grade="'+g+'">Grade '+g+' <span aria-hidden="true">↗</span></button>').join('')+
  '</div></div>';
 }
 function exitStudentPreview(){
@@ -185,7 +187,7 @@ function home(){
  '<section class="dashboard-hero max"><div class="dashboard-copy"><div class="eyebrow">Your learning journey · '+esc(stageLabel(state.grade))+'</div>'+
  '<h1 id="main-title" tabindex="-1">Build your <em>capacity.</em><br>Sharpen your <em>judgement.</em></h1>'+
  '<p class="hero-lead">Learn what AI can do, when it helps, and how to use it thoughtfully in real situations.</p>'+
- '<div class="hero-buttons"><button class="btn" data-lesson="'+chosen.id+'">'+actionLabel+' →</button></div><div class="dashboard-secondary-links" aria-label="Other learning routes"><button class="btn btn-text" data-action="courses">All modules in this stage ↗</button><button class="btn btn-text" data-action="explore-stages">Explore stages →</button><button class="btn btn-text" data-action="snapshot">My learning progress ↗</button></div>'+
+ '<div class="hero-buttons"><button class="btn" data-lesson="'+chosen.id+'">'+actionLabel+' →</button></div><div class="dashboard-secondary-links" aria-label="Other learning routes"><button class="btn btn-text" data-action="courses">All modules in this stage ↗</button><button class="btn btn-text" data-action="explore-stages">Explore stages →</button><button class="btn btn-text" data-action="snapshot">My learning progress ↗</button><a class="btn btn-text" href="./elementary.html?guide=1">Grades 4–5 foundations ↗</a></div>'+
  '</div><a class="dashboard-meter dashboard-meter--action" href="#/lesson/'+chosen.id+'" data-lesson="'+chosen.id+'"><span class="sr-only">'+esc(actionLabel+": "+chosen.title)+'. </span><div class="eyebrow">YOUR JOURNEY</div>'+
  progressDisplay+
  '<p>Progress is practice—not a grade.</p><span class="dashboard-meter-action">'+(resume?'Continue learning':review?'Review the module':'Open the lesson')+' <span aria-hidden="true">↗</span></span></a></section>'+
@@ -590,7 +592,7 @@ function welcome(){
  '<div class="eyebrow">Your learning journey starts here</div>'+
  '<h1 id="main-title" tabindex="-1">Find your starting stage.</h1>'+
  '<p class="grade-entry-intro">Choose your school grade for a recommended starting stage. It is guidance, not a limit: you can explore all seven stages.</p>'+
- '<button type="button" class="grade-curriculum-link" data-action="curriculum">Explore the complete Grades 6–12 curriculum →</button>'+
+ '<button type="button" class="grade-curriculum-link" data-action="curriculum">Explore the complete Grades 6–12 curriculum →</button><section class="elementary-entry"><strong>Elementary foundations</strong><p>Four short modules per grade, designed for iPad.</p><a class="btn btn-outline" href="./elementary.html?grade=4">Grade 4 ↗</a> <a class="btn btn-outline" href="./elementary.html?grade=5">Grade 5 ↗</a></section>'+
  (linked?'<p class="welcome-deeplink" role="status">A Grade '+linked.grade+' lesson was shared with you: <strong>'+esc(linked.title)+'</strong>. Choose Grade '+linked.grade+' to open it.</p>':"")+
  '<div class="grade-entry-grid" role="group" aria-label="Choose your grade">'+Object.entries(GRADES).map(([g,details])=>
  '<button type="button" class="grade-entry-card" data-action="pick-grade" data-pick="'+g+'" aria-label="Enter Grade '+g+': '+esc(details.headline)+'">'+
@@ -701,7 +703,7 @@ if(t.dataset.grade){gradeTo(t.dataset.grade);return;}
 if(t.dataset.lesson){openLesson(t.dataset.lesson);return;}
 const action=t.dataset.action;
 if(action==="student-preview-menu"){studentPickerOpen=!studentPickerOpen;render();$("#student-preview-trigger")?.focus?.({preventScroll:true});return;}
-if(action==="student-preview"){enterStudentView(true,Number(t.dataset.studentGrade||6));writeRoute(false);render(true);if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});return;}
+if(action==="student-preview"){const chosen=Number(t.dataset.studentGrade||6);if(chosen===4||chosen===5){window.location.assign("./elementary.html?grade="+chosen+"&preview=1");return;}enterStudentView(true,chosen);writeRoute(false);render(true);if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});return;}
 if(action==="student-exit"){exitStudentPreview();return;}
 if(studentMode&&["home","courses","about","curriculum","teacher-guides","educators","snapshot","profile","stages","enter","explore-stages","diagnostic","retake"].includes(action)){studentActiveLesson=false;state.page="student";render(true);if(window.scrollTo)window.scrollTo({top:0,behavior:"auto"});return;}
 if(action==="skip-main"){const main=$("#main-content");if(main?.focus)main.focus({preventScroll:true});return}
@@ -791,7 +793,7 @@ if(t.dataset?.seniorMilestone!==undefined){const l=currentLesson(),w=getPractice
 document.addEventListener("keydown",(e)=>{
  if(e.key==="Escape"&&studentPickerOpen){studentPickerOpen=false;render();$("#student-preview-trigger")?.focus?.({preventScroll:true});}
 });
-function syncHistory(){if(!state.gradeChosen){if(!readRoute())state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
+function syncHistory(){if(elementaryRoute())return;if(!state.gradeChosen){if(!readRoute())state.page="welcome";render(true);return;}if(readRoute()){persist();if(state.page==="diagnostic"&&!diagnosticRun)diagnosticRun={grade:state.grade,index:0,answers:Array(6).fill(null)};render(true);if(window.scrollTo)window.scrollTo(0,0);}}
 window.addEventListener("popstate",syncHistory);
 window.addEventListener("hashchange",syncHistory);
 if(/^#\/student(?:\/(6|7|8|9|10|11|12))?$/.test(window.location?.hash||"")){readRoute();}else if(state.gradeChosen){if(!readRoute()||state.page==="welcome")state.page="home";}else{const initialHash=window.location?.hash||"";

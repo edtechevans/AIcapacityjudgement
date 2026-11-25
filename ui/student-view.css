@@ -164,3 +164,8 @@
  .student-pathway-columns{grid-template-columns:1fr;gap:25px}
  .student-pathway-stack .student-work-card{min-height:120px}
 }
+
+/* Elementary entry and nine-grade preview picker. */
+.student-preview-options{max-height:min(68vh,560px);overflow-y:auto;overscroll-behavior:contain}
+.elementary-entry{margin:16px 0;padding:16px;border:1px solid #D8E0E8;border-radius:12px;background:#fff;color:#172D4E;text-align:left}
+.elementary-entry p{margin:6px 0 12px}.elementary-entry a{min-height:48px;display:inline-flex;align-items:center;margin:3px 0}
