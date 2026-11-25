@@ -8,3 +8,6 @@ Eight 15–20 minute modules, two Capacity and two Judgement per grade, with exp
 - Public totals include 50 modules and nine stages; secondary strand explorer stays seven stages.
 - Sources: OECD/European Commission (2026), https://www.oecd.org/en/publications/empowering-learners-for-the-age-of-ai_65cd27d4-en.html; UNESCO (2024), https://www.unesco.org/en/articles/ai-competency-framework-students; UNICEF (2025), https://www.unicef.org/innocenti/reports/policy-guidance-ai-children. No endorsement or comprehensive standards mapping is claimed.
 - Verify actual school iPad Safari and classroom suitability with teachers before wider release. Browser-local progress is not central reporting.
+
+## Visual redesign
+Integrated the elementary guides into the existing Grades 4–12 Teaching Guides directory (the original guide URL redirects). Student modules now have four distinct stages with illustrated, accessible SVG examples, a persistent stage indicator, an explore-before-check sequence, an offline partner activity, and illustrated answer cards. Previous progress remains local; no live AI or external media calls are needed. The visual illustrations are explanatory, not answer cues. Teacher previews remain isolated. Actual iPad hardware and classroom pilot remain outstanding.

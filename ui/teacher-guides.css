@@ -75,3 +75,6 @@
 .tg-count{margin-bottom:14px}
 .tg-detail-hero h1{font-family:inherit;color:#fff;font-weight:770;font-size:clamp(1.9rem,4vw,3.05rem);letter-spacing:-.045em;line-height:1.15;margin:12px 0}
 @media(max-width:650px){.tg-page{padding-top:21px}.tg-heading{margin-bottom:15px}.tg-heading h1{font-size:2.2rem}.tg-controls{margin-top:15px}}
+
+/* Elementary and secondary guides share the same directory. */
+.tg-grade-nav button,.tg-strand-nav button{min-height:48px}.tg-intro{margin:16px 0 22px}.tg-list .tg-module{min-height:210px}
